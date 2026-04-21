@@ -814,7 +814,7 @@
       <div class="week-divider wd0" id="week-0">
         <div class="week-badge"><span>0</span></div>
         <div class="week-info">
-          <h2 style="border:none;">What You Need Before Week 1</h2>
+          <h2 style="border:none;">What You Need Before <a href="#week-1">Week 1</a></h2>
           <div class="week-goal">Install the required tools and learn 5 terminal commands</div>
         </div>
         <div class="week-progress" data-week="0"><span class="pct-val">0%</span>done</div>
@@ -919,7 +919,7 @@ npm --version      # should show 10+</pre></div>
       </div>
 
       <h3>Installing Git</h3>
-      <p>Git is version control &mdash; you will use it starting Week 5. Install it now so your setup is complete.</p>
+      <p>Git is version control &mdash; you will use it starting <a href="#week-5">Week 5</a>. Install it now so your setup is complete.</p>
 
       <div class="os-tabs">
         <div class="os-tab active" data-os="mac" onclick="switchOS('mac')">🍎 macOS</div>
@@ -1099,9 +1099,17 @@ gh --version</pre></div>
 # ✓ Logged in to github.com as YOUR-USERNAME</pre></div>
       </div>
 
+      <h4 style="margin-top: 20px;">Connect <code class="inline-code">git</code> to your GitHub credentials</h4>
+      <p>The previous step logged in the <code class="inline-code">gh</code> CLI only. To make plain <code class="inline-code">git push</code> / <code class="inline-code">git pull</code> work without asking for a password, run one more command:</p>
+      <div class="code-block">
+        <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">bash</span></div>
+        <div class="code-body"><pre>gh auth setup-git</pre></div>
+      </div>
+      <p>This configures Git's credential helper to pull your token from <code class="inline-code">gh</code> automatically. No output means success.</p>
+
       <div class="callout callout-success">
         <span class="icon">✅</span>
-        <div><strong>What this unlocks:</strong> from now on, <code class="inline-code">git push</code>, <code class="inline-code">git pull</code>, and <code class="inline-code">gh repo create</code> will all work without passwords or tokens. You will not think about authentication again.</div>
+        <div><strong>What this unlocks:</strong> after both commands above (<code class="inline-code">gh auth login</code> + <code class="inline-code">gh auth setup-git</code>), every <code class="inline-code">git push</code>, <code class="inline-code">git pull</code>, and <code class="inline-code">gh repo create</code> will work without passwords or tokens. You will not think about authentication again.</div>
       </div>
 
       <h3>Installing VS Code</h3>
@@ -1201,16 +1209,17 @@ gh --version</pre></div>
           <li><input type="checkbox" id="w0-6" data-week="0"><label for="w0-6">Git identity is configured with the same email as GitHub (<code class="inline-code">git config --global --list</code> shows it)</label></li>
           <li><input type="checkbox" id="w0-7" data-week="0"><label for="w0-7"><code class="inline-code">gh --version</code> shows 2.x.x</label></li>
           <li><input type="checkbox" id="w0-8" data-week="0"><label for="w0-8"><code class="inline-code">gh auth status</code> shows "Logged in to github.com"</label></li>
-          <li><input type="checkbox" id="w0-9" data-week="0"><label for="w0-9">VS Code is installed and opens</label></li>
-          <li><input type="checkbox" id="w0-10" data-week="0"><label for="w0-10">Playwright Test for VSCode extension is installed</label></li>
-          <li><input type="checkbox" id="w0-11" data-week="0"><label for="w0-11">I am signed in to VS Code with my GitHub account (Settings Sync enabled)</label></li>
-          <li><input type="checkbox" id="w0-12" data-week="0"><label for="w0-12">I can run <code class="inline-code">code .</code> in my terminal (optional, but very helpful)</label></li>
+          <li><input type="checkbox" id="w0-9" data-week="0"><label for="w0-9">I ran <code class="inline-code">gh auth setup-git</code> so plain <code class="inline-code">git push</code> works without a password</label></li>
+          <li><input type="checkbox" id="w0-10" data-week="0"><label for="w0-10">VS Code is installed and opens</label></li>
+          <li><input type="checkbox" id="w0-11" data-week="0"><label for="w0-11">Playwright Test for VSCode extension is installed</label></li>
+          <li><input type="checkbox" id="w0-12" data-week="0"><label for="w0-12">I am signed in to VS Code with my GitHub account (Settings Sync enabled)</label></li>
+          <li><input type="checkbox" id="w0-13" data-week="0"><label for="w0-13">I can run <code class="inline-code">code .</code> in my terminal (optional, but very helpful)</label></li>
         </ul>
       </div>
 
       <div class="callout callout-warning">
         <span class="icon">💡</span>
-        <div>If you get stuck on setup, ask a colleague or your team lead before Week 1 starts. Setup problems are normal &mdash; they are not a sign that automation is not for you.</div>
+        <div>If you get stuck on setup, ask a colleague or your team lead before <a href="#week-1">Week 1</a> starts. Setup problems are normal &mdash; they are not a sign that automation is not for you.</div>
       </div>
 
       <!-- ══════════════════════════════════════════════════════════════════ -->
@@ -1236,7 +1245,7 @@ gh --version</pre></div>
         <div><strong>When to do what:</strong> read the whole guide now. Exercises are split into two parts:
           <ul style="margin: 6px 0 0 18px; font-size: 14px;">
             <li><strong>Part A &mdash; Navigation basics</strong> &mdash; do now, works on any folder</li>
-            <li><strong>Part B &mdash; With your Playwright project</strong> &mdash; needs a project (see "Quick setup" below, or come back after Week 1 Exercise 1)</li>
+            <li><strong>Part B &mdash; With your Playwright project</strong> &mdash; needs a project (see "Quick setup" below, or come back after <a href="#week-1">Week 1</a> Exercise 1)</li>
           </ul>
         </div>
       </div>
@@ -1408,7 +1417,7 @@ gh --version</pre></div>
         <span class="topic-tag tag-new">Extension</span>
         <h4>4. Record new test</h4>
         <p>In the Playwright section, click <strong>"Record new"</strong>. A browser opens. Every click, type, and navigation you do is converted into Playwright code. When you finish, the generated test is inserted into your file.</p>
-        <p><strong>Warning:</strong> the generated code often uses brittle locators. Use it as a starting point, then improve the locators (Week 3 skill).</p>
+        <p><strong>Warning:</strong> the generated code often uses brittle locators. Use it as a starting point, then improve the locators (<a href="#week-3">Week 3</a> skill).</p>
       </div>
 
       <div class="topic-block">
@@ -1423,7 +1432,7 @@ gh --version</pre></div>
       </div>
 
       <h3>Git Integration &mdash; commit without the terminal</h3>
-      <p>In Week 5 you will learn Git commands. But for day-to-day work, VS Code has a visual Git panel that is often faster.</p>
+      <p>In <a href="#week-5">Week 5</a> you will learn Git commands. But for day-to-day work, VS Code has a visual Git panel that is often faster.</p>
 
       <div class="topic-block">
         <h4>Source Control panel (🔀 icon or <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>G</kbd>)</h4>
@@ -1444,8 +1453,8 @@ gh --version</pre></div>
         <h4>Want to do all exercises right now? Create a scratch project</h4>
         <p>Part B exercises need a Playwright project. You have two options:</p>
         <ul>
-          <li><strong>Option 1:</strong> wait until Week 1 &mdash; you will create a project there anyway.</li>
-          <li><strong>Option 2:</strong> create a throwaway project in 2 minutes (same command as Week 1). You can delete it later or keep it as your Week 1 project.</li>
+          <li><strong>Option 1:</strong> wait until <a href="#week-1">Week 1</a> &mdash; you will create a project there anyway.</li>
+          <li><strong>Option 2:</strong> create a throwaway project in 2 minutes (same command as <a href="#week-1">Week 1</a>). You can delete it later or keep it as your <a href="#week-1">Week 1</a> project.</li>
         </ul>
         <div class="code-block">
           <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> 2-minute scratch project <span class="lang">bash</span></div>
@@ -1475,7 +1484,7 @@ code .                             # open it in VS Code</pre></div>
 
       <div class="topic-block exercises">
         <span class="topic-tag tag-practice">Part B · With your Playwright project</span>
-        <h4>Do these after Week 1 Exercise 1 (or use the scratch project above)</h4>
+        <h4>Do these after <a href="#week-1">Week 1</a> Exercise 1 (or use the scratch project above)</h4>
         <p style="font-size: 13px; color: var(--text-subtle); margin-bottom: 8px;">Open your Playwright project in VS Code first: <code class="inline-code">cd my-playwright-learning &amp;&amp; code .</code></p>
         <ol class="checklist">
           <li><input type="checkbox" id="vs-e9" data-week="vs"><label for="vs-e9"><strong>Quick-open a file</strong> (<kbd>⌘/Ctrl</kbd>+<kbd>P</kbd>). Type "config" &mdash; <code class="inline-code">playwright.config.ts</code> shows up. Press Enter.</label></li>
@@ -1487,7 +1496,7 @@ code .                             # open it in VS Code</pre></div>
           <li><input type="checkbox" id="vs-e15" data-week="vs"><label for="vs-e15"><strong>Run a test from the gutter.</strong> Click the green ▶ next to any <code class="inline-code">test(...)</code> line in <code class="inline-code">example.spec.ts</code>. Watch the test run without using the terminal.</label></li>
           <li><input type="checkbox" id="vs-e16" data-week="vs"><label for="vs-e16"><strong>Try Pick Locator.</strong> In the Testing panel &rarr; Playwright section &rarr; "Pick locator". A browser opens. Hover elements, see suggested locators, copy one.</label></li>
           <li><input type="checkbox" id="vs-e17" data-week="vs"><label for="vs-e17"><strong>Create a TypeScript error on purpose.</strong> In a test, remove the <code class="inline-code">import { test, expect }</code> line. Red squiggles appear. Hover to read the message. Undo (<kbd>⌘/Ctrl</kbd>+<kbd>Z</kbd>).</label></li>
-          <li><input type="checkbox" id="vs-e18" data-week="vs"><label for="vs-e18"><strong>Look at Source Control</strong> (🔀 icon in Activity Bar). If your project has a Git repo, you'll see changed files. (You will use this more in Week 5.)</label></li>
+          <li><input type="checkbox" id="vs-e18" data-week="vs"><label for="vs-e18"><strong>Look at Source Control</strong> (🔀 icon in Activity Bar). If your project has a Git repo, you'll see changed files. (You will use this more in <a href="#week-5">Week 5</a>.)</label></li>
         </ol>
       </div>
 
@@ -1500,7 +1509,7 @@ code .                             # open it in VS Code</pre></div>
           <li><input type="checkbox" id="vs-r4" data-week="vs"><label for="vs-r4">I can use IntelliSense, hover docs, and Go to Definition</label></li>
           <li><input type="checkbox" id="vs-r5" data-week="vs"><label for="vs-r5">I know how to read red squiggles (TypeScript errors)</label></li>
         </ul>
-        <p style="font-size: 12px; color: var(--text-subtle); margin-top: 10px;">💡 If you only did Part A, finish Part B items after Week 1 Exercise 1.</p>
+        <p style="font-size: 12px; color: var(--text-subtle); margin-top: 10px;">💡 If you only did Part A, finish Part B items after <a href="#week-1">Week 1</a> Exercise 1.</p>
       </div>
 
       <!-- ══════════════════════════════════════════════════════════════════ -->
@@ -1588,7 +1597,7 @@ export default defineConfig({
         </div>
         <div class="callout callout-info">
           <span class="icon">💡</span>
-          <div><strong>Important:</strong> <code class="inline-code">baseURL</code> is what lets you write <code class="inline-code">page.goto('/login')</code> in tests. Without it, relative URLs fail. You will set this in Week 4 for your login test.</div>
+          <div><strong>Important:</strong> <code class="inline-code">baseURL</code> is what lets you write <code class="inline-code">page.goto('/login')</code> in tests. Without it, relative URLs fail. You will set this in <a href="#week-4">Week 4</a> for your login test.</div>
         </div>
       </div>
 
@@ -2079,7 +2088,7 @@ await expect(page.getByRole("button", { name: "Submit" })).toBeDisabled();</pre>
 
       <div class="callout callout-info">
         <span class="icon">👀</span>
-        <div><strong>Looking ahead:</strong> In this week's exercises you will hardcode locators directly in tests (e.g. <code class="inline-code">page.getByPlaceholder("Email")</code> repeated in each test). Week 6 introduces the <strong>Page Object Model</strong>, which moves these into a reusable class. For now, keep it simple &mdash; you will refactor later.</div>
+        <div><strong>Looking ahead:</strong> In this week's exercises you will hardcode locators directly in tests (e.g. <code class="inline-code">page.getByPlaceholder("Email")</code> repeated in each test). <a href="#week-6">Week 6</a> introduces the <strong>Page Object Model</strong>, which moves these into a reusable class. For now, keep it simple &mdash; you will refactor later.</div>
       </div>
 
       <p class="section-label">TOPICS &mdash; DEBUGGING</p>
@@ -2272,6 +2281,11 @@ test.describe("Login functionality", () =&gt; {
         </ul>
       </div>
 
+      <div class="callout callout-info">
+        <span class="icon">📋</span>
+        <div><strong>Prerequisites from <a href="#week-0">Week 0</a>:</strong> Git is installed, you have a GitHub account, and both <code class="inline-code">gh auth login</code> + <code class="inline-code">gh auth setup-git</code> are done. If you skipped any of these, go back and finish <a href="#week-0">Week 0</a> before continuing &mdash; commands below will fail without them. Every <code class="inline-code">git</code> command in this week assumes you have run <code class="inline-code">git init</code> in your project folder first (see the first code block below).</div>
+      </div>
+
       <p class="section-label">TOPICS</p>
 
       <div class="topic-block">
@@ -2280,7 +2294,7 @@ test.describe("Login functionality", () =&gt; {
         <p>Git tracks changes to your files. Think of it as "save points" &mdash; you can always go back to a previous version.</p>
         <div class="callout callout-info">
           <span class="icon">💡</span>
-          <div><strong>Good news:</strong> <code class="inline-code">npm init playwright@latest</code> already created a <code class="inline-code">.gitignore</code> in Week 1. Check it exists with <code class="inline-code">ls -a</code> (Mac) or <code class="inline-code">dir /a</code> (Windows). If it is missing, create one (see below).</div>
+          <div><strong>Good news:</strong> <code class="inline-code">npm init playwright@latest</code> already created a <code class="inline-code">.gitignore</code> in <a href="#week-1">Week 1</a>. Check it exists with <code class="inline-code">ls -a</code> (Mac) or <code class="inline-code">dir /a</code> (Windows). If it is missing, create one (see below).</div>
         </div>
         <div class="code-block">
           <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> Initialize your repo <span class="lang">bash</span></div>
@@ -2424,7 +2438,7 @@ gh pr create --title "Add search tests for product catalog" --body "Adds 3 tests
           <li><input type="checkbox" id="w5-p1" data-week="5"><label for="w5-p1"><strong>Choose a test target.</strong> Pick a public site (<a href="https://www.saucedemo.com" target="_blank">SauceDemo</a>, <a href="https://demo.playwright.dev/todomvc" target="_blank">TodoMVC</a>) or your company's staging environment.</label></li>
           <li><input type="checkbox" id="w5-p2" data-week="5"><label for="w5-p2"><strong>Pick one user journey.</strong> For example: login, search, add to cart, or registration.</label></li>
           <li><input type="checkbox" id="w5-p3" data-week="5"><label for="w5-p3"><strong>List 3-5 test cases.</strong> At least one happy path and one negative case. Write them as bullet points before writing any code.</label></li>
-          <li><input type="checkbox" id="w5-p4" data-week="5"><label for="w5-p4"><strong>Create a branch.</strong> Run <code class="inline-code">git checkout -b final-project</code>. All your Week 6 work will go here.</label></li>
+          <li><input type="checkbox" id="w5-p4" data-week="5"><label for="w5-p4"><strong>Create a branch.</strong> Run <code class="inline-code">git checkout -b final-project</code>. All your <a href="#week-6">Week 6</a> work will go here.</label></li>
         </ol>
       </div>
 
@@ -2439,7 +2453,7 @@ gh pr create --title "Add search tests for product catalog" --body "Adds 3 tests
           <li><input type="checkbox" id="w5-r1" data-week="5"><label for="w5-r1">My project is in a Git repo and pushed to GitHub</label></li>
           <li><input type="checkbox" id="w5-r2" data-week="5"><label for="w5-r2">I have created a branch, committed, pushed, and opened a Pull Request</label></li>
           <li><input type="checkbox" id="w5-r3" data-week="5"><label for="w5-r3">I have a written plan for my final project (target site + test case list)</label></li>
-          <li><input type="checkbox" id="w5-r4" data-week="5"><label for="w5-r4">My <code class="inline-code">final-project</code> branch is created and ready for Week 6</label></li>
+          <li><input type="checkbox" id="w5-r4" data-week="5"><label for="w5-r4">My <code class="inline-code">final-project</code> branch is created and ready for <a href="#week-6">Week 6</a></label></li>
         </ul>
       </div>
 
@@ -2599,7 +2613,7 @@ npx playwright show-report               # open last HTML report
 
         <p><strong>Steps:</strong></p>
         <ol class="checklist">
-          <li><input type="checkbox" id="w6-s1" data-week="6"><label for="w6-s1">Switch to your <code class="inline-code">final-project</code> branch (created in Week 5)</label></li>
+          <li><input type="checkbox" id="w6-s1" data-week="6"><label for="w6-s1">Switch to your <code class="inline-code">final-project</code> branch (created in <a href="#week-5">Week 5</a>)</label></li>
           <li><input type="checkbox" id="w6-s2" data-week="6"><label for="w6-s2">Create at least 1 Page Object class in <code class="inline-code">pages/</code></label></li>
           <li><input type="checkbox" id="w6-s3" data-week="6"><label for="w6-s3">Write 3-5 test cases: at least one happy path and at least one negative case</label></li>
           <li><input type="checkbox" id="w6-s4" data-week="6"><label for="w6-s4">Organize tests with <code class="inline-code">test.describe</code> and <code class="inline-code">beforeEach</code></label></li>
@@ -2649,7 +2663,7 @@ npx playwright show-report               # open last HTML report
 
       <table>
         <tr><th>Pitfall</th><th>Why It Happens</th><th>Fix</th></tr>
-        <tr><td>Skipping the TypeScript week</td><td>Playwright looks like the real work</td><td>Week 2 is not optional. Weak TypeScript causes 80% of test bugs.</td></tr>
+        <tr><td>Skipping the TypeScript week</td><td>Playwright looks like the real work</td><td><a href="#week-2">Week 2</a> is not optional. Weak TypeScript causes 80% of test bugs.</td></tr>
         <tr><td>Not using <code class="inline-code">await</code></td><td>Easy to forget &mdash; the code still runs, just wrongly</td><td>Rule: every Playwright method call needs <code class="inline-code">await</code>. No exceptions.</td></tr>
         <tr><td>Using CSS selectors instead of semantic locators</td><td>They look familiar from DevTools</td><td>Try <code class="inline-code">getByRole</code> and <code class="inline-code">getByLabel</code> first. They break less often when the UI changes.</td></tr>
         <tr><td>Using <code class="inline-code">page.waitForTimeout()</code></td><td>Feels like an easy fix for timing issues</td><td>NEVER use it. Use auto-waiting assertions like <code class="inline-code">expect(...).toBeVisible()</code>.</td></tr>
@@ -2716,7 +2730,7 @@ npx playwright show-report               # open last HTML report
     </div>
 
     <div class="page-footer">
-      <span>Playwright for Manual QA Engineers &bull; 6-Week Learning Path v5.6</span>
+      <span>Playwright for Manual QA Engineers &bull; 6-Week Learning Path v5.7</span>
       <span>April 2026</span>
     </div>
 
