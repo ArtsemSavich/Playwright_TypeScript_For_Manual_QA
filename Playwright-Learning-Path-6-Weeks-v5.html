@@ -1,0 +1,2909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Playwright for Manual QA Engineers — 6-Week Learning Path</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap');
+
+  :root {
+    --blue: #0052CC;
+    --blue-light: #DEEBFF;
+    --nav: #172B4D;
+    --text: #172B4D;
+    --text-subtle: #5E6C84;
+    --border: #DFE1E6;
+    --bg: #FFFFFF;
+    --sidebar: #F4F5F7;
+    --info-bg: #DEEBFF;
+    --warning-bg: #FFFAE6;
+    --success-bg: #E3FCEF;
+    --error-bg: #FFEBE6;
+    --purple: #6554C0;
+    --teal: #00B8D9;
+    --green: #00875A;
+    --orange: #FF8B00;
+    --red: #DE350B;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: var(--text);
+    background: #F4F5F7;
+    line-height: 1.6;
+  }
+
+  .top-nav {
+    background: var(--nav);
+    color: white;
+    padding: 0 24px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  .top-nav .logo { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 18px; }
+  .top-nav .logo svg { width: 28px; height: 28px; }
+  .top-nav .mobile-toc-toggle {
+    margin-left: auto;
+    background: rgba(255,255,255,0.1);
+    border: none;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 13px;
+    cursor: pointer;
+    display: none;
+  }
+
+  /* ── LAYOUT: content + right sidebar TOC ── */
+  .layout {
+    max-width: 1340px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 260px;
+    gap: 0;
+    align-items: start;
+  }
+
+  .page-wrapper {
+    background: var(--bg);
+    min-height: calc(100vh - 56px);
+    box-shadow: 0 0 1px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.08);
+    max-width: 1060px;
+    width: 100%;
+    margin-left: auto;
+  }
+
+  /* ── RIGHT SIDEBAR TOC ── */
+  .toc {
+    position: sticky;
+    top: 56px;
+    max-height: calc(100vh - 56px);
+    overflow-y: auto;
+    padding: 24px 20px 24px 24px;
+    font-size: 13px;
+  }
+  .toc-header {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-subtle);
+    margin-bottom: 12px;
+  }
+  .toc-progress-box {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px;
+    margin-bottom: 16px;
+  }
+  .toc-progress-box .overall-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-subtle);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  .toc-progress-box .overall-value {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--blue);
+    line-height: 1.2;
+  }
+  .toc-progress-box .overall-value span { font-size: 13px; color: var(--text-subtle); font-weight: 500; }
+  .progress-bar-bg {
+    background: var(--border);
+    border-radius: 10px;
+    height: 6px;
+    margin-top: 8px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    background: linear-gradient(90deg, var(--blue), var(--teal));
+    height: 100%;
+    border-radius: 10px;
+    transition: width 0.3s ease;
+  }
+  .toc-reset {
+    background: white;
+    border: 1px solid var(--border);
+    color: var(--text-subtle);
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 8px;
+  }
+  .toc-reset:hover { background: var(--error-bg); color: var(--red); border-color: #FFBDAD; }
+
+  .toc ul { list-style: none; margin: 0; padding: 0; }
+  .toc li { margin: 0; }
+  .toc a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 10px;
+    color: var(--text);
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 13px;
+    line-height: 1.4;
+    border-left: 2px solid transparent;
+    margin-left: -2px;
+  }
+  .toc a:hover { background: var(--sidebar); }
+  .toc a.active {
+    background: var(--blue-light);
+    color: var(--blue);
+    font-weight: 600;
+    border-left-color: var(--blue);
+  }
+  .toc a .pct {
+    font-size: 11px;
+    color: var(--text-subtle);
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+  .toc a.active .pct { color: var(--blue); }
+  .toc a.done .pct { color: var(--green); font-weight: 700; }
+
+  .toc-section { margin-top: 16px; }
+  .toc-section-title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-subtle);
+    padding: 0 10px;
+    margin-bottom: 4px;
+  }
+
+  .page-header {
+    padding: 48px 48px 24px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(135deg, #DEEBFF 0%, #EAE6FF 100%);
+  }
+  .page-header .label {
+    display: inline-block;
+    background: var(--blue);
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 3px 10px;
+    border-radius: 3px;
+    margin-bottom: 12px;
+  }
+  .page-header h1 {
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 1.25;
+    color: var(--text);
+    letter-spacing: -0.5px;
+  }
+  .page-header .subtitle {
+    font-size: 16px;
+    color: var(--text-subtle);
+    margin-top: 8px;
+  }
+
+  .content { padding: 32px 48px 64px; }
+
+  /* ── WEEK DIVIDER ── */
+  .week-divider {
+    margin: 48px -48px 0;
+    padding: 28px 48px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    border-top: 3px solid var(--border);
+    scroll-margin-top: 72px;
+  }
+  .week-divider .week-badge {
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .week-divider .week-badge span {
+    font-size: 28px;
+    font-weight: 800;
+    color: white;
+  }
+  .week-divider .week-info { flex: 1; }
+  .week-divider .week-info h2 {
+    font-size: 24px;
+    font-weight: 800;
+    border: none;
+    margin: 0;
+    padding: 0;
+    letter-spacing: -0.5px;
+  }
+  .week-divider .week-info .week-goal {
+    font-size: 14px;
+    color: var(--text-subtle);
+    margin-top: 4px;
+  }
+  .week-divider .week-progress {
+    text-align: right;
+    font-size: 12px;
+    color: var(--text-subtle);
+    min-width: 90px;
+  }
+  .week-divider .week-progress .pct-val {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text);
+    display: block;
+    line-height: 1.1;
+  }
+  .week-divider .week-progress.complete .pct-val { color: var(--green); }
+
+  .wd0 { background: linear-gradient(135deg, #F4F5F7, var(--bg)); }
+  .wd0 .week-badge { background: var(--nav); }
+  .wd1 { background: linear-gradient(135deg, #E3FCEF, var(--bg)); }
+  .wd1 .week-badge { background: var(--green); }
+  .wd2 { background: linear-gradient(135deg, #DEEBFF, var(--bg)); }
+  .wd2 .week-badge { background: var(--blue); }
+  .wd3 { background: linear-gradient(135deg, #EAE6FF, var(--bg)); }
+  .wd3 .week-badge { background: var(--purple); }
+  .wd4 { background: linear-gradient(135deg, #FFFAE6, var(--bg)); }
+  .wd4 .week-badge { background: var(--orange); }
+  .wd5 { background: linear-gradient(135deg, #FFEBE6, var(--bg)); }
+  .wd5 .week-badge { background: var(--red); }
+  .wd6 { background: linear-gradient(135deg, #E6FCFF, var(--bg)); }
+  .wd6 .week-badge { background: var(--teal); }
+  .wdvs { background: linear-gradient(135deg, #E7F5FF, var(--bg)); }
+  .wdvs .week-badge { background: #007ACC; }
+  .wdvs .week-badge span { font-size: 24px; }
+
+  /* ── IDE mockup diagram ── */
+  .ide-mockup {
+    background: #1E1E1E;
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 16px 0;
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 12px;
+    border: 1px solid #333;
+  }
+  .ide-mockup .ide-titlebar {
+    background: #3C3C3C;
+    color: #CCC;
+    padding: 6px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+  }
+  .ide-mockup .ide-titlebar .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .ide-mockup .ide-titlebar .dot.r { background: #FF5F56; }
+  .ide-mockup .ide-titlebar .dot.y { background: #FFBD2E; }
+  .ide-mockup .ide-titlebar .dot.g { background: #27C93F; }
+  .ide-mockup .ide-body {
+    display: grid;
+    grid-template-columns: 48px 180px 1fr;
+    min-height: 280px;
+  }
+  .ide-mockup .activity-bar {
+    background: #333333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px 0;
+    gap: 16px;
+    border-right: 1px solid #252526;
+  }
+  .ide-mockup .activity-bar .icon {
+    color: #858585;
+    font-size: 18px;
+    padding: 4px;
+    position: relative;
+  }
+  .ide-mockup .activity-bar .icon.active {
+    color: white;
+    border-left: 2px solid #007ACC;
+    margin-left: -2px;
+    padding-left: 6px;
+  }
+  .ide-mockup .activity-bar .icon .tip {
+    position: absolute;
+    left: 42px;
+    top: 0;
+    background: #252526;
+    color: #CCC;
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-size: 10px;
+    white-space: nowrap;
+    font-family: 'Inter', sans-serif;
+    display: none;
+  }
+  .ide-mockup .activity-bar .icon:hover .tip { display: block; }
+  .ide-mockup .side-panel {
+    background: #252526;
+    color: #CCC;
+    padding: 10px 12px;
+    border-right: 1px solid #1E1E1E;
+  }
+  .ide-mockup .side-panel .heading {
+    font-size: 10px;
+    color: #858585;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+  .ide-mockup .side-panel .file { padding: 2px 0; color: #CCC; }
+  .ide-mockup .side-panel .file.folder::before { content: '📁 '; }
+  .ide-mockup .side-panel .file.ts::before { content: '📄 '; color: #3178C6; }
+  .ide-mockup .editor {
+    background: #1E1E1E;
+    color: #D4D4D4;
+    padding: 10px 14px;
+    line-height: 1.7;
+  }
+  .ide-mockup .editor .tab {
+    background: #1E1E1E;
+    color: white;
+    padding: 4px 12px 4px 8px;
+    border-top: 1px solid #007ACC;
+    display: inline-block;
+    margin: -10px 0 10px -14px;
+    font-size: 11px;
+  }
+  .ide-mockup .editor .line { display: flex; gap: 14px; }
+  .ide-mockup .editor .line .num { color: #858585; min-width: 16px; text-align: right; }
+  .ide-mockup .editor .kw { color: #569CD6; }
+  .ide-mockup .editor .str { color: #CE9178; }
+  .ide-mockup .editor .fn { color: #DCDCAA; }
+  .ide-mockup .editor .com { color: #6A9955; }
+  .ide-mockup .editor .run-btn {
+    color: #73C991;
+    margin-right: 8px;
+    cursor: pointer;
+  }
+  .ide-mockup .terminal {
+    grid-column: 1 / -1;
+    background: #1E1E1E;
+    color: #CCC;
+    padding: 10px 14px;
+    border-top: 1px solid #333;
+    font-size: 11px;
+  }
+  .ide-mockup .terminal .heading {
+    color: #858585;
+    text-transform: uppercase;
+    font-size: 10px;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  .ide-mockup .terminal .prompt { color: #73C991; }
+  .ide-mockup .statusbar {
+    background: #007ACC;
+    color: white;
+    padding: 4px 12px;
+    font-size: 11px;
+    display: flex;
+    gap: 16px;
+  }
+
+  /* ── Shortcut table styling ── */
+  .shortcut-table kbd {
+    background: #F4F5F7;
+    border: 1px solid #C1C7D0;
+    border-radius: 3px;
+    padding: 1px 6px;
+    font-family: 'Fira Code', monospace;
+    font-size: 12px;
+    color: var(--text);
+    box-shadow: 0 1px 0 #C1C7D0;
+    white-space: nowrap;
+  }
+  .shortcut-table td { font-size: 13px; }
+
+  /* ── Section labels ── */
+  .section-label {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-subtle);
+    margin: 28px 0 10px;
+  }
+
+  /* ── Topic blocks ── */
+  .topic-block {
+    background: var(--sidebar);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 12px 0;
+  }
+  .topic-block h4 {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .topic-block p, .topic-block li { font-size: 14px; line-height: 1.7; }
+  .topic-block ul, .topic-block ol { margin-left: 18px; margin-top: 6px; }
+  .topic-block li { margin: 5px 0; }
+
+  .topic-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 2px 8px;
+    border-radius: 3px;
+    margin-bottom: 8px;
+  }
+  .tag-theory { background: var(--blue-light); color: var(--blue); }
+  .tag-practice { background: #EAE6FF; color: var(--purple); }
+  .tag-reference { background: var(--warning-bg); color: #974F0C; }
+  .tag-git { background: #FFEBE6; color: var(--red); }
+  .tag-project { background: var(--success-bg); color: var(--green); }
+  .tag-new { background: #E6FCFF; color: var(--teal); }
+
+  /* ── Deliverable box ── */
+  .deliverable {
+    background: #E6FCFF;
+    border: 2px solid #B3F5FF;
+    border-radius: 8px;
+    padding: 18px 22px;
+    margin: 20px 0 8px;
+  }
+  .deliverable h4 { font-size: 14px; font-weight: 700; margin-bottom: 6px; color: var(--teal); }
+  .deliverable p, .deliverable li { font-size: 13px; margin: 3px 0; line-height: 1.6; }
+  .deliverable code { font-size: 12px; }
+
+  /* ── Ready-to-move-on box ── */
+  .ready-box {
+    background: var(--success-bg);
+    border: 2px solid #ABF5D1;
+    border-radius: 8px;
+    padding: 18px 22px;
+    margin: 20px 0 8px;
+  }
+  .ready-box h4 { font-size: 14px; font-weight: 700; margin-bottom: 10px; color: var(--green); }
+  .ready-box p, .ready-box li { font-size: 13px; margin: 3px 0; line-height: 1.6; }
+
+  /* ── Checkbox lists ── */
+  .checklist {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px 0;
+    margin: 0;
+    line-height: 1.6;
+  }
+  .checklist input[type="checkbox"] {
+    margin-top: 3px;
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    cursor: pointer;
+    accent-color: var(--green);
+  }
+  .checklist label {
+    cursor: pointer;
+    flex: 1;
+    font-size: 14px;
+  }
+  .checklist input[type="checkbox"]:checked + label {
+    text-decoration: line-through;
+    color: var(--text-subtle);
+  }
+  .checklist .sub-note {
+    font-size: 13px;
+    color: var(--text-subtle);
+    display: block;
+    margin-top: 4px;
+  }
+  .checklist input[type="checkbox"]:checked + label .sub-note { color: #A5ADBA; }
+
+  .exercises .checklist li { padding: 10px 0; border-bottom: 1px dashed var(--border); }
+  .exercises .checklist li:last-child { border-bottom: none; }
+  .exercises .checklist label strong { color: var(--blue); }
+  .exercises .checklist input[type="checkbox"]:checked + label strong { color: var(--text-subtle); }
+
+  /* ── Milestone ── */
+  .milestone {
+    background: var(--success-bg);
+    border: 2px solid #ABF5D1;
+    border-radius: 8px;
+    padding: 18px 22px;
+    margin: 24px 0 8px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .milestone .icon { font-size: 24px; }
+  .milestone h4 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+  .milestone p { font-size: 13px; margin: 0; }
+
+  /* ── Generic styles ── */
+  h2 {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 40px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    scroll-margin-top: 72px;
+  }
+  h3 {
+    font-size: 17px;
+    font-weight: 700;
+    margin: 24px 0 8px;
+    color: var(--text);
+  }
+
+  .code-block {
+    background: #263238;
+    color: #EEFFFF;
+    border-radius: 6px;
+    margin: 12px 0;
+    overflow: hidden;
+    font-size: 13px;
+  }
+  .code-header {
+    background: #1E272C;
+    padding: 6px 16px;
+    font-size: 11px;
+    color: #78909C;
+    font-family: 'Fira Code', monospace;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid #37474F;
+  }
+  .code-header .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+  .code-header .dot.r { background: #FF5F56; }
+  .code-header .dot.y { background: #FFBD2E; }
+  .code-header .dot.g { background: #27C93F; }
+  .code-header .lang { margin-left: auto; background: #37474F; padding: 2px 8px; border-radius: 3px; font-size: 10px; }
+  .code-body { padding: 14px 18px; overflow-x: auto; line-height: 1.5; }
+  pre { font-family: 'Fira Code', 'Consolas', monospace; white-space: pre; margin: 0; }
+  .inline-code {
+    background: var(--sidebar);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 1px 5px;
+    font-size: 13px;
+    color: #DE350B;
+    font-family: 'Fira Code', monospace;
+  }
+
+  .callout {
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    display: flex;
+    gap: 12px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .callout .icon { font-size: 20px; flex-shrink: 0; }
+  .callout-info { background: var(--info-bg); border-left: 4px solid #0065FF; }
+  .callout-warning { background: var(--warning-bg); border-left: 4px solid #FF8B00; }
+  .callout-success { background: var(--success-bg); border-left: 4px solid #00875A; }
+  .callout-error { background: var(--error-bg); border-left: 4px solid #DE350B; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 14px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  th {
+    background: var(--sidebar);
+    font-weight: 600;
+    text-align: left;
+    padding: 10px 14px;
+    border-bottom: 2px solid var(--border);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    color: var(--text-subtle);
+  }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:hover td { background: #FAFBFC; }
+  tr:last-child td { border-bottom: none; }
+
+  .overview-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+  .overview-card {
+    background: var(--sidebar);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px 20px;
+  }
+
+  .file-tree {
+    background: var(--sidebar);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 18px 22px;
+    margin: 12px 0;
+    font-family: 'Fira Code', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .file-tree .dir { color: var(--blue); font-weight: 600; }
+  .file-tree .file { color: var(--text); }
+  .file-tree .comment { color: var(--text-subtle); font-style: italic; }
+
+  hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+  a { color: var(--blue); }
+  p { margin: 10px 0; font-size: 15px; }
+  .page-footer {
+    padding: 24px 48px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--text-subtle);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* Tabs for OS install */
+  .os-tabs {
+    display: flex;
+    gap: 2px;
+    border-bottom: 2px solid var(--border);
+    margin-bottom: 0;
+  }
+  .os-tab {
+    padding: 10px 18px;
+    background: var(--sidebar);
+    border: 1px solid var(--border);
+    border-bottom: none;
+    border-radius: 6px 6px 0 0;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-subtle);
+  }
+  .os-tab.active {
+    background: var(--bg);
+    color: var(--blue);
+    border-bottom: 2px solid var(--bg);
+    margin-bottom: -2px;
+    position: relative;
+    z-index: 1;
+  }
+  .os-content { display: none; padding: 16px 0 0; }
+  .os-content.active { display: block; }
+
+  @media (max-width: 1100px) {
+    .layout { grid-template-columns: 1fr; }
+    .toc {
+      position: fixed;
+      top: 56px;
+      right: 0;
+      background: white;
+      width: 280px;
+      max-height: calc(100vh - 56px);
+      border-left: 1px solid var(--border);
+      box-shadow: -2px 0 8px rgba(0,0,0,0.1);
+      z-index: 50;
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+    }
+    .toc.open { transform: translateX(0); }
+    .top-nav .mobile-toc-toggle { display: inline-block; }
+    .page-wrapper { margin: 0 auto; }
+  }
+
+  @media (max-width: 768px) {
+    .page-header, .content, .page-footer { padding-left: 20px; padding-right: 20px; }
+    .overview-grid { grid-template-columns: 1fr; }
+    .week-divider { margin-left: -20px; margin-right: -20px; padding-left: 20px; padding-right: 20px; }
+  }
+
+  @media print {
+    .toc, .top-nav { display: none; }
+    .layout { grid-template-columns: 1fr; }
+    .page-wrapper { box-shadow: none; max-width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <div class="logo">
+    <svg viewBox="0 0 32 32" fill="none"><path d="M6.5 16c0-.3.2-.7.5-1l8.6-8.6c.6-.6 1.5-.6 2.1 0l.7.7c.6.6.6 1.5 0 2.1L12.1 16l6.3 6.3c.6.6.6 1.5 0 2.1l-.7.7c-.6.6-1.5.6-2.1 0L7 16.5c-.3-.3-.5-.6-.5-1z" fill="rgba(255,255,255,0.5)"/><path d="M15 16c0-.3.2-.7.5-1l8.6-8.6c.6-.6 1.5-.6 2.1 0l.7.7c.6.6.6 1.5 0 2.1L20.6 16l6.3 6.3c.6.6.6 1.5 0 2.1l-.7.7c-.6.6-1.5.6-2.1 0l-8.6-8.6c-.3-.3-.5-.6-.5-1z" fill="white"/></svg>
+    QA Engineering &middot; Learning Path
+  </div>
+  <button class="mobile-toc-toggle" onclick="document.getElementById('toc').classList.toggle('open')">☰ Navigation</button>
+</nav>
+
+<div class="layout">
+
+  <main class="page-wrapper">
+
+    <div class="page-header">
+      <span class="label">6-Week Program</span>
+      <h1>Playwright for Manual QA Engineers</h1>
+      <p class="subtitle">From zero automation experience to writing, debugging, and maintaining Playwright E2E tests.</p>
+    </div>
+
+    <div class="content">
+
+      <!-- ══════════════════════════════════════════════ -->
+      <!-- PROGRAM OVERVIEW -->
+      <!-- ══════════════════════════════════════════════ -->
+
+      <h2 id="overview">Program Overview</h2>
+
+      <table>
+        <tr><th>Week</th><th>Theme</th><th>Goal</th><th>Deliverable</th><th>Time</th></tr>
+        <tr><td><strong>1</strong></td><td>Environment &amp; First Test</td><td>Install tools, run a test, understand every file</td><td>First test running + HTML report</td><td>5-6 hrs</td></tr>
+        <tr><td><strong>2</strong></td><td>TypeScript for QA</td><td>Read and understand TypeScript test code</td><td>Annotated test file with comments</td><td>5-6 hrs</td></tr>
+        <tr><td><strong>3</strong></td><td>Locators</td><td>Find any element on the page reliably</td><td>Locator exercise file (10 locators)</td><td>6-7 hrs</td></tr>
+        <tr><td><strong>4</strong></td><td>Writing &amp; Debugging Tests</td><td>Write tests, read errors, fix failures</td><td>login.spec.ts (3 cases) + 2 fixed tests</td><td>6-7 hrs</td></tr>
+        <tr><td><strong>5</strong></td><td>Git &amp; Project Setup</td><td>Learn Git workflow, set up final project</td><td>Git repo on GitHub + project plan</td><td>5-6 hrs</td></tr>
+        <tr><td><strong>6</strong></td><td>POM &amp; Final Project</td><td>Learn Page Objects, write a test suite, deliver via PR</td><td>3-5 passing tests with POM + Pull Request</td><td>6-7 hrs</td></tr>
+      </table>
+
+      <p style="font-size: 14px; color: var(--text-subtle); margin-top: 4px;">Total estimated time: 32-38 hours over 6 weeks</p>
+
+      <div class="callout callout-info">
+        <span class="icon">📋</span>
+        <div><strong>Track your progress:</strong> Each week has interactive checkboxes. Check them off as you complete items — your progress is saved automatically in your browser. See the sidebar on the right for overall progress.</div>
+      </div>
+
+      <!-- ══════════════════════════════════════════════ -->
+      <!-- WEEK 0 — SETUP -->
+      <!-- ══════════════════════════════════════════════ -->
+
+      <div class="week-divider wd0" id="week-0">
+        <div class="week-badge"><span>0</span></div>
+        <div class="week-info">
+          <h2 style="border:none;">What You Need Before Week 1</h2>
+          <div class="week-goal">Install the required tools and learn 5 terminal commands</div>
+        </div>
+        <div class="week-progress" data-week="0"><span class="pct-val">0%</span>done</div>
+      </div>
+
+      <h3>The Terminal</h3>
+      <p>The terminal is a text interface to your computer. Instead of clicking icons, you type commands. You will use it to run TypeScript files, install packages, and execute tests. You do not need to master it &mdash; you need to be comfortable with 4 things:</p>
+      <div class="topic-block">
+        <ul>
+          <li><strong>Opening the terminal</strong> &mdash; Terminal.app on Mac, PowerShell or Windows Terminal on Windows</li>
+          <li><strong>Navigating folders:</strong> <code class="inline-code">cd folder-name</code> to go into a folder, <code class="inline-code">cd ..</code> to go back, <code class="inline-code">ls</code> (Mac) or <code class="inline-code">dir</code> (Windows) to see what is inside</li>
+          <li><strong>Running a command:</strong> type it and press Enter</li>
+          <li><strong>Reading output:</strong> most commands print a result or an error &mdash; read it before asking for help</li>
+        </ul>
+      </div>
+
+      <p><strong>Practice now:</strong></p>
+      <div class="code-block">
+        <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> Try these 5 commands <span class="lang">bash</span></div>
+        <div class="code-body"><pre>1. Open your terminal
+2. cd Desktop                    # go to Desktop folder
+3. mkdir qa-automation           # create a new folder
+4. cd qa-automation              # go inside it
+5. ls                            # (Mac) or dir (Windows) — folder is empty</pre></div>
+      </div>
+      <p style="font-size: 14px;">If you completed these 5 steps without errors, you are ready.</p>
+
+      <h3>Installing Node.js</h3>
+      <p>Choose your operating system:</p>
+
+      <div class="os-tabs">
+        <div class="os-tab active" data-os="mac" onclick="switchOS('mac')">🍎 macOS</div>
+        <div class="os-tab" data-os="windows" onclick="switchOS('windows')">🪟 Windows</div>
+        <div class="os-tab" data-os="linux" onclick="switchOS('linux')">🐧 Linux</div>
+      </div>
+
+      <div class="os-content active" data-os="mac">
+        <p><strong>Option A: Download installer (easiest)</strong></p>
+        <div class="topic-block">
+          <ul>
+            <li>Download Node.js v22 LTS from <a href="https://nodejs.org" target="_blank">nodejs.org</a></li>
+            <li>Run the installer &mdash; accept all defaults</li>
+            <li>Open Terminal and verify: <code class="inline-code">node --version</code> should show v22.x.x</li>
+          </ul>
+        </div>
+
+        <p><strong>Option B: Homebrew (if you already use it, or want it for other tools)</strong></p>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">bash</span></div>
+          <div class="code-body"><pre># Install Homebrew (skip if already installed)
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# Install Node.js
+brew install node@22
+
+# Verify
+node --version     # should show v22.x.x
+npm --version      # should show 10+</pre></div>
+        </div>
+      </div>
+
+      <div class="os-content" data-os="windows">
+        <p><strong>Option A: Download installer (easiest)</strong></p>
+        <div class="topic-block">
+          <ul>
+            <li>Download Node.js v22 LTS (Windows Installer .msi) from <a href="https://nodejs.org" target="_blank">nodejs.org</a></li>
+            <li>Run the installer &mdash; accept all defaults. Make sure "Add to PATH" is checked.</li>
+            <li>Close and reopen PowerShell or Windows Terminal</li>
+            <li>Verify: <code class="inline-code">node --version</code> should show v22.x.x</li>
+          </ul>
+        </div>
+
+        <p><strong>Option B: winget (if you have Windows 10/11 package manager)</strong></p>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">powershell</span></div>
+          <div class="code-body"><pre># In PowerShell (run as regular user)
+winget install OpenJS.NodeJS.LTS
+
+# Close and reopen PowerShell, then verify:
+node --version     # should show v22.x.x
+npm --version      # should show 10+</pre></div>
+        </div>
+
+        <div class="callout callout-warning">
+          <span class="icon">💡</span>
+          <div><strong>PowerShell vs CMD:</strong> Use PowerShell or Windows Terminal, not the old <code class="inline-code">cmd.exe</code>. Commands in this guide assume PowerShell or bash. If you see "command not found", you are probably in the wrong terminal.</div>
+        </div>
+      </div>
+
+      <div class="os-content" data-os="linux">
+        <p>Install via your package manager. On Ubuntu/Debian:</p>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">bash</span></div>
+          <div class="code-body"><pre># Add NodeSource repository for v22 LTS
+curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+sudo apt install -y nodejs
+
+# Verify
+node --version     # should show v22.x.x
+npm --version      # should show 10+</pre></div>
+        </div>
+      </div>
+
+      <h3>Installing Git</h3>
+      <p>Git is version control &mdash; you will use it starting Week 5. Install it now so your setup is complete.</p>
+
+      <div class="os-tabs">
+        <div class="os-tab active" data-os="mac" onclick="switchOS('mac')">🍎 macOS</div>
+        <div class="os-tab" data-os="windows" onclick="switchOS('windows')">🪟 Windows</div>
+        <div class="os-tab" data-os="linux" onclick="switchOS('linux')">🐧 Linux</div>
+      </div>
+
+      <div class="os-content active" data-os="mac">
+        <p><strong>Option A: Homebrew (recommended)</strong></p>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">bash</span></div>
+          <div class="code-body"><pre>brew install git
+git --version    # should show 2.x.x</pre></div>
+        </div>
+
+        <p><strong>Option B: Download installer</strong></p>
+        <div class="topic-block">
+          <ul>
+            <li>Go to <a href="https://git-scm.com/download/mac" target="_blank">git-scm.com/download/mac</a></li>
+            <li>Pick the "Binary installer" link &mdash; download the .dmg and run it</li>
+            <li>Open a new Terminal window, verify: <code class="inline-code">git --version</code></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="os-content" data-os="windows">
+        <p><strong>Option A: Download installer</strong></p>
+        <div class="topic-block">
+          <ul>
+            <li>Download from <a href="https://git-scm.com/download/win" target="_blank">git-scm.com/download/win</a></li>
+            <li>Run the installer &mdash; defaults are mostly fine, <strong>with one important exception</strong> (see the warning below)</li>
+            <li>Close and reopen PowerShell, verify: <code class="inline-code">git --version</code></li>
+          </ul>
+        </div>
+
+        <div class="callout callout-error">
+          <span class="icon">⚠️</span>
+          <div><strong>Important &mdash; editor screen:</strong> The installer asks "Choosing the default editor used by Git". The default is <strong>Vim</strong>. Do NOT keep Vim &mdash; it is very hard to exit for beginners. Pick <strong>"Nano"</strong> or <strong>"Notepad"</strong> from the dropdown instead. (You can fix this later with <code class="inline-code">git config --global core.editor</code> if you already clicked through.)</div>
+        </div>
+
+        <p><strong>Option B: winget</strong></p>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">powershell</span></div>
+          <div class="code-body"><pre>winget install --id Git.Git -e
+
+# Close and reopen PowerShell, then verify:
+git --version</pre></div>
+        </div>
+        <p style="font-size: 13px; color: var(--text-subtle);">winget sets Vim as the default editor too &mdash; we will override that in the Git identity step below.</p>
+      </div>
+
+      <div class="os-content" data-os="linux">
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">bash</span></div>
+          <div class="code-body"><pre>sudo apt install -y git
+git --version</pre></div>
+        </div>
+      </div>
+
+      <h3>Create a GitHub Account</h3>
+      <p>GitHub is where your code lives online. You need an account <strong>before</strong> configuring Git identity &mdash; your Git email must match your GitHub email, otherwise your commits will not show up in your GitHub profile.</p>
+
+      <div class="topic-block">
+        <ul>
+          <li>Go to <a href="https://github.com/signup" target="_blank">github.com/signup</a> and create a free account (2 minutes)</li>
+          <li>Verify your email &mdash; GitHub will send a confirmation link</li>
+          <li><strong>Use an email you will keep access to</strong> &mdash; ideally your work email, or a personal one you check regularly. You will use this exact email for Git identity in the next step.</li>
+          <li>Pick a username you are comfortable with professionally &mdash; it will show up on your PRs and commits</li>
+        </ul>
+      </div>
+
+      <div class="callout callout-warning">
+        <span class="icon">🔐</span>
+        <div><strong>Enable 2FA (two-factor authentication) &mdash; GitHub requires it.</strong> After creating your account, go to Settings &rarr; Password and authentication &rarr; Two-factor authentication. Options:
+          <ul style="margin: 6px 0 0 18px; font-size: 14px;">
+            <li><strong>Authenticator app</strong> (recommended) &mdash; Google Authenticator, 1Password, Authy, Microsoft Authenticator</li>
+            <li><strong>SMS</strong> &mdash; works but less secure</li>
+          </ul>
+          <strong>Save your backup codes somewhere safe</strong> (password manager, printed paper). If you lose your phone and don't have backup codes, recovering the account is painful.
+        </div>
+      </div>
+
+      <div class="callout callout-info">
+        <span class="icon">💡</span>
+        <div><strong>About passwords:</strong> GitHub does not accept your password when pushing code from the terminal. You need either a Personal Access Token, an SSH key, or &mdash; the easiest option &mdash; the GitHub CLI (two sections below). We will use the CLI so you never have to deal with tokens.</div>
+      </div>
+
+      <h3>Configure Git Identity</h3>
+      <p>Git needs your name and email for commits. Use the <strong>same email</strong> you registered on GitHub &mdash; this is how GitHub links commits to your profile.</p>
+      <div class="code-block">
+        <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">bash</span></div>
+        <div class="code-body"><pre># Use the SAME email as your GitHub account
+git config --global user.name "Your Name"
+git config --global user.email "you@company.com"
+git config --global init.defaultBranch main
+
+# Override the Vim editor default with something friendlier
+git config --global core.editor "nano"    # or "notepad" on Windows
+
+# Verify
+git config --global --list</pre></div>
+      </div>
+      <p style="font-size: 13px; color: var(--text-subtle);">Later, after VS Code is installed and the <code class="inline-code">code .</code> command works from the terminal, you can switch the editor to VS Code &mdash; see the VS Code "After installation" section below.</p>
+
+      <h3>Installing GitHub CLI (<code class="inline-code">gh</code>)</h3>
+      <p>The GitHub CLI is a small tool that handles authentication for you. After one command (<code class="inline-code">gh auth login</code>), every <code class="inline-code">git push</code> and <code class="inline-code">git pull</code> just works &mdash; no tokens, no SSH keys, no passwords.</p>
+
+      <div class="os-tabs">
+        <div class="os-tab active" data-os="mac" onclick="switchOS('mac')">🍎 macOS</div>
+        <div class="os-tab" data-os="windows" onclick="switchOS('windows')">🪟 Windows</div>
+        <div class="os-tab" data-os="linux" onclick="switchOS('linux')">🐧 Linux</div>
+      </div>
+
+      <div class="os-content active" data-os="mac">
+        <p><strong>Homebrew (recommended)</strong></p>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">bash</span></div>
+          <div class="code-body"><pre>brew install gh
+gh --version    # should show 2.x.x</pre></div>
+        </div>
+        <p style="font-size: 13px; color: var(--text-subtle);">Alternative: download installer from <a href="https://cli.github.com" target="_blank">cli.github.com</a></p>
+      </div>
+
+      <div class="os-content" data-os="windows">
+        <p><strong>Option A: winget (recommended)</strong></p>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">powershell</span></div>
+          <div class="code-body"><pre>winget install --id GitHub.cli
+
+# Close and reopen PowerShell, then verify:
+gh --version</pre></div>
+        </div>
+
+        <p><strong>Option B: Download installer</strong> from <a href="https://cli.github.com" target="_blank">cli.github.com</a></p>
+      </div>
+
+      <div class="os-content" data-os="linux">
+        <p>On Debian/Ubuntu:</p>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">bash</span></div>
+          <div class="code-body"><pre># Add the official GitHub CLI repository
+(type -p wget &gt;/dev/null || (sudo apt update &amp;&amp; sudo apt install wget -y)) \
+  &amp;&amp; sudo mkdir -p -m 755 /etc/apt/keyrings \
+  &amp;&amp; wget -qO- https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg &gt; /dev/null \
+  &amp;&amp; sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg \
+  &amp;&amp; echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list &gt; /dev/null \
+  &amp;&amp; sudo apt update \
+  &amp;&amp; sudo apt install gh -y
+
+gh --version</pre></div>
+        </div>
+        <p style="font-size: 13px; color: var(--text-subtle);">Full install instructions for other distros: <a href="https://github.com/cli/cli/blob/trunk/docs/install_linux.md" target="_blank">GitHub CLI Linux docs</a></p>
+      </div>
+
+      <h3>Authenticate with GitHub</h3>
+      <p>Run this once. It opens your browser, you log in to GitHub, done.</p>
+      <div class="code-block">
+        <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">bash</span></div>
+        <div class="code-body"><pre>gh auth login</pre></div>
+      </div>
+
+      <p>You will see a series of prompts. Choose these answers:</p>
+      <div class="topic-block">
+        <ul>
+          <li><strong>Where do you use GitHub?</strong> &rarr; <code class="inline-code">GitHub.com</code></li>
+          <li><strong>Preferred protocol for Git operations?</strong> &rarr; <code class="inline-code">HTTPS</code></li>
+          <li><strong>Authenticate Git with your GitHub credentials?</strong> &rarr; <code class="inline-code">Yes</code></li>
+          <li><strong>How would you like to authenticate?</strong> &rarr; <code class="inline-code">Login with a web browser</code></li>
+        </ul>
+        <p>Copy the one-time code shown in the terminal, press Enter, a browser tab opens &mdash; paste the code, approve (2FA prompt may appear). You are done.</p>
+      </div>
+
+      <p><strong>Verify:</strong></p>
+      <div class="code-block">
+        <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">bash</span></div>
+        <div class="code-body"><pre>gh auth status
+# ✓ Logged in to github.com as YOUR-USERNAME</pre></div>
+      </div>
+
+      <div class="callout callout-success">
+        <span class="icon">✅</span>
+        <div><strong>What this unlocks:</strong> from now on, <code class="inline-code">git push</code>, <code class="inline-code">git pull</code>, and <code class="inline-code">gh repo create</code> will all work without passwords or tokens. You will not think about authentication again.</div>
+      </div>
+
+      <h3>Installing VS Code</h3>
+
+      <div class="os-tabs">
+        <div class="os-tab active" data-os="mac" onclick="switchOS('mac')">🍎 macOS</div>
+        <div class="os-tab" data-os="windows" onclick="switchOS('windows')">🪟 Windows</div>
+        <div class="os-tab" data-os="linux" onclick="switchOS('linux')">🐧 Linux</div>
+      </div>
+
+      <div class="os-content active" data-os="mac">
+        <p><strong>Option A: Download installer</strong></p>
+        <div class="topic-block">
+          <ul>
+            <li>Download from <a href="https://code.visualstudio.com" target="_blank">code.visualstudio.com</a></li>
+            <li>Open the .zip / .dmg and drag "Visual Studio Code" to the Applications folder</li>
+            <li>Launch VS Code from Launchpad or Spotlight</li>
+          </ul>
+        </div>
+
+        <p><strong>Option B: Homebrew</strong></p>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">bash</span></div>
+          <div class="code-body"><pre>brew install --cask visual-studio-code</pre></div>
+        </div>
+      </div>
+
+      <div class="os-content" data-os="windows">
+        <p><strong>Option A: Download installer</strong></p>
+        <div class="topic-block">
+          <ul>
+            <li>Download from <a href="https://code.visualstudio.com" target="_blank">code.visualstudio.com</a></li>
+            <li>Run the installer &mdash; make sure these are checked:
+              <ul>
+                <li><strong>Add to PATH</strong> (so <code class="inline-code">code .</code> works from PowerShell)</li>
+                <li><strong>Add "Open with Code" to context menu</strong> (optional but handy)</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+
+        <p><strong>Option B: winget</strong></p>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">powershell</span></div>
+          <div class="code-body"><pre>winget install Microsoft.VisualStudioCode</pre></div>
+        </div>
+      </div>
+
+      <div class="os-content" data-os="linux">
+        <p><strong>Option A: Snap (Ubuntu / most distros)</strong></p>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">bash</span></div>
+          <div class="code-body"><pre>sudo snap install code --classic</pre></div>
+        </div>
+
+        <p><strong>Option B: Download .deb / .rpm</strong> from <a href="https://code.visualstudio.com" target="_blank">code.visualstudio.com</a></p>
+      </div>
+
+      <h4 style="margin-top: 20px;">After installation (all platforms)</h4>
+      <div class="topic-block">
+        <ul>
+          <li>Install the <strong>Playwright extension:</strong> open VS Code &rarr; Extensions (<kbd>Ctrl/Cmd</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd>) &rarr; search "Playwright" &rarr; install <strong>"Playwright Test for VSCode"</strong> by Microsoft</li>
+          <li>TypeScript support is built into VS Code &mdash; no extra install needed</li>
+          <li><strong>Sign in with your GitHub account</strong> (recommended). Click the <strong>Accounts</strong> icon (person silhouette, bottom-left) &rarr; "Sign in to Sync Settings" &rarr; choose <strong>GitHub</strong>. This turns on <strong>Settings Sync</strong>, which is convenient because:
+            <ul>
+              <li>Your extensions (Playwright, Prettier, themes) follow you to any machine where you sign in</li>
+              <li>If you get a new laptop or reinstall VS Code, everything restores automatically &mdash; no reconfiguring</li>
+              <li>Keybindings, snippets, and UI state sync across work laptop / home desktop</li>
+            </ul>
+          </li>
+          <li>Enable the <code class="inline-code">code .</code> shortcut &mdash; lets you open any folder in VS Code from the terminal:
+            <ul>
+              <li><strong>Mac:</strong> open VS Code &rarr; <kbd>⌘</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> &rarr; "Shell Command: Install 'code' command in PATH"</li>
+              <li><strong>Windows:</strong> works out of the box if you checked "Add to PATH" during install</li>
+              <li><strong>Linux (snap):</strong> works out of the box</li>
+            </ul>
+          </li>
+          <li><strong>Optional &mdash; use VS Code as your Git editor.</strong> Once <code class="inline-code">code .</code> works from the terminal, you can upgrade the Git editor from Nano to VS Code:
+            <div class="code-block">
+              <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">bash</span></div>
+              <div class="code-body"><pre>git config --global core.editor "code --wait"</pre></div>
+            </div>
+            Now when Git opens an editor (e.g. <code class="inline-code">git commit</code> without <code class="inline-code">-m</code>, or during a rebase), it opens in VS Code instead of Nano/Vim.
+          </li>
+        </ul>
+      </div>
+
+      <p class="section-label">CHECK BEFORE MOVING ON</p>
+      <div class="ready-box">
+        <h4>Setup is complete when</h4>
+        <ul class="checklist">
+          <li><input type="checkbox" id="w0-1" data-week="0"><label for="w0-1">Terminal opens and I can navigate folders with <code class="inline-code">cd</code> and <code class="inline-code">ls</code>/<code class="inline-code">dir</code></label></li>
+          <li><input type="checkbox" id="w0-2" data-week="0"><label for="w0-2"><code class="inline-code">node --version</code> shows v22.x.x (or v20+)</label></li>
+          <li><input type="checkbox" id="w0-3" data-week="0"><label for="w0-3"><code class="inline-code">npm --version</code> shows 10+ (or 9+)</label></li>
+          <li><input type="checkbox" id="w0-4" data-week="0"><label for="w0-4"><code class="inline-code">git --version</code> shows 2.x.x</label></li>
+          <li><input type="checkbox" id="w0-5" data-week="0"><label for="w0-5">I have a GitHub account, verified email, and 2FA enabled (with backup codes saved)</label></li>
+          <li><input type="checkbox" id="w0-6" data-week="0"><label for="w0-6">Git identity is configured with the same email as GitHub (<code class="inline-code">git config --global --list</code> shows it)</label></li>
+          <li><input type="checkbox" id="w0-7" data-week="0"><label for="w0-7"><code class="inline-code">gh --version</code> shows 2.x.x</label></li>
+          <li><input type="checkbox" id="w0-8" data-week="0"><label for="w0-8"><code class="inline-code">gh auth status</code> shows "Logged in to github.com"</label></li>
+          <li><input type="checkbox" id="w0-9" data-week="0"><label for="w0-9">VS Code is installed and opens</label></li>
+          <li><input type="checkbox" id="w0-10" data-week="0"><label for="w0-10">Playwright Test for VSCode extension is installed</label></li>
+          <li><input type="checkbox" id="w0-11" data-week="0"><label for="w0-11">I am signed in to VS Code with my GitHub account (Settings Sync enabled)</label></li>
+          <li><input type="checkbox" id="w0-12" data-week="0"><label for="w0-12">I can run <code class="inline-code">code .</code> in my terminal (optional, but very helpful)</label></li>
+        </ul>
+      </div>
+
+      <div class="callout callout-warning">
+        <span class="icon">💡</span>
+        <div>If you get stuck on setup, ask a colleague or your team lead before Week 1 starts. Setup problems are normal &mdash; they are not a sign that automation is not for you.</div>
+      </div>
+
+      <!-- ══════════════════════════════════════════════════════════════════ -->
+      <!--                 V S   C O D E   R E F E R E N C E                 -->
+      <!-- ══════════════════════════════════════════════════════════════════ -->
+
+      <div class="week-divider wdvs" id="vscode">
+        <div class="week-badge"><span>🛠</span></div>
+        <div class="week-info">
+          <h2 style="border:none;">VS Code &mdash; Your IDE</h2>
+          <div class="week-goal">Reference guide · ~1 hour to read + practice · revisit anytime</div>
+        </div>
+        <div class="week-progress" data-week="vs"><span class="pct-val">0%</span>done</div>
+      </div>
+
+      <div class="callout callout-info">
+        <span class="icon">📌</span>
+        <div><strong>Why this section:</strong> you will spend 80% of your time in VS Code. You do not need to master it &mdash; learn the essentials now, come back to this page when needed. Skip it if you already use VS Code daily.</div>
+      </div>
+
+      <div class="callout callout-warning">
+        <span class="icon">🗓️</span>
+        <div><strong>When to do what:</strong> read the whole guide now. Exercises are split into two parts:
+          <ul style="margin: 6px 0 0 18px; font-size: 14px;">
+            <li><strong>Part A &mdash; Navigation basics</strong> &mdash; do now, works on any folder</li>
+            <li><strong>Part B &mdash; With your Playwright project</strong> &mdash; needs a project (see "Quick setup" below, or come back after Week 1 Exercise 1)</li>
+          </ul>
+        </div>
+      </div>
+
+      <h3>Window Anatomy</h3>
+      <p>VS Code has 5 main areas. Knowing their names helps when reading tutorials or asking for help.</p>
+
+      <div class="ide-mockup">
+        <div class="ide-titlebar">
+          <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+          &nbsp; my-playwright-learning — VS Code
+        </div>
+        <div class="ide-body">
+          <div class="activity-bar">
+            <span class="icon active">📁<span class="tip">Explorer</span></span>
+            <span class="icon">🔍<span class="tip">Search</span></span>
+            <span class="icon">🔀<span class="tip">Source Control (Git)</span></span>
+            <span class="icon">▶<span class="tip">Run &amp; Debug</span></span>
+            <span class="icon">🧩<span class="tip">Extensions</span></span>
+            <span class="icon">🧪<span class="tip">Testing (Playwright)</span></span>
+          </div>
+          <div class="side-panel">
+            <div class="heading">Explorer</div>
+            <div class="file folder">tests</div>
+            <div class="file ts" style="padding-left: 16px;">login.spec.ts</div>
+            <div class="file folder">pages</div>
+            <div class="file ts" style="padding-left: 16px;">LoginPage.ts</div>
+            <div class="file">playwright.config.ts</div>
+            <div class="file">package.json</div>
+          </div>
+          <div class="editor">
+            <span class="tab">login.spec.ts</span>
+            <div class="line"><span class="num">1</span><span><span class="kw">import</span> { test, expect } <span class="kw">from</span> <span class="str">"@playwright/test"</span>;</span></div>
+            <div class="line"><span class="num">2</span><span></span></div>
+            <div class="line"><span class="num">3</span><span><span class="run-btn">▶</span><span class="kw">test</span>(<span class="str">"login works"</span>, <span class="kw">async</span> ({ page }) =&gt; {</span></div>
+            <div class="line"><span class="num">4</span><span>&nbsp;&nbsp;<span class="kw">await</span> page.<span class="fn">goto</span>(<span class="str">"/login"</span>);</span></div>
+            <div class="line"><span class="num">5</span><span>&nbsp;&nbsp;<span class="com">// Run/Debug buttons appear in the gutter ◀</span></span></div>
+            <div class="line"><span class="num">6</span><span>});</span></div>
+          </div>
+          <div class="terminal">
+            <div class="heading">Terminal</div>
+            <div><span class="prompt">$</span> npx playwright test --ui</div>
+          </div>
+        </div>
+        <div class="statusbar">
+          <span>⎇ main ✓</span>
+          <span>Ln 15, Col 10</span>
+          <span>TypeScript</span>
+          <span style="margin-left: auto;">Playwright ready</span>
+        </div>
+      </div>
+
+      <div class="topic-block">
+        <h4>What you see</h4>
+        <ul>
+          <li><strong>Activity Bar (far left, dark column with icons).</strong> Switches between panels. The 6 icons you will use: Explorer (files), Search, Source Control (Git), Run &amp; Debug, Extensions, and Testing (Playwright). Hover any icon to see its name.</li>
+          <li><strong>Side Panel (left, lighter column).</strong> Shows whatever the Activity Bar has selected. Usually the file tree.</li>
+          <li><strong>Editor (center).</strong> Where you write code. Tabs at the top &mdash; one per open file.</li>
+          <li><strong>Terminal Panel (bottom).</strong> Built-in terminal. Running commands here instead of a separate terminal app keeps everything in one window.</li>
+          <li><strong>Status Bar (very bottom, blue strip).</strong> Git branch on the left, errors/warnings, cursor position, language mode.</li>
+        </ul>
+      </div>
+
+      <h3>Essential Shortcuts</h3>
+      <p>You do not need to memorize all of these. Start with the top 5, the rest will come naturally.</p>
+
+      <table class="shortcut-table">
+        <tr><th>Action</th><th>Mac</th><th>Windows / Linux</th><th>Why it matters</th></tr>
+        <tr><td><strong>Command Palette</strong></td><td><kbd>⌘</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd></td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd></td><td>Run any VS Code action by name &mdash; if you forget a shortcut, find it here</td></tr>
+        <tr><td><strong>Quick file open</strong></td><td><kbd>⌘</kbd>+<kbd>P</kbd></td><td><kbd>Ctrl</kbd>+<kbd>P</kbd></td><td>Jump to any file by typing part of its name</td></tr>
+        <tr><td><strong>Toggle terminal</strong></td><td><kbd>Ctrl</kbd>+<kbd>`</kbd></td><td><kbd>Ctrl</kbd>+<kbd>`</kbd></td><td>Open / close the built-in terminal &mdash; used constantly</td></tr>
+        <tr><td><strong>Find in file</strong></td><td><kbd>⌘</kbd>+<kbd>F</kbd></td><td><kbd>Ctrl</kbd>+<kbd>F</kbd></td><td>Search within the current file</td></tr>
+        <tr><td><strong>Find in all files</strong></td><td><kbd>⌘</kbd>+<kbd>Shift</kbd>+<kbd>F</kbd></td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>F</kbd></td><td>Search the whole project &mdash; great for "where is this locator used?"</td></tr>
+        <tr><td>Go to Definition</td><td><kbd>F12</kbd> or <kbd>⌘</kbd>+click</td><td><kbd>F12</kbd> or <kbd>Ctrl</kbd>+click</td><td>Jump to where a function or class is defined</td></tr>
+        <tr><td>Rename symbol</td><td><kbd>F2</kbd></td><td><kbd>F2</kbd></td><td>Rename a variable/function everywhere it is used</td></tr>
+        <tr><td>Toggle side bar</td><td><kbd>⌘</kbd>+<kbd>B</kbd></td><td><kbd>Ctrl</kbd>+<kbd>B</kbd></td><td>Hide the file tree to get more editor space</td></tr>
+        <tr><td>Split editor</td><td><kbd>⌘</kbd>+<kbd>\</kbd></td><td><kbd>Ctrl</kbd>+<kbd>\</kbd></td><td>Show two files side by side</td></tr>
+        <tr><td>Save</td><td><kbd>⌘</kbd>+<kbd>S</kbd></td><td><kbd>Ctrl</kbd>+<kbd>S</kbd></td><td>Save the current file</td></tr>
+        <tr><td>Comment line</td><td><kbd>⌘</kbd>+<kbd>/</kbd></td><td><kbd>Ctrl</kbd>+<kbd>/</kbd></td><td>Add/remove <code class="inline-code">//</code> comment on the current line</td></tr>
+        <tr><td>Duplicate line</td><td><kbd>⌥</kbd>+<kbd>⇧</kbd>+<kbd>↓</kbd></td><td><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>↓</kbd></td><td>Copy the current line below</td></tr>
+      </table>
+
+      <div class="callout callout-success">
+        <span class="icon">💡</span>
+        <div><strong>If you remember only one:</strong> the Command Palette (<kbd>⌘/Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>). It is a search for every action in VS Code. Forgot how to format code? Type "format". Need to change theme? Type "theme". It replaces needing to memorize everything.</div>
+      </div>
+
+      <h3>The Integrated Terminal</h3>
+      <p>VS Code has a built-in terminal. Use it instead of Terminal.app / PowerShell &mdash; everything stays in one window.</p>
+
+      <div class="topic-block">
+        <ul>
+          <li><strong>Open / close:</strong> <kbd>Ctrl</kbd>+<kbd>`</kbd> (backtick, the key above Tab)</li>
+          <li><strong>Open a second terminal:</strong> click the <code class="inline-code">+</code> button in the terminal panel. Tests in one, <code class="inline-code">git status</code> in another.</li>
+          <li><strong>Split side-by-side:</strong> click the split icon in the terminal panel.</li>
+          <li><strong>It opens in your project folder automatically</strong> &mdash; no need to <code class="inline-code">cd</code> every time.</li>
+          <li><strong>Windows users:</strong> VS Code lets you pick the shell. Click the dropdown next to <code class="inline-code">+</code> &mdash; choose PowerShell (recommended) or Git Bash.</li>
+        </ul>
+      </div>
+
+      <h3>TypeScript Features You Get for Free</h3>
+      <p>VS Code has built-in TypeScript support. These features save you time, especially as a non-developer.</p>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-theory">Theory</span>
+        <h4>IntelliSense &mdash; autocomplete while you type</h4>
+        <p>Start typing <code class="inline-code">page.</code> in a test file. A dropdown appears with every method Playwright offers: <code class="inline-code">goto</code>, <code class="inline-code">click</code>, <code class="inline-code">fill</code>, <code class="inline-code">getByRole</code>. Pick one with arrow keys + <kbd>Enter</kbd> (or <kbd>Tab</kbd>).</p>
+        <p>This means: <strong>you do not need to memorize API methods.</strong> Let VS Code show them to you.</p>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-theory">Theory</span>
+        <h4>Hover for documentation</h4>
+        <p>Hover your mouse over any Playwright method (e.g. <code class="inline-code">getByRole</code>) in your test file. A tooltip appears showing what it does, what parameters it takes, and usually an example. No need to open the docs.</p>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-theory">Theory</span>
+        <h4>Go to Definition (<kbd>F12</kbd>)</h4>
+        <p>Place your cursor on a class name, e.g. <code class="inline-code">LoginPage</code>, and press <kbd>F12</kbd>. VS Code jumps to where <code class="inline-code">LoginPage</code> is defined. Press <kbd>Ctrl</kbd>+<kbd>-</kbd> (Mac: <kbd>⌃</kbd>+<kbd>-</kbd>) to go back.</p>
+        <p>Use this when you see a method being called and want to see how it works.</p>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-theory">Theory</span>
+        <h4>Red squiggles &mdash; TypeScript errors</h4>
+        <p>If you see a red wavy underline, TypeScript found a problem. Hover over it to read the message. Common examples:</p>
+        <ul>
+          <li><strong>"Cannot find name 'expect'"</strong> &mdash; you forgot to <code class="inline-code">import</code> it.</li>
+          <li><strong>"Property 'fil' does not exist on type"</strong> &mdash; typo; you meant <code class="inline-code">fill</code>.</li>
+          <li><strong>"Expected 1 arguments, but got 0"</strong> &mdash; a method needs a parameter you did not pass.</li>
+        </ul>
+        <p>Fix these <em>before</em> running tests &mdash; they are 5-second fixes, and ignoring them means the test will not even start.</p>
+      </div>
+
+      <h3>The Playwright Extension &mdash; the game changer</h3>
+      <p>You installed "Playwright Test for VSCode" in Week 0. Here is what it gives you.</p>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-new">Extension</span>
+        <h4>1. Testing panel (🧪 icon in Activity Bar)</h4>
+        <p>Click the beaker icon in the Activity Bar (left side). You see a tree of all your tests. From here you can:</p>
+        <ul>
+          <li><strong>Run a test</strong> by clicking the ▶ play button next to it</li>
+          <li><strong>Debug a test</strong> by right-clicking &rarr; Debug Test</li>
+          <li><strong>See pass/fail status</strong> with green ✓ or red ✗ icons</li>
+          <li><strong>Filter to only failed tests</strong> with the filter icon at the top</li>
+        </ul>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-new">Extension</span>
+        <h4>2. Run / Debug buttons in the gutter</h4>
+        <p>Look next to any <code class="inline-code">test(...)</code> line &mdash; a small green ▶ button appears in the gutter (left margin of the editor). Click it to run just that test. Right-click for Debug.</p>
+        <div class="callout callout-success">
+          <span class="icon">⚡</span>
+          <div><strong>This is your fastest feedback loop.</strong> Edit a test &rarr; click ▶ &rarr; see result in the Test Results panel. No terminal needed.</div>
+        </div>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-new">Extension</span>
+        <h4>3. Pick Locator &mdash; visual locator picker</h4>
+        <p>In the Testing panel, find the "Playwright" section at the bottom. Click <strong>"Pick locator"</strong>. A browser opens. Hover any element on the page &mdash; VS Code suggests a locator in real time. Click to copy it to clipboard.</p>
+        <p>This is faster than opening DevTools and writing locators by hand. And it automatically suggests <code class="inline-code">getByRole</code> / <code class="inline-code">getByText</code> &mdash; the good locators.</p>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-new">Extension</span>
+        <h4>4. Record new test</h4>
+        <p>In the Playwright section, click <strong>"Record new"</strong>. A browser opens. Every click, type, and navigation you do is converted into Playwright code. When you finish, the generated test is inserted into your file.</p>
+        <p><strong>Warning:</strong> the generated code often uses brittle locators. Use it as a starting point, then improve the locators (Week 3 skill).</p>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-new">Extension</span>
+        <h4>5. Show browser / Run in headed mode</h4>
+        <p>In the Playwright section there are checkboxes:</p>
+        <ul>
+          <li><strong>Show browser</strong> &mdash; run tests with the browser visible (like <code class="inline-code">--headed</code>)</li>
+          <li><strong>Show trace viewer</strong> &mdash; open the trace after the test finishes</li>
+        </ul>
+        <p>Check these when you want to watch tests run visually without switching to the terminal.</p>
+      </div>
+
+      <h3>Git Integration &mdash; commit without the terminal</h3>
+      <p>In Week 5 you will learn Git commands. But for day-to-day work, VS Code has a visual Git panel that is often faster.</p>
+
+      <div class="topic-block">
+        <h4>Source Control panel (🔀 icon or <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>G</kbd>)</h4>
+        <ul>
+          <li><strong>See all changed files</strong> &mdash; a list appears with M (modified), U (untracked), D (deleted) labels</li>
+          <li><strong>View the diff</strong> &mdash; click any file to see what changed (old version on left, new on right)</li>
+          <li><strong>Stage a file</strong> &mdash; click the <code class="inline-code">+</code> next to the file (same as <code class="inline-code">git add</code>)</li>
+          <li><strong>Commit</strong> &mdash; type a commit message at the top and press <kbd>⌘/Ctrl</kbd>+<kbd>Enter</kbd></li>
+          <li><strong>Push</strong> &mdash; click the <code class="inline-code">...</code> menu or the sync icon in the status bar</li>
+        </ul>
+        <p>You will still need the terminal for some things (initial <code class="inline-code">git init</code>, creating branches, fixing conflicts), but for "stage, commit, push" &mdash; the UI is faster.</p>
+      </div>
+
+      <p class="section-label">EXERCISES</p>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-practice">Quick setup (optional)</span>
+        <h4>Want to do all exercises right now? Create a scratch project</h4>
+        <p>Part B exercises need a Playwright project. You have two options:</p>
+        <ul>
+          <li><strong>Option 1:</strong> wait until Week 1 &mdash; you will create a project there anyway.</li>
+          <li><strong>Option 2:</strong> create a throwaway project in 2 minutes (same command as Week 1). You can delete it later or keep it as your Week 1 project.</li>
+        </ul>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> 2-minute scratch project <span class="lang">bash</span></div>
+          <div class="code-body"><pre># In your terminal (anywhere convenient)
+mkdir vscode-practice
+cd vscode-practice
+npm init playwright@latest        # accept all defaults
+code .                             # open it in VS Code</pre></div>
+        </div>
+        <p style="font-size: 13px; color: var(--text-subtle);">This creates a working Playwright project with example tests (<code class="inline-code">tests/example.spec.ts</code>) you can use for all Part B exercises.</p>
+      </div>
+
+      <div class="topic-block exercises">
+        <span class="topic-tag tag-practice">Part A · Navigation basics</span>
+        <h4>Do these now (any folder works &mdash; even an empty one)</h4>
+        <ol class="checklist">
+          <li><input type="checkbox" id="vs-e1" data-week="vs"><label for="vs-e1"><strong>Open a folder in VS Code.</strong> File &rarr; Open Folder (or run <code class="inline-code">code .</code> from the terminal inside any folder).</label></li>
+          <li><input type="checkbox" id="vs-e2" data-week="vs"><label for="vs-e2"><strong>Open the Command Palette</strong> (<kbd>⌘/Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>). Type "toggle theme" and try a different color theme.</label></li>
+          <li><input type="checkbox" id="vs-e3" data-week="vs"><label for="vs-e3"><strong>Open the integrated terminal</strong> (<kbd>Ctrl</kbd>+<kbd>`</kbd>). Run <code class="inline-code">node --version</code>. You should see your Node version.</label></li>
+          <li><input type="checkbox" id="vs-e4" data-week="vs"><label for="vs-e4"><strong>Open a second terminal.</strong> Click the <code class="inline-code">+</code> button in the terminal panel. Switch between them using the dropdown.</label></li>
+          <li><input type="checkbox" id="vs-e5" data-week="vs"><label for="vs-e5"><strong>Toggle the side bar</strong> (<kbd>⌘/Ctrl</kbd>+<kbd>B</kbd>). Now you have more space for the editor.</label></li>
+          <li><input type="checkbox" id="vs-e6" data-week="vs"><label for="vs-e6"><strong>Create a file.</strong> In Explorer, right-click &rarr; New File &rarr; name it <code class="inline-code">notes.md</code>. Type something. Save with <kbd>⌘/Ctrl</kbd>+<kbd>S</kbd>.</label></li>
+          <li><input type="checkbox" id="vs-e7" data-week="vs"><label for="vs-e7"><strong>Find in file</strong> (<kbd>⌘/Ctrl</kbd>+<kbd>F</kbd>) &mdash; search for a word in your <code class="inline-code">notes.md</code>.</label></li>
+          <li><input type="checkbox" id="vs-e8" data-week="vs"><label for="vs-e8"><strong>Find the Extensions panel</strong> (🧩 icon in Activity Bar). Verify "Playwright Test for VSCode" is installed. If not &mdash; install it now.</label></li>
+        </ol>
+      </div>
+
+      <div class="topic-block exercises">
+        <span class="topic-tag tag-practice">Part B · With your Playwright project</span>
+        <h4>Do these after Week 1 Exercise 1 (or use the scratch project above)</h4>
+        <p style="font-size: 13px; color: var(--text-subtle); margin-bottom: 8px;">Open your Playwright project in VS Code first: <code class="inline-code">cd my-playwright-learning &amp;&amp; code .</code></p>
+        <ol class="checklist">
+          <li><input type="checkbox" id="vs-e9" data-week="vs"><label for="vs-e9"><strong>Quick-open a file</strong> (<kbd>⌘/Ctrl</kbd>+<kbd>P</kbd>). Type "config" &mdash; <code class="inline-code">playwright.config.ts</code> shows up. Press Enter.</label></li>
+          <li><input type="checkbox" id="vs-e10" data-week="vs"><label for="vs-e10"><strong>Search across the project</strong> (<kbd>⌘/Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>F</kbd>). Search for "test" &mdash; see all matches across files.</label></li>
+          <li><input type="checkbox" id="vs-e11" data-week="vs"><label for="vs-e11"><strong>Try IntelliSense.</strong> In <code class="inline-code">tests/example.spec.ts</code>, on a new line inside a test, type <code class="inline-code">page.</code> (with the dot). Pick <code class="inline-code">goto</code> from the dropdown. Do NOT save.</label></li>
+          <li><input type="checkbox" id="vs-e12" data-week="vs"><label for="vs-e12"><strong>Hover for docs.</strong> Hover your mouse over <code class="inline-code">expect</code> in the example test &mdash; a tooltip with documentation appears.</label></li>
+          <li><input type="checkbox" id="vs-e13" data-week="vs"><label for="vs-e13"><strong>Go to Definition.</strong> Place your cursor on <code class="inline-code">test</code> (inside <code class="inline-code">test("...", async...)</code>) and press <kbd>F12</kbd>. See where it is defined inside <code class="inline-code">@playwright/test</code>. Press <kbd>⌘/Ctrl</kbd>+<kbd>-</kbd> to go back.</label></li>
+          <li><input type="checkbox" id="vs-e14" data-week="vs"><label for="vs-e14"><strong>Open the Testing panel</strong> (🧪 icon in Activity Bar). See the example tests listed there.</label></li>
+          <li><input type="checkbox" id="vs-e15" data-week="vs"><label for="vs-e15"><strong>Run a test from the gutter.</strong> Click the green ▶ next to any <code class="inline-code">test(...)</code> line in <code class="inline-code">example.spec.ts</code>. Watch the test run without using the terminal.</label></li>
+          <li><input type="checkbox" id="vs-e16" data-week="vs"><label for="vs-e16"><strong>Try Pick Locator.</strong> In the Testing panel &rarr; Playwright section &rarr; "Pick locator". A browser opens. Hover elements, see suggested locators, copy one.</label></li>
+          <li><input type="checkbox" id="vs-e17" data-week="vs"><label for="vs-e17"><strong>Create a TypeScript error on purpose.</strong> In a test, remove the <code class="inline-code">import { test, expect }</code> line. Red squiggles appear. Hover to read the message. Undo (<kbd>⌘/Ctrl</kbd>+<kbd>Z</kbd>).</label></li>
+          <li><input type="checkbox" id="vs-e18" data-week="vs"><label for="vs-e18"><strong>Look at Source Control</strong> (🔀 icon in Activity Bar). If your project has a Git repo, you'll see changed files. (You will use this more in Week 5.)</label></li>
+        </ol>
+      </div>
+
+      <div class="ready-box">
+        <h4>Ready When</h4>
+        <ul class="checklist">
+          <li><input type="checkbox" id="vs-r1" data-week="vs"><label for="vs-r1">Part A is done &mdash; I can navigate VS Code confidently</label></li>
+          <li><input type="checkbox" id="vs-r2" data-week="vs"><label for="vs-r2">I use the integrated terminal (<kbd>Ctrl</kbd>+<kbd>`</kbd>) instead of an external one</label></li>
+          <li><input type="checkbox" id="vs-r3" data-week="vs"><label for="vs-r3">Part B &mdash; once I have a Playwright project &mdash; I can run tests from the Testing panel and the gutter</label></li>
+          <li><input type="checkbox" id="vs-r4" data-week="vs"><label for="vs-r4">I can use IntelliSense, hover docs, and Go to Definition</label></li>
+          <li><input type="checkbox" id="vs-r5" data-week="vs"><label for="vs-r5">I know how to read red squiggles (TypeScript errors)</label></li>
+        </ul>
+        <p style="font-size: 12px; color: var(--text-subtle); margin-top: 10px;">💡 If you only did Part A, finish Part B items after Week 1 Exercise 1.</p>
+      </div>
+
+      <!-- ══════════════════════════════════════════════════════════════════ -->
+      <!--                          W E E K   1                             -->
+      <!-- ══════════════════════════════════════════════════════════════════ -->
+
+      <div class="week-divider wd1" id="week-1">
+        <div class="week-badge"><span>1</span></div>
+        <div class="week-info">
+          <h2 style="border:none;">Environment Setup &amp; First Test</h2>
+          <div class="week-goal">Estimated time: 5-6 hours</div>
+        </div>
+        <div class="week-progress" data-week="1"><span class="pct-val">0%</span>done</div>
+      </div>
+
+      <p class="section-label">LEARNING OBJECTIVES</p>
+      <div class="topic-block">
+        <ul>
+          <li>Understand what Playwright is and why it is used</li>
+          <li>Create a Playwright project from scratch</li>
+          <li>Run tests (all browsers, one browser, one test file)</li>
+          <li>Read the HTML report</li>
+          <li>Name every file in the project and explain what it does</li>
+        </ul>
+      </div>
+
+      <p class="section-label">TOPICS</p>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-theory">Theory</span>
+        <h4>Manual vs Automated testing</h4>
+        <ul>
+          <li><strong>Why automate?</strong> Regression testing is repetitive. Automation runs the same checks every time, faster, without human error.</li>
+          <li><strong>What is Playwright?</strong> A tool by Microsoft that controls a real browser through code. You write instructions like "go to this URL", "click this button", "check if this text appears".</li>
+          <li><strong>What is E2E testing?</strong> End-to-end tests simulate a real user journey: open the app, log in, perform actions, verify results.</li>
+          <li><strong>When NOT to automate:</strong> exploratory testing, one-time checks, tests that change every sprint, highly visual UI checks.</li>
+        </ul>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-theory">Theory</span>
+        <h4>Project structure &mdash; what each file does</h4>
+        <p>After running <code class="inline-code">npm init playwright@latest</code>, Playwright creates these files:</p>
+        <table>
+          <tr><th>File / Folder</th><th>What it is</th><th>Do I edit it?</th></tr>
+          <tr><td><code class="inline-code">playwright.config.ts</code></td><td>Settings: browsers, base URL, timeouts, reporters</td><td>Yes, to configure your project</td></tr>
+          <tr><td><code class="inline-code">package.json</code></td><td>Project manifest: name, scripts, dependencies</td><td>Yes, to add scripts and packages</td></tr>
+          <tr><td><code class="inline-code">package-lock.json</code></td><td>Exact versions of all packages (auto-generated)</td><td>No &mdash; managed by npm</td></tr>
+          <tr><td><code class="inline-code">node_modules/</code></td><td>Downloaded library code</td><td>Never &mdash; not committed to Git</td></tr>
+          <tr><td><code class="inline-code">tests/</code></td><td>Your test files (<code class="inline-code">.spec.ts</code>)</td><td>Yes &mdash; this is where you work</td></tr>
+          <tr><td><code class="inline-code">tests-examples/</code></td><td>Sample tests from Playwright</td><td>Read to learn, then delete</td></tr>
+          <tr><td><code class="inline-code">.gitignore</code></td><td>Files Git should ignore (node_modules, reports...)</td><td>Sometimes &mdash; Playwright creates a good default</td></tr>
+        </table>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-reference">Reference</span>
+        <h4>Understanding <code class="inline-code">playwright.config.ts</code> &mdash; the 3 things you care about now</h4>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> playwright.config.ts (simplified) <span class="lang">typescript</span></div>
+          <div class="code-body"><pre>import { defineConfig, devices } from '@playwright/test';
+
+export default defineConfig({
+  testDir: './tests',
+
+  use: {
+    // 1. baseURL — the site your tests run against.
+    // When set, you can write page.goto('/login') instead of
+    // page.goto('https://practicetestautomation.com/login')
+    baseURL: 'https://practicetestautomation.com',
+
+    // 2. trace — record execution for debugging
+    trace: 'on-first-retry',
+  },
+
+  // 3. projects — which browsers to run tests in.
+  // By default, EACH test runs in all 3 browsers.
+  // That's why running 1 test shows "3 tests passed" in the report.
+  projects: [
+    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
+    { name: 'firefox',  use: { ...devices['Desktop Firefox'] } },
+    { name: 'webkit',   use: { ...devices['Desktop Safari'] } },
+  ],
+});</pre></div>
+        </div>
+        <div class="callout callout-info">
+          <span class="icon">💡</span>
+          <div><strong>Important:</strong> <code class="inline-code">baseURL</code> is what lets you write <code class="inline-code">page.goto('/login')</code> in tests. Without it, relative URLs fail. You will set this in Week 4 for your login test.</div>
+        </div>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-reference">Reference</span>
+        <h4>How to run tests</h4>
+        <table>
+          <tr><th>Command</th><th>What it does</th></tr>
+          <tr><td><code class="inline-code">npx playwright test</code></td><td>Run ALL tests in ALL browsers (headless)</td></tr>
+          <tr><td><code class="inline-code">npx playwright test --headed</code></td><td>Same, but show the browser window</td></tr>
+          <tr><td><code class="inline-code">npx playwright test --project=chromium</code></td><td>Run ONLY in Chromium &mdash; much faster</td></tr>
+          <tr><td><code class="inline-code">npx playwright test login.spec.ts</code></td><td>Run only one test file</td></tr>
+          <tr><td><code class="inline-code">npx playwright test -g "wrong password"</code></td><td>Run only tests whose name matches the text</td></tr>
+          <tr><td><code class="inline-code">npx playwright test --ui</code></td><td>Open UI mode &mdash; best for local dev (run, debug, watch changes)</td></tr>
+          <tr><td><code class="inline-code">npx playwright show-report</code></td><td>Open the HTML report from the last run</td></tr>
+        </table>
+        <div class="callout callout-success">
+          <span class="icon">⚡</span>
+          <div><strong>Pro tip:</strong> During development, use <code class="inline-code">--project=chromium</code> and target a specific file. Running all browsers is for CI, not your dev loop.</div>
+        </div>
+      </div>
+
+      <p class="section-label">EXERCISES</p>
+
+      <div class="topic-block exercises">
+        <span class="topic-tag tag-practice">Hands-on</span>
+        <ol class="checklist">
+          <li><input type="checkbox" id="w1-e1" data-week="1"><label for="w1-e1"><strong>Create a project.</strong> Open your terminal, navigate to your working folder, and run:
+            <div class="code-block">
+              <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">bash</span></div>
+              <div class="code-body"><pre>mkdir my-playwright-learning
+cd my-playwright-learning
+npm init playwright@latest</pre></div>
+            </div>
+            Accept the defaults. Playwright installs browsers and creates the project files.
+          </label></li>
+          <li><input type="checkbox" id="w1-e2" data-week="1"><label for="w1-e2"><strong>Open the project in VS Code.</strong> Run <code class="inline-code">code .</code> from the project folder.</label></li>
+          <li><input type="checkbox" id="w1-e3" data-week="1"><label for="w1-e3"><strong>Run the example tests (headless).</strong> Run <code class="inline-code">npx playwright test</code>. You should see a summary of passed/failed tests.</label></li>
+          <li><input type="checkbox" id="w1-e4" data-week="1"><label for="w1-e4"><strong>Run with visible browser, one project only.</strong> Run <code class="inline-code">npx playwright test --headed --project=chromium</code>. Watch the browser open, navigate, click, and close automatically.</label></li>
+          <li><input type="checkbox" id="w1-e5" data-week="1"><label for="w1-e5"><strong>Run a single test file.</strong> Run <code class="inline-code">npx playwright test example.spec.ts</code>. Notice how it is faster.</label></li>
+          <li><input type="checkbox" id="w1-e6" data-week="1"><label for="w1-e6"><strong>Open the HTML report.</strong> Run <code class="inline-code">npx playwright show-report</code>. Click on a test to see its steps.</label></li>
+          <li><input type="checkbox" id="w1-e7" data-week="1"><label for="w1-e7"><strong>Try UI mode.</strong> Run <code class="inline-code">npx playwright test --ui</code>. This is the tool you will use most often during development.</label></li>
+          <li><input type="checkbox" id="w1-e8" data-week="1"><label for="w1-e8"><strong>File quiz.</strong> In VS Code, for each file and folder, write a one-sentence description of what it does. Compare with the table above.</label></li>
+        </ol>
+      </div>
+
+      <div class="deliverable">
+        <h4>Deliverable</h4>
+        <p>A working Playwright project with the example tests running. You can open the HTML report and explain what every file in the project does.</p>
+        <p>Verify: <code class="inline-code">npx playwright test --project=chromium</code> runs without errors. <code class="inline-code">npx playwright show-report</code> opens the report.</p>
+      </div>
+
+      <div class="ready-box">
+        <h4>Ready to Move On When</h4>
+        <ul class="checklist">
+          <li><input type="checkbox" id="w1-r1" data-week="1"><label for="w1-r1">I can create and run a Playwright project without help</label></li>
+          <li><input type="checkbox" id="w1-r2" data-week="1"><label for="w1-r2">I can run all tests, one project, one file, and one test by name</label></li>
+          <li><input type="checkbox" id="w1-r3" data-week="1"><label for="w1-r3">I can open and read the HTML report</label></li>
+          <li><input type="checkbox" id="w1-r4" data-week="1"><label for="w1-r4">I understand why one test shows up 3 times in the report (one per browser project)</label></li>
+          <li><input type="checkbox" id="w1-r5" data-week="1"><label for="w1-r5">I can name every file in the project and explain what it does</label></li>
+        </ul>
+      </div>
+
+      <!-- ══════════════════════════════════════════════════════════════════ -->
+      <!--                          W E E K   2                             -->
+      <!-- ══════════════════════════════════════════════════════════════════ -->
+
+      <div class="week-divider wd2" id="week-2">
+        <div class="week-badge"><span>2</span></div>
+        <div class="week-info">
+          <h2 style="border:none;">TypeScript for QA</h2>
+          <div class="week-goal">Estimated time: 5-6 hours</div>
+        </div>
+        <div class="week-progress" data-week="2"><span class="pct-val">0%</span>done</div>
+      </div>
+
+      <p class="section-label">LEARNING OBJECTIVES</p>
+      <div class="topic-block">
+        <ul>
+          <li>Read TypeScript test code and understand what each line does</li>
+          <li>Understand <code class="inline-code">const</code>, <code class="inline-code">let</code>, types, and template strings</li>
+          <li>Understand <code class="inline-code">async/await</code> &mdash; the pattern used in every Playwright test</li>
+          <li>Understand <code class="inline-code">import</code> and how <code class="inline-code">package.json</code> manages dependencies</li>
+        </ul>
+      </div>
+
+      <div class="callout callout-warning">
+        <span class="icon">💡</span>
+        <div><strong>You do not need to become a developer.</strong> The goal is to read TypeScript well enough to understand what a test does, spot errors, and make small edits. Think of it like reading a recipe &mdash; you do not need to be a chef.</div>
+      </div>
+
+      <p class="section-label">TOPICS</p>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-theory">Theory</span>
+        <h4>Variables, types, and strings</h4>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">typescript</span></div>
+          <div class="code-body"><pre>// Variables
+const username = "john@test.com";   // const = value will not change
+let attempts = 0;                    // let = value can change later
+attempts = 3;                        // OK — let allows reassignment
+
+// Types — TypeScript knows what type each value is
+const name: string = "Alice";        // text
+const age: number = 30;              // number
+const isAdmin: boolean = true;       // true or false
+
+// Template strings — inserting variables into text
+const greeting = `Hello, ${name}! You are ${age} years old.`;
+
+// Arrays — lists of values
+const browsers: string[] = ["chromium", "firefox", "webkit"];</pre></div>
+        </div>
+        <p><strong>Key takeaway:</strong> <code class="inline-code">const</code> = fixed, <code class="inline-code">let</code> = changeable. The <code class="inline-code">: string</code> part tells TypeScript what kind of data the variable holds.</p>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-theory">Theory</span>
+        <h4>Functions and async/await</h4>
+        <p>Two common ways to declare a function in TypeScript:</p>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> Option 1: function keyword <span class="lang">typescript</span></div>
+          <div class="code-body"><pre>function greet(name: string): string {
+  return `Hello, ${name}`;
+}
+
+greet("Alice");   // "Hello, Alice"</pre></div>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> Option 2: arrow function (shorter syntax, same result) <span class="lang">typescript</span></div>
+          <div class="code-body"><pre>const greetShort = (name: string): string =&gt; `Hello, ${name}`;
+
+greetShort("Alice");   // "Hello, Alice"</pre></div>
+        </div>
+        <p>Now the important one — <code class="inline-code">async/await</code>:</p>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">typescript</span></div>
+          <div class="code-body"><pre>// async/await — "wait for this to finish before continuing"
+// Playwright uses this EVERYWHERE because browser actions take time
+async function login(page) {
+  await page.goto("https://example.com/login");  // wait for page load
+  await page.fill("#email", "user@test.com");     // wait for typing
+  await page.click("button[type=submit]");        // wait for click
+}
+
+// Without "await", the test would try to click
+// before the page even finishes loading!</pre></div>
+        </div>
+        <p><strong>Key takeaway:</strong> Every Playwright action starts with <code class="inline-code">await</code>. It means "do not go to the next line until this is done."</p>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-theory">Theory</span>
+        <h4>Imports and dependencies</h4>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">typescript</span></div>
+          <div class="code-body"><pre>// Import from an installed package (lives in node_modules/)
+import { test, expect } from "@playwright/test";
+
+// Import from your own file (relative path — starts with ./)
+import { LoginPage } from "./pages/LoginPage";</pre></div>
+        </div>
+        <table>
+          <tr><th>Concept</th><th>What it means</th></tr>
+          <tr><td><code class="inline-code">dependencies</code></td><td>Libraries your code needs to run</td></tr>
+          <tr><td><code class="inline-code">devDependencies</code></td><td>Libraries needed only during development/testing</td></tr>
+          <tr><td><code class="inline-code">^1.40.0</code></td><td>Version 1.40.0 or compatible newer (not 2.0)</td></tr>
+          <tr><td><code class="inline-code">node_modules/</code></td><td>Where npm downloads library code</td></tr>
+          <tr><td><code class="inline-code">npm install</code></td><td>Downloads everything listed in package.json</td></tr>
+          <tr><td><code class="inline-code">npm install -D name</code></td><td>Add new library to devDependencies</td></tr>
+        </table>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-reference">Reference</span>
+        <h4>Anatomy of a Playwright test file</h4>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> example.spec.ts <span class="lang">typescript</span></div>
+          <div class="code-body"><pre>import { test, expect } from "@playwright/test";
+
+test.describe("Login page", () =&gt; {
+
+  test.beforeEach(async ({ page }) =&gt; {
+    await page.goto("https://example.com/login");
+  });
+
+  test("should show error for wrong password", async ({ page }) =&gt; {
+    await page.fill("#email", "user@test.com");
+    await page.fill("#password", "wrongpassword");
+    await page.click("button[type=submit]");
+
+    await expect(page.locator(".error-message")).toBeVisible();
+    await expect(page.locator(".error-message")).toHaveText("Invalid credentials");
+  });
+});</pre></div>
+        </div>
+        <table>
+          <tr><th>Keyword</th><th>What it means</th></tr>
+          <tr><td><code class="inline-code">import { test, expect }</code></td><td>Load tools from the Playwright library</td></tr>
+          <tr><td><code class="inline-code">test.describe("name", ...)</code></td><td>Group related tests (like a folder)</td></tr>
+          <tr><td><code class="inline-code">test.beforeEach</code></td><td>Runs before EVERY test &mdash; good for setup</td></tr>
+          <tr><td><code class="inline-code">test("name", async ({ page }) =&gt; ...)</code></td><td>One test case. <code class="inline-code">page</code> = your browser tab.</td></tr>
+          <tr><td><code class="inline-code">await</code></td><td>"Wait for this to finish"</td></tr>
+          <tr><td><code class="inline-code">expect(...).toBeVisible()</code></td><td>Assertion: "I expect this element to be visible"</td></tr>
+        </table>
+      </div>
+
+      <p class="section-label">EXERCISES</p>
+
+      <div class="topic-block exercises">
+        <span class="topic-tag tag-practice">Hands-on</span>
+        <ol class="checklist">
+          <li><input type="checkbox" id="w2-e1" data-week="2"><label for="w2-e1"><strong>Read the example test.</strong> Open <code class="inline-code">tests/example.spec.ts</code> in VS Code. For each line, write a comment above it explaining what it does.</label></li>
+          <li><input type="checkbox" id="w2-e2" data-week="2"><label for="w2-e2"><strong>Identify the keywords.</strong> Find and highlight: all <code class="inline-code">await</code>, all <code class="inline-code">const</code>/<code class="inline-code">let</code>, all <code class="inline-code">import</code> statements, and all <code class="inline-code">expect</code> assertions.</label></li>
+          <li><input type="checkbox" id="w2-e3" data-week="2"><label for="w2-e3"><strong>Break it on purpose.</strong> Remove one <code class="inline-code">await</code> from a Playwright call. Run the test. Read the error. Put it back.</label></li>
+          <li><input type="checkbox" id="w2-e4" data-week="2"><label for="w2-e4"><strong>Change a string value.</strong> In a test, change the URL or expected text to something wrong. Run the test. Read the error &mdash; what does it say?</label></li>
+          <li><input type="checkbox" id="w2-e5" data-week="2"><label for="w2-e5"><strong>Check package.json.</strong> Open <code class="inline-code">package.json</code>. Write down: what is in <code class="inline-code">devDependencies</code>? What version of Playwright is installed?</label></li>
+        </ol>
+      </div>
+
+      <div class="deliverable">
+        <h4>Deliverable</h4>
+        <p>A copy of <code class="inline-code">example.spec.ts</code> with your comments above every line explaining what each line does.</p>
+      </div>
+
+      <div class="ready-box">
+        <h4>Ready to Move On When</h4>
+        <ul class="checklist">
+          <li><input type="checkbox" id="w2-r1" data-week="2"><label for="w2-r1">I can read a Playwright test and explain what each line does</label></li>
+          <li><input type="checkbox" id="w2-r2" data-week="2"><label for="w2-r2">I understand what <code class="inline-code">const</code>, <code class="inline-code">async/await</code>, and <code class="inline-code">import</code> mean</label></li>
+          <li><input type="checkbox" id="w2-r3" data-week="2"><label for="w2-r3">I can explain in one sentence what <code class="inline-code">await</code> does</label></li>
+          <li><input type="checkbox" id="w2-r4" data-week="2"><label for="w2-r4">I know where dependencies are listed and how to check their versions</label></li>
+        </ul>
+      </div>
+
+      <!-- ══════════════════════════════════════════════════════════════════ -->
+      <!--                          W E E K   3                             -->
+      <!-- ══════════════════════════════════════════════════════════════════ -->
+
+      <div class="week-divider wd3" id="week-3">
+        <div class="week-badge"><span>3</span></div>
+        <div class="week-info">
+          <h2 style="border:none;">Locators &mdash; Finding Elements on the Page</h2>
+          <div class="week-goal">Estimated time: 6-7 hours</div>
+        </div>
+        <div class="week-progress" data-week="3"><span class="pct-val">0%</span>done</div>
+      </div>
+
+      <p class="section-label">LEARNING OBJECTIVES</p>
+      <div class="topic-block">
+        <ul>
+          <li>Find any element on a page using Playwright locators</li>
+          <li>Choose the best locator type for each situation</li>
+          <li>Use Playwright Inspector and codegen to discover locators</li>
+          <li>Chain and filter locators when multiple similar elements exist</li>
+        </ul>
+      </div>
+
+      <div class="callout callout-error">
+        <span class="icon">&#9888;&#65039;</span>
+        <div><strong>This is the #1 skill for QA automation.</strong> Bad locators = flaky tests that fail randomly. Good locators = stable tests that only fail when there is a real bug. Spend extra time here.</div>
+      </div>
+
+      <p class="section-label">TOPICS</p>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-theory">Theory</span>
+        <h4>What is a locator?</h4>
+        <p>A locator tells Playwright "find this element on the page." Think of it like directions: "the big red button at the top of the form."</p>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">typescript</span></div>
+          <div class="code-body"><pre>// Different ways to find the same "Login" button:
+
+page.getByRole("button", { name: "Login" })     // By role (BEST)
+page.getByTestId("login-button")                 // By test ID (GREAT)
+page.getByText("Login")                          // By text (GOOD)
+page.getByPlaceholder("Enter your email")        // By placeholder (GOOD)
+page.getByLabel("Password")                      // By label (GOOD)
+page.locator("button.btn-primary")               // By CSS (OK)
+page.locator("#login-btn")                       // By ID (OK)
+page.locator("//div[@class='form']/button[1]")   // By XPath (AVOID)</pre></div>
+        </div>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-reference">Reference</span>
+        <h4>Locator priority: best to worst</h4>
+        <table>
+          <tr><th>Priority</th><th>Locator</th><th>Example</th><th>Why</th></tr>
+          <tr><td>1st</td><td><code class="inline-code">getByRole</code></td><td><code class="inline-code">page.getByRole("button", { name: "Submit" })</code></td><td>How a real user thinks &mdash; "click the Submit button"</td></tr>
+          <tr><td>1st</td><td><code class="inline-code">getByTestId</code></td><td><code class="inline-code">page.getByTestId("submit-btn")</code></td><td>Developers add <code class="inline-code">data-testid</code> specifically for tests</td></tr>
+          <tr><td>2nd</td><td><code class="inline-code">getByText</code></td><td><code class="inline-code">page.getByText("Welcome back")</code></td><td>Readable, but breaks if text changes</td></tr>
+          <tr><td>2nd</td><td><code class="inline-code">getByPlaceholder</code></td><td><code class="inline-code">page.getByPlaceholder("Email")</code></td><td>Great for input fields</td></tr>
+          <tr><td>2nd</td><td><code class="inline-code">getByLabel</code></td><td><code class="inline-code">page.getByLabel("Password")</code></td><td>Uses form labels &mdash; accessible and stable</td></tr>
+          <tr><td>3rd</td><td>CSS selector</td><td><code class="inline-code">page.locator(".btn-primary")</code></td><td>CSS classes are meant for styling, not testing</td></tr>
+          <tr><td>Last</td><td>XPath</td><td><code class="inline-code">page.locator("//div[2]/button")</code></td><td>Breaks if anything in HTML structure changes</td></tr>
+        </table>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-theory">Theory</span>
+        <h4>Using Playwright Inspector to find locators</h4>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">bash</span></div>
+          <div class="code-body"><pre># Open codegen — records your clicks as code
+npx playwright codegen https://your-site.com</pre></div>
+        </div>
+        <p>A browser opens alongside a recording window. Click around your website and Playwright generates test code with locators automatically.</p>
+        <div class="callout callout-success">
+          <span class="icon">💡</span>
+          <div><strong>Pro tip:</strong> Use codegen to <em>discover</em> locators, then <em>improve</em> them. Codegen might suggest <code class="inline-code">page.locator("#j_idt142\\:email")</code> &mdash; replace with <code class="inline-code">page.getByPlaceholder("Email")</code>.</div>
+        </div>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-theory">Theory</span>
+        <h4>Chaining and filtering &mdash; multiple similar elements</h4>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">typescript</span></div>
+          <div class="code-body"><pre>// Problem: 3 "Delete" buttons on the page
+// Solution: narrow down by parent
+
+page.locator(".user-settings").getByRole("button", { name: "Delete" })
+
+page.locator("tr").first().getByRole("button", { name: "Edit" })
+
+page.getByRole("listitem").filter({ hasText: "Product A" })
+
+page.locator("[data-testid='cart-item']")
+    .filter({ hasText: "Running Shoes" })
+    .getByRole("button", { name: "Remove" })</pre></div>
+        </div>
+      </div>
+
+      <p class="section-label">EXERCISES</p>
+
+      <div class="topic-block exercises">
+        <span class="topic-tag tag-practice">Hands-on</span>
+        <ol class="checklist">
+          <li><input type="checkbox" id="w3-e1" data-week="3"><label for="w3-e1"><strong>Find the login form elements.</strong> Open <a href="https://practicetestautomation.com/practice-test-login/" target="_blank">the practice site</a> in your browser. Using DevTools, write a locator for: the username field, the password field, and the submit button. Use <code class="inline-code">getByRole</code>, <code class="inline-code">getByLabel</code>, or <code class="inline-code">getByPlaceholder</code>.</label></li>
+          <li><input type="checkbox" id="w3-e2" data-week="3"><label for="w3-e2"><strong>Write 10 locators.</strong> Open <a href="https://www.saucedemo.com" target="_blank">SauceDemo</a> or your staging site. Write 10 locators for 10 different elements. For each, write which locator type you chose and why.</label></li>
+          <li><input type="checkbox" id="w3-e3" data-week="3"><label for="w3-e3"><strong>Improve bad locators.</strong> Replace these with better alternatives:
+            <div class="code-block">
+              <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> Rewrite these <span class="lang">typescript</span></div>
+              <div class="code-body"><pre>page.locator("#tsf &gt; div:nth-child(2) &gt; div &gt; div &gt; button")  // ???
+page.locator("//div[@class='form-group']/input[1]")            // ???
+page.locator(".btn.btn-primary.submit-form")                   // ???</pre></div>
+            </div>
+          </label></li>
+          <li><input type="checkbox" id="w3-e4" data-week="3"><label for="w3-e4"><strong>Chain a locator.</strong> On any page with a list (products, users, items), write a locator that targets a specific button inside a specific list item using <code class="inline-code">.filter()</code>.</label></li>
+          <li><input type="checkbox" id="w3-e5" data-week="3"><label for="w3-e5"><strong>Use the VS Code "Pick Locator" tool.</strong> Open the Playwright extension sidebar in VS Code. Click "Pick locator" and hover over elements. Notice how it suggests <code class="inline-code">getByRole</code> before CSS.</label></li>
+        </ol>
+      </div>
+
+      <div class="deliverable">
+        <h4>Deliverable</h4>
+        <p>A file <code class="inline-code">locators-practice.spec.ts</code> with 10 locators, each with a comment explaining why you chose that locator type.</p>
+      </div>
+
+      <div class="ready-box">
+        <h4>Ready to Move On When</h4>
+        <ul class="checklist">
+          <li><input type="checkbox" id="w3-r1" data-week="3"><label for="w3-r1">I can write reliable locators using <code class="inline-code">getByRole</code>, <code class="inline-code">getByTestId</code>, and <code class="inline-code">getByText</code></label></li>
+          <li><input type="checkbox" id="w3-r2" data-week="3"><label for="w3-r2">I can use codegen to discover locators and improve them</label></li>
+          <li><input type="checkbox" id="w3-r3" data-week="3"><label for="w3-r3">I can chain and filter locators to find the exact element</label></li>
+          <li><input type="checkbox" id="w3-r4" data-week="3"><label for="w3-r4">I can find an element using at least 3 different locator types</label></li>
+        </ul>
+      </div>
+
+      <!-- ══════════════════════════════════════════════════════════════════ -->
+      <!--                          W E E K   4                             -->
+      <!-- ══════════════════════════════════════════════════════════════════ -->
+
+      <div class="week-divider wd4" id="week-4">
+        <div class="week-badge"><span>4</span></div>
+        <div class="week-info">
+          <h2 style="border:none;">Writing &amp; Debugging Tests</h2>
+          <div class="week-goal">Estimated time: 6-7 hours</div>
+        </div>
+        <div class="week-progress" data-week="4"><span class="pct-val">0%</span>done</div>
+      </div>
+
+      <p class="section-label">LEARNING OBJECTIVES</p>
+      <div class="topic-block">
+        <ul>
+          <li>Interact with a page: fill fields, click buttons, select options</li>
+          <li>Write assertions that check what the page shows after an action</li>
+          <li>Write a test that covers a complete user flow (happy path + negative cases)</li>
+          <li>Organize tests with <code class="inline-code">test.describe</code> and <code class="inline-code">beforeEach</code></li>
+          <li>Read a Playwright error message and identify what went wrong</li>
+          <li>Use debugging tools to find and fix failures</li>
+        </ul>
+      </div>
+
+      <p class="section-label">SETUP FOR THIS WEEK</p>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-reference">Setup</span>
+        <h4>Add <code class="inline-code">baseURL</code> to your config</h4>
+        <p>Before writing your login test, configure <code class="inline-code">baseURL</code> in <code class="inline-code">playwright.config.ts</code>. This lets you use short relative URLs in tests.</p>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> playwright.config.ts <span class="lang">typescript</span></div>
+          <div class="code-body"><pre>export default defineConfig({
+  testDir: './tests',
+  use: {
+    baseURL: 'https://practicetestautomation.com',   // &lt;-- add this
+    trace: 'on-first-retry',
+  },
+  // ...
+});</pre></div>
+        </div>
+        <p>Now in tests you can write <code class="inline-code">page.goto('/practice-test-login/')</code> instead of the full URL.</p>
+      </div>
+
+      <p class="section-label">TOPICS &mdash; WRITING TESTS</p>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-reference">Reference</span>
+        <h4>Browser actions cheat sheet</h4>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">typescript</span></div>
+          <div class="code-body"><pre>// Navigation
+await page.goto("https://example.com");
+await page.goto("/login");           // uses baseURL from config
+await page.goBack();
+await page.reload();
+
+// Clicking
+await page.getByRole("button", { name: "Save" }).click();
+await page.getByText("Learn more").click();
+
+// Typing
+await page.getByPlaceholder("Email").fill("test@example.com");
+await page.getByRole("textbox").clear();
+
+// Dropdowns
+await page.getByLabel("Country").selectOption("US");
+
+// Checkboxes
+await page.getByLabel("I agree to terms").check();
+
+// Keyboard
+await page.keyboard.press("Enter");
+
+// Waiting (only when auto-wait is not enough)
+await page.waitForURL("**/dashboard");
+await page.locator(".spinner").waitFor({ state: "hidden" });</pre></div>
+        </div>
+      </div>
+
+      <div class="callout callout-error">
+        <span class="icon">🚫</span>
+        <div><strong>Never use <code class="inline-code">page.waitForTimeout(3000)</code>.</strong> It pauses the test for a fixed time regardless of what the page is doing. This is the #1 cause of flaky tests. Playwright's assertions (<code class="inline-code">expect(...).toBeVisible()</code>) already wait automatically &mdash; use them instead.</div>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-reference">Reference</span>
+        <h4>Assertions cheat sheet</h4>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">typescript</span></div>
+          <div class="code-body"><pre>await expect(page.getByText("Welcome")).toBeVisible();
+await expect(page.getByText("Error")).not.toBeVisible();
+await expect(page.getByTestId("username")).toHaveText("John Doe");
+await expect(page.getByTestId("message")).toContainText("success");
+await expect(page).toHaveURL(/.*dashboard/);
+await expect(page).toHaveTitle("Dashboard - MyApp");
+await expect(page.getByLabel("Email")).toHaveValue("test@example.com");
+await expect(page.getByRole("listitem")).toHaveCount(5);
+await expect(page.getByRole("button", { name: "Submit" })).toBeEnabled();
+await expect(page.getByRole("button", { name: "Submit" })).toBeDisabled();</pre></div>
+        </div>
+        <p><strong>Tip:</strong> Add a failure message to assertions: <code class="inline-code">expect(locator, 'Error should be visible after wrong password').toBeVisible()</code></p>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-reference">Reference</span>
+        <h4>Test organization patterns</h4>
+        <table>
+          <tr><th>Pattern</th><th>When to use</th></tr>
+          <tr><td><code class="inline-code">test.describe("group")</code></td><td>Group related tests for the same feature</td></tr>
+          <tr><td><code class="inline-code">test.beforeEach</code></td><td>Setup that runs before every test (e.g., navigate to page)</td></tr>
+          <tr><td><code class="inline-code">test.afterEach</code></td><td>Cleanup after every test</td></tr>
+          <tr><td><code class="inline-code">test.skip("reason")</code></td><td>Temporarily skip a test (better than commenting out)</td></tr>
+          <tr><td><code class="inline-code">test.only("name")</code></td><td>Run ONLY this test (for debugging &mdash; remove before committing!)</td></tr>
+        </table>
+      </div>
+
+      <div class="callout callout-info">
+        <span class="icon">👀</span>
+        <div><strong>Looking ahead:</strong> In this week's exercises you will hardcode locators directly in tests (e.g. <code class="inline-code">page.getByPlaceholder("Email")</code> repeated in each test). Week 6 introduces the <strong>Page Object Model</strong>, which moves these into a reusable class. For now, keep it simple &mdash; you will refactor later.</div>
+      </div>
+
+      <p class="section-label">TOPICS &mdash; DEBUGGING</p>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-theory">Theory</span>
+        <h4>The 4 most common failure types</h4>
+        <table>
+          <tr><th>#</th><th>Type</th><th>What it means</th><th>Typical cause</th></tr>
+          <tr><td>1</td><td>Element not found</td><td>Locator does not match anything on the page</td><td>Wrong locator, element not rendered yet</td></tr>
+          <tr><td>2</td><td>Assertion failed</td><td>Element exists but the value is wrong</td><td>Text changed, wrong expected value</td></tr>
+          <tr><td>3</td><td>Timeout</td><td>Playwright waited but element never appeared</td><td>Slow page, element hidden, network error</td></tr>
+          <tr><td>4</td><td>Missing await</td><td>Code ran before the previous action finished</td><td>Forgot <code class="inline-code">await</code> on a Playwright call</td></tr>
+        </table>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-theory">Theory</span>
+        <h4>Reading error messages</h4>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> Typical error output <span class="lang">text</span></div>
+          <div class="code-body"><pre>  1) login.spec.ts:15:5 &gt; Login &gt; should show dashboard
+
+     Error: Timed out 5000ms waiting for expect(locator).toBeVisible()
+
+     Locator: getByText("Welcome back")
+     Expected: visible
+     Received: &lt;element not found&gt;
+
+       15 |    await expect(page.getByText("Welcome back")).toBeVisible();
+          |                                                  ^</pre></div>
+        </div>
+        <table>
+          <tr><th>Part of error</th><th>What it tells you</th></tr>
+          <tr><td><code class="inline-code">login.spec.ts:15:5</code></td><td>File name and exact line number</td></tr>
+          <tr><td><code class="inline-code">Timed out 5000ms</code></td><td>Waited 5 seconds but element never appeared</td></tr>
+          <tr><td><code class="inline-code">Locator: getByText("Welcome back")</code></td><td>Which element it was looking for</td></tr>
+          <tr><td><code class="inline-code">&lt;element not found&gt;</code></td><td>Element does not exist (text changed? page did not load?)</td></tr>
+        </table>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-reference">Reference</span>
+        <h4>5 debugging tools</h4>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">bash</span></div>
+          <div class="code-body"><pre># 1. UI mode (best for local development)
+npx playwright test --ui
+
+# 2. See what the browser shows
+npx playwright test tests/login.spec.ts --headed
+
+# 3. Step through line by line
+npx playwright test tests/login.spec.ts --debug
+
+# 4. Record everything (video, screenshots, network)
+npx playwright test tests/login.spec.ts --trace on
+
+# 5. Replay a recorded trace
+npx playwright show-trace test-results/.../trace.zip</pre></div>
+        </div>
+        <table>
+          <tr><th>Tool</th><th>Best for</th><th>What you see</th></tr>
+          <tr><td><code class="inline-code">--ui</code></td><td>Everyday dev &mdash; run, watch, debug in one place</td><td>Interactive UI with time travel, locator picker, watch mode</td></tr>
+          <tr><td><code class="inline-code">--headed</code></td><td>Quick check &mdash; "what is on screen?"</td><td>Live browser during test</td></tr>
+          <tr><td><code class="inline-code">--debug</code></td><td>Precise debugging &mdash; "which line fails?"</td><td>Inspector with pause/step/inspect</td></tr>
+          <tr><td><code class="inline-code">--trace on</code></td><td>Post-mortem &mdash; "what happened before it broke?"</td><td>Timeline with screenshots, DOM, network</td></tr>
+          <tr><td><code class="inline-code">page.pause()</code></td><td>Pause at a specific line in code</td><td>Inspector opens, try locators live</td></tr>
+        </table>
+        <div class="callout callout-info">
+          <span class="icon">💡</span>
+          <div><strong>Your day-to-day tool should be <code class="inline-code">npx playwright test --ui</code>.</strong> The VS Code Playwright extension also gives you run/debug buttons next to each test &mdash; try both and see which you prefer.</div>
+        </div>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-reference">Reference</span>
+        <h4>Debugging process &mdash; use this every time</h4>
+        <ol style="margin-left: 18px;">
+          <li><strong>Read the error message fully.</strong> What did it expect? What did it get?</li>
+          <li><strong>Open the HTML report.</strong> Look at the screenshot of the moment it failed.</li>
+          <li><strong>Open the trace.</strong> Step backwards from the failure.</li>
+          <li><strong>If still unsure:</strong> run with <code class="inline-code">--headed</code> or <code class="inline-code">--ui</code> and watch the browser.</li>
+          <li><strong>Add <code class="inline-code">page.pause()</code></strong> just before the failure to inspect the page live.</li>
+        </ol>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-reference">Reference</span>
+        <h4>Common failures and how to fix them</h4>
+        <table>
+          <tr><th>Error</th><th>Likely cause</th><th>Fix</th></tr>
+          <tr><td>Timed out waiting for locator</td><td>Element doesn't exist or hasn't loaded</td><td>Check locator. Use <code class="inline-code">expect(...).toBeVisible()</code> or increase timeout.</td></tr>
+          <tr><td>Strict mode violation: N elements</td><td>Locator matches multiple elements</td><td>Make locator more specific: <code class="inline-code">.first()</code>, <code class="inline-code">.filter()</code>, or narrow with parent.</td></tr>
+          <tr><td>Navigation interrupted</td><td>Page redirected during action</td><td>Add <code class="inline-code">await page.waitForURL(...)</code></td></tr>
+          <tr><td>Works locally, fails in CI</td><td>Timing issue or <code class="inline-code">waitForTimeout</code> used</td><td>Replace hard waits with <code class="inline-code">expect(...).toBeVisible()</code></td></tr>
+          <tr><td>Element is not visible</td><td>Hidden or behind overlay</td><td>Scroll to element or check for modal/overlay</td></tr>
+        </table>
+      </div>
+
+      <p class="section-label">EXERCISES</p>
+
+      <div class="topic-block exercises">
+        <span class="topic-tag tag-practice">Hands-on</span>
+        <h4>Writing tests</h4>
+        <ol class="checklist">
+          <li><input type="checkbox" id="w4-e1" data-week="4"><label for="w4-e1"><strong>Write a login test (happy path).</strong> Use <a href="https://practicetestautomation.com/practice-test-login/" target="_blank">the practice site</a>. Credentials: username <code class="inline-code">student</code>, password <code class="inline-code">Password123</code>.
+            <div class="code-block">
+              <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> tests/login.spec.ts <span class="lang">typescript</span></div>
+              <div class="code-body"><pre>import { test, expect } from "@playwright/test";
+
+test.describe("Login functionality", () =&gt; {
+
+  test.beforeEach(async ({ page }) =&gt; {
+    await page.goto("/practice-test-login/");   // uses baseURL
+  });
+
+  test("successful login with valid credentials", async ({ page }) =&gt; {
+    await page.getByLabel("Username").fill("student");
+    await page.getByLabel("Password").fill("Password123");
+    await page.getByRole("button", { name: "Submit" }).click();
+
+    await expect(page).toHaveURL(/.*logged-in-successfully/);
+    await expect(page.getByRole("heading", { name: /Logged In Successfully/ })).toBeVisible();
+  });
+});</pre></div>
+            </div>
+          </label></li>
+          <li><input type="checkbox" id="w4-e2" data-week="4"><label for="w4-e2"><strong>Add a negative test.</strong> Submit with a wrong password (<code class="inline-code">student</code> / <code class="inline-code">wrongPass</code>). Assert the error message is visible and contains "Your password is invalid!".</label></li>
+          <li><input type="checkbox" id="w4-e3" data-week="4"><label for="w4-e3"><strong>Add an empty-form test.</strong> Submit without filling anything. Assert the validation message appears.</label></li>
+          <li><input type="checkbox" id="w4-e4" data-week="4"><label for="w4-e4"><strong>Add failure messages.</strong> Go back to all your assertions and add meaningful messages, e.g. <code class="inline-code">expect(element, 'Error should appear after wrong password').toBeVisible()</code></label></li>
+          <li><input type="checkbox" id="w4-e5" data-week="4"><label for="w4-e5"><strong>Run in UI mode.</strong> Run <code class="inline-code">npx playwright test --ui</code> and play with the time-travel view. Click through the steps of one of your tests.</label></li>
+        </ol>
+      </div>
+
+      <div class="topic-block exercises">
+        <span class="topic-tag tag-practice">Hands-on</span>
+        <h4>Debugging exercises</h4>
+        <p>Your coach will provide 2 broken test files. For each one: read the full error, use a debugging tool, identify the failed step, and fix it.</p>
+        <ol class="checklist">
+          <li><input type="checkbox" id="w4-d1" data-week="4"><label for="w4-d1"><strong>Broken locator.</strong> A locator that no longer matches the element. Find the correct one using <code class="inline-code">--ui</code> or <code class="inline-code">--debug</code>.</label></li>
+          <li><input type="checkbox" id="w4-d2" data-week="4"><label for="w4-d2"><strong>Wrong assertion value.</strong> The test checks for text that is slightly different from what the page shows. Use the trace to find the mismatch.</label></li>
+        </ol>
+      </div>
+
+      <div class="deliverable">
+        <h4>Deliverable</h4>
+        <p><code class="inline-code">login.spec.ts</code> &mdash; 3 login test cases + 2 fixed test files:</p>
+        <ul style="margin-left: 18px; font-size: 13px;">
+          <li>Test 1: Correct credentials &rarr; user is logged in</li>
+          <li>Test 2: Wrong password &rarr; error message is shown</li>
+          <li>Test 3: Empty form &rarr; validation message appears</li>
+          <li>2 broken tests identified and fixed</li>
+        </ul>
+        <p>All tests must pass. Each assertion must have a failure message.</p>
+        <p>Verify: <code class="inline-code">npx playwright test --project=chromium</code></p>
+      </div>
+
+      <div class="ready-box">
+        <h4>Ready to Move On When</h4>
+        <ul class="checklist">
+          <li><input type="checkbox" id="w4-r1" data-week="4"><label for="w4-r1">I can fill a form and assert the result without looking at the docs</label></li>
+          <li><input type="checkbox" id="w4-r2" data-week="4"><label for="w4-r2">I know the difference between <code class="inline-code">toHaveText()</code> and <code class="inline-code">toContainText()</code></label></li>
+          <li><input type="checkbox" id="w4-r3" data-week="4"><label for="w4-r3">All my tests pass reliably</label></li>
+          <li><input type="checkbox" id="w4-r4" data-week="4"><label for="w4-r4">I can read an error message and identify what went wrong</label></li>
+          <li><input type="checkbox" id="w4-r5" data-week="4"><label for="w4-r5">I have used at least two debugging tools (UI mode, <code class="inline-code">--headed</code>, <code class="inline-code">--debug</code>, or trace)</label></li>
+          <li><input type="checkbox" id="w4-r6" data-week="4"><label for="w4-r6">I understand why <code class="inline-code">page.waitForTimeout()</code> should be avoided</label></li>
+        </ul>
+      </div>
+
+      <!-- ══════════════════════════════════════════════════════════════════ -->
+      <!--                          W E E K   5                             -->
+      <!-- ══════════════════════════════════════════════════════════════════ -->
+
+      <div class="week-divider wd5" id="week-5">
+        <div class="week-badge"><span>5</span></div>
+        <div class="week-info">
+          <h2 style="border:none;">Git &amp; Final Project Setup</h2>
+          <div class="week-goal">Estimated time: 5-6 hours</div>
+        </div>
+        <div class="week-progress" data-week="5"><span class="pct-val">0%</span>done</div>
+      </div>
+
+      <p class="section-label">LEARNING OBJECTIVES</p>
+      <div class="topic-block">
+        <ul>
+          <li>Use Git: create a repo, commit changes, create branches, push</li>
+          <li>Understand the team workflow: pull, branch, push, Pull Request</li>
+          <li>Set up your final project: choose a target site, plan your tests, create the repo</li>
+        </ul>
+      </div>
+
+      <p class="section-label">TOPICS</p>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-git">Git</span>
+        <h4>Git basics &mdash; version control for your project</h4>
+        <p>Git tracks changes to your files. Think of it as "save points" &mdash; you can always go back to a previous version.</p>
+        <div class="callout callout-info">
+          <span class="icon">💡</span>
+          <div><strong>Good news:</strong> <code class="inline-code">npm init playwright@latest</code> already created a <code class="inline-code">.gitignore</code> in Week 1. Check it exists with <code class="inline-code">ls -a</code> (Mac) or <code class="inline-code">dir /a</code> (Windows). If it is missing, create one (see below).</div>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> Initialize your repo <span class="lang">bash</span></div>
+          <div class="code-body"><pre># Go to your project folder
+cd my-playwright-learning
+
+# Step 1: Initialize Git
+git init
+
+# Step 2: Check that .gitignore exists.
+# If it's missing, create it (safe append — won't overwrite existing):
+cat &gt;&gt; .gitignore &lt;&lt; 'EOF'
+node_modules/
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+.env
+EOF
+
+# Step 3: Stage all files (prepare them for saving)
+git add .
+
+# Step 4: Create your first commit (save point)
+git commit -m "Initial project setup with Playwright"
+
+# Step 5: Create a repo on GitHub and push (using gh CLI from Week 0):
+gh repo create my-playwright-learning --public --source=. --remote=origin --push
+
+# Or manually if you prefer:
+#   1. Create a new repo on github.com (no README, no .gitignore — you already have them)
+#   2. git remote add origin https://github.com/YOUR-USERNAME/my-playwright-learning.git
+#   3. git branch -M main
+#   4. git push -u origin main</pre></div>
+        </div>
+        <p style="font-size: 13px; color: var(--text-subtle);"><strong>What is <code class="inline-code">.env</code>?</strong> A file where you store secrets (passwords, API keys) so you don't hardcode them in tests. You will likely use it later. It's listed in <code class="inline-code">.gitignore</code> so secrets never end up on GitHub.</p>
+        <table>
+          <tr><th>Command</th><th>What it does</th><th>Analogy</th></tr>
+          <tr><td><code class="inline-code">git init</code></td><td>Start tracking this folder</td><td>Create a new save file</td></tr>
+          <tr><td><code class="inline-code">git status</code></td><td>See what changed since last save</td><td>Check unsaved changes</td></tr>
+          <tr><td><code class="inline-code">git add .</code></td><td>Mark all changes for saving</td><td>Select what to save</td></tr>
+          <tr><td><code class="inline-code">git commit -m "msg"</code></td><td>Save a snapshot with a note</td><td>Press "Save"</td></tr>
+          <tr><td><code class="inline-code">git push</code></td><td>Upload saves to GitHub</td><td>Sync to the cloud</td></tr>
+          <tr><td><code class="inline-code">git log --oneline</code></td><td>See history of all saves</td><td>View save history</td></tr>
+        </table>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-git">Git</span>
+        <h4>Branches &mdash; work without breaking things</h4>
+        <p>A <strong>branch</strong> is a copy of your project where you can make changes safely. When you are happy, you merge it back into <code class="inline-code">main</code>.</p>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">bash</span></div>
+          <div class="code-body"><pre># See what branch you are on
+git branch
+
+# Create a new branch and switch to it
+git checkout -b feature/login-tests
+
+# ... make changes, write tests ...
+
+# Stage and commit
+git add tests/login.spec.ts
+git commit -m "Add login tests for valid and invalid credentials"
+
+# Push your branch to GitHub
+git push -u origin feature/login-tests
+
+# Go to GitHub -&gt; create a Pull Request (PR)
+# Teammate reviews -&gt; approves -&gt; merge into main</pre></div>
+        </div>
+        <div class="callout callout-info">
+          <span class="icon">💡</span>
+          <div><strong>Branch naming:</strong> Use descriptive names like <code class="inline-code">feature/login-tests</code> or <code class="inline-code">fix/broken-locator</code>. If you have Jira tickets: <code class="inline-code">feature/JIRA-123-login-tests</code>.</div>
+        </div>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-git">Git</span>
+        <h4>Team workflow &mdash; pull, branch, push, PR</h4>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">bash</span></div>
+          <div class="code-body"><pre># 1. Start from latest main
+git checkout main
+git pull
+
+# 2. Create a branch for your task
+git checkout -b feature/JIRA-456-search-tests
+
+# 3. Write your tests...
+
+# 4. Check what changed
+git status
+git diff
+
+# 5. Commit (small, focused commits)
+git add tests/search.spec.ts
+git commit -m "Add search tests for product catalog"
+
+# 6. Push branch
+git push -u origin feature/JIRA-456-search-tests
+
+# 7. Open a Pull Request on GitHub for review
+#    Fastest: use the gh CLI —
+gh pr create --title "Add search tests for product catalog" --body "Adds 3 tests covering the search flow."
+# Or go to github.com in your browser and click "Create pull request"</pre></div>
+        </div>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-reference">Reference</span>
+        <h4>Managing dependencies</h4>
+        <table>
+          <tr><th>Scenario</th><th>Command</th></tr>
+          <tr><td>Add a new library</td><td><code class="inline-code">npm install &lt;name&gt;</code></td></tr>
+          <tr><td>Add as dev dependency</td><td><code class="inline-code">npm install -D &lt;name&gt;</code></td></tr>
+          <tr><td>After <code class="inline-code">git pull</code> &mdash; sync</td><td><code class="inline-code">npm install</code></td></tr>
+          <tr><td>Remove a library</td><td><code class="inline-code">npm uninstall &lt;name&gt;</code></td></tr>
+          <tr><td>Check for updates</td><td><code class="inline-code">npm outdated</code></td></tr>
+          <tr><td>Update Playwright</td><td><code class="inline-code">npm install -D @playwright/test@latest &amp;&amp; npx playwright install</code></td></tr>
+        </table>
+      </div>
+
+      <p class="section-label">EXERCISES</p>
+
+      <div class="topic-block exercises">
+        <span class="topic-tag tag-git">Git</span>
+        <h4>Git exercises</h4>
+        <ol class="checklist">
+          <li><input type="checkbox" id="w5-e1" data-week="5"><label for="w5-e1"><strong>Init your repo.</strong> Run <code class="inline-code">git init</code> in your project folder. Verify <code class="inline-code">.gitignore</code> exists (or create one). Stage and commit all your work from Weeks 1-4.</label></li>
+          <li><input type="checkbox" id="w5-e2" data-week="5"><label for="w5-e2"><strong>Push to GitHub.</strong> Run <code class="inline-code">gh repo create my-playwright-learning --public --source=. --remote=origin --push</code>. Open the URL it prints to see your code on github.com.</label></li>
+          <li><input type="checkbox" id="w5-e3" data-week="5"><label for="w5-e3"><strong>Create a branch.</strong> Run <code class="inline-code">git checkout -b feature/practice-branch</code>. Make a small change to a test. Commit. Push the branch.</label></li>
+          <li><input type="checkbox" id="w5-e4" data-week="5"><label for="w5-e4"><strong>Create a Pull Request.</strong> Run <code class="inline-code">gh pr create --fill</code> (uses your commit message as the PR description). Open the PR link — look at the diff, it shows exactly what changed.</label></li>
+        </ol>
+      </div>
+
+      <div class="topic-block exercises">
+        <span class="topic-tag tag-project">Final project</span>
+        <h4>Plan your final project</h4>
+        <ol class="checklist">
+          <li><input type="checkbox" id="w5-p1" data-week="5"><label for="w5-p1"><strong>Choose a test target.</strong> Pick a public site (<a href="https://www.saucedemo.com" target="_blank">SauceDemo</a>, <a href="https://demo.playwright.dev/todomvc" target="_blank">TodoMVC</a>) or your company's staging environment.</label></li>
+          <li><input type="checkbox" id="w5-p2" data-week="5"><label for="w5-p2"><strong>Pick one user journey.</strong> For example: login, search, add to cart, or registration.</label></li>
+          <li><input type="checkbox" id="w5-p3" data-week="5"><label for="w5-p3"><strong>List 3-5 test cases.</strong> At least one happy path and one negative case. Write them as bullet points before writing any code.</label></li>
+          <li><input type="checkbox" id="w5-p4" data-week="5"><label for="w5-p4"><strong>Create a branch.</strong> Run <code class="inline-code">git checkout -b final-project</code>. All your Week 6 work will go here.</label></li>
+        </ol>
+      </div>
+
+      <div class="deliverable">
+        <h4>Deliverable</h4>
+        <p>Your project is in a Git repo on GitHub. You have pushed at least one branch and created a Pull Request. You have a plan for your final project: target site, user journey, and list of test cases.</p>
+      </div>
+
+      <div class="ready-box">
+        <h4>Ready to Move On When</h4>
+        <ul class="checklist">
+          <li><input type="checkbox" id="w5-r1" data-week="5"><label for="w5-r1">My project is in a Git repo and pushed to GitHub</label></li>
+          <li><input type="checkbox" id="w5-r2" data-week="5"><label for="w5-r2">I have created a branch, committed, pushed, and opened a Pull Request</label></li>
+          <li><input type="checkbox" id="w5-r3" data-week="5"><label for="w5-r3">I have a written plan for my final project (target site + test case list)</label></li>
+          <li><input type="checkbox" id="w5-r4" data-week="5"><label for="w5-r4">My <code class="inline-code">final-project</code> branch is created and ready for Week 6</label></li>
+        </ul>
+      </div>
+
+      <!-- ══════════════════════════════════════════════════════════════════ -->
+      <!--                          W E E K   6                             -->
+      <!-- ══════════════════════════════════════════════════════════════════ -->
+
+      <div class="week-divider wd6" id="week-6">
+        <div class="week-badge"><span>6</span></div>
+        <div class="week-info">
+          <h2 style="border:none;">Final Project &mdash; POM &amp; Test Suite</h2>
+          <div class="week-goal">Estimated time: 6-7 hours</div>
+        </div>
+        <div class="week-progress" data-week="6"><span class="pct-val">0%</span>done</div>
+      </div>
+
+      <p class="section-label">OBJECTIVE</p>
+      <div class="topic-block">
+        <p>Apply everything from Weeks 1-5 to write a small, working test suite for one user journey. You choose the journey. You work independently. You deliver it as a Pull Request.</p>
+        <p>This week also introduces the <strong>Page Object Model</strong> &mdash; a simple pattern that keeps your locators organized. You will use it in your final project.</p>
+      </div>
+
+      <p class="section-label">NEW TOPIC &mdash; PAGE OBJECT MODEL</p>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-theory">Theory</span>
+        <h4>Page Object Model (POM) &mdash; define locators once, reuse everywhere</h4>
+        <p>If a button locator appears in 5 tests and the button changes, you update 5 files. With a Page Object you define each locator <strong>once</strong> in a separate file.</p>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> pages/LoginPage.ts <span class="lang">typescript</span></div>
+          <div class="code-body"><pre>import { Page, Locator } from "@playwright/test";
+
+export class LoginPage {
+  readonly page: Page;
+  readonly emailInput: Locator;
+  readonly passwordInput: Locator;
+  readonly loginButton: Locator;
+  readonly errorMessage: Locator;
+
+  constructor(page: Page) {
+    this.page = page;
+    this.emailInput = page.getByPlaceholder("Email");
+    this.passwordInput = page.getByPlaceholder("Password");
+    this.loginButton = page.getByRole("button", { name: "Login" });
+    this.errorMessage = page.locator(".error-message");
+  }
+
+  async goto() {
+    await this.page.goto("/login");
+  }
+
+  async login(email: string, password: string) {
+    await this.emailInput.fill(email);
+    await this.passwordInput.fill(password);
+    await this.loginButton.click();
+  }
+}</pre></div>
+        </div>
+        <p><strong>Where to save:</strong> Create a <code class="inline-code">pages/</code> folder next to <code class="inline-code">tests/</code>. One file per page of your app.</p>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-practice">Hands-on</span>
+        <h4>Using a Page Object in a test</h4>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> tests/login.spec.ts <span class="lang">typescript</span></div>
+          <div class="code-body"><pre>import { test, expect } from "@playwright/test";
+import { LoginPage } from "../pages/LoginPage";
+
+test.describe("Login", () =&gt; {
+  let loginPage: LoginPage;
+
+  test.beforeEach(async ({ page }) =&gt; {
+    loginPage = new LoginPage(page);
+    await loginPage.goto();
+  });
+
+  test("successful login", async ({ page }) =&gt; {
+    await loginPage.login("user@company.com", "password123");
+    await expect(page).toHaveURL(/.*dashboard/);
+  });
+
+  test("invalid password shows error", async () =&gt; {
+    await loginPage.login("user@company.com", "wrong");
+    await expect(loginPage.errorMessage).toBeVisible();
+  });
+});</pre></div>
+        </div>
+        <div class="callout callout-info">
+          <span class="icon">💡</span>
+          <div><strong>Notice how clean the tests are now.</strong> If the login button changes, you update ONE file (<code class="inline-code">LoginPage.ts</code>) instead of every test.</div>
+        </div>
+      </div>
+
+      <p class="section-label">README TEMPLATE</p>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-reference">Reference</span>
+        <h4>Minimal README.md for your project</h4>
+        <p>A new team member should be able to clone your repo and run your tests. Use this as a starting point:</p>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> README.md <span class="lang">markdown</span></div>
+          <div class="code-body"><pre># SauceDemo Playwright Tests
+
+E2E tests for the login and checkout journey on saucedemo.com.
+
+## Prerequisites
+- Node.js v22+
+- npm v10+
+
+## Setup
+```bash
+git clone https://github.com/YOUR-USERNAME/my-playwright-learning.git
+cd my-playwright-learning
+npm install
+npx playwright install
+```
+
+## Run tests
+```bash
+npx playwright test                      # all tests, all browsers
+npx playwright test --project=chromium   # only Chromium (fast)
+npx playwright test --ui                 # interactive UI mode
+npx playwright show-report               # open last HTML report
+```
+
+## Project structure
+- `tests/` — test specs (`*.spec.ts`)
+- `pages/` — Page Object classes
+- `playwright.config.ts` — configuration
+
+## Covered scenarios
+- Successful login with valid credentials
+- Login with wrong password shows error
+- Empty form shows validation message</pre></div>
+        </div>
+      </div>
+
+      <p class="section-label">FINAL PROJECT REQUIREMENTS</p>
+
+      <div class="topic-block" style="border: 2px solid var(--teal); background: #E6FCFF;">
+        <span class="topic-tag tag-project">Final project</span>
+        <h4>Automate a full user journey</h4>
+
+        <p><strong>Your repo structure (minimum — can be simpler):</strong></p>
+        <div class="file-tree">
+          <span class="dir">my-playwright-learning/</span><br>
+          ├── <span class="dir">tests/</span><br>
+          │&nbsp;&nbsp;&nbsp;└── <span class="file">login.spec.ts</span> <span class="comment"># add more .spec.ts files as needed</span><br>
+          ├── <span class="dir">pages/</span><br>
+          │&nbsp;&nbsp;&nbsp;└── <span class="file">LoginPage.ts</span> <span class="comment"># at least 1 Page Object</span><br>
+          ├── <span class="file">playwright.config.ts</span><br>
+          ├── <span class="file">package.json</span><br>
+          ├── <span class="file">.gitignore</span><br>
+          └── <span class="file">README.md</span>
+        </div>
+
+        <p><strong>Steps:</strong></p>
+        <ol class="checklist">
+          <li><input type="checkbox" id="w6-s1" data-week="6"><label for="w6-s1">Switch to your <code class="inline-code">final-project</code> branch (created in Week 5)</label></li>
+          <li><input type="checkbox" id="w6-s2" data-week="6"><label for="w6-s2">Create at least 1 Page Object class in <code class="inline-code">pages/</code></label></li>
+          <li><input type="checkbox" id="w6-s3" data-week="6"><label for="w6-s3">Write 3-5 test cases: at least one happy path and at least one negative case</label></li>
+          <li><input type="checkbox" id="w6-s4" data-week="6"><label for="w6-s4">Organize tests with <code class="inline-code">test.describe</code> and <code class="inline-code">beforeEach</code></label></li>
+          <li><input type="checkbox" id="w6-s5" data-week="6"><label for="w6-s5">Use <code class="inline-code">getByRole</code> or <code class="inline-code">getByTestId</code> for locators (no XPath)</label></li>
+          <li><input type="checkbox" id="w6-s6" data-week="6"><label for="w6-s6">Add a failure message to each assertion</label></li>
+          <li><input type="checkbox" id="w6-s7" data-week="6"><label for="w6-s7">All tests pass: <code class="inline-code">npx playwright test</code></label></li>
+          <li><input type="checkbox" id="w6-s8" data-week="6"><label for="w6-s8">Write a short <code class="inline-code">README.md</code> (use the template above)</label></li>
+          <li><input type="checkbox" id="w6-s9" data-week="6"><label for="w6-s9">Commit with clear messages, push, create a Pull Request for review</label></li>
+        </ol>
+      </div>
+
+      <div class="topic-block" style="border: 2px solid #ABF5D1; background: var(--success-bg);">
+        <h4>Assessment Criteria</h4>
+        <table>
+          <tr><th>Area</th><th>What We Look For</th></tr>
+          <tr><td><strong>Tests run</strong></td><td><code class="inline-code">npx playwright test</code> passes with no errors</td></tr>
+          <tr><td><strong>Coverage</strong></td><td>Happy path + at least one negative case covered</td></tr>
+          <tr><td><strong>Locators</strong></td><td>Semantic locators used (<code class="inline-code">getByRole</code>, <code class="inline-code">getByLabel</code>, <code class="inline-code">getByText</code>) — no XPath</td></tr>
+          <tr><td><strong>No hard waits</strong></td><td>No <code class="inline-code">page.waitForTimeout()</code>. Rely on auto-waiting assertions.</td></tr>
+          <tr><td><strong>Assertions</strong></td><td>Each test has at least one meaningful assertion with a failure message</td></tr>
+          <tr><td><strong>Readability</strong></td><td>Test names clearly describe what is being tested</td></tr>
+          <tr><td><strong>Page Objects</strong></td><td>At least 1 Page Object file in <code class="inline-code">pages/</code> (more is fine)</td></tr>
+          <tr><td><strong>Git</strong></td><td>Clean commit history, descriptive messages, Pull Request created</td></tr>
+          <tr><td><strong>README</strong></td><td>A new team member could run the tests by following the README</td></tr>
+        </table>
+      </div>
+
+      <div class="ready-box">
+        <h4>Graduation Criteria</h4>
+        <ul class="checklist">
+          <li><input type="checkbox" id="w6-g1" data-week="6"><label for="w6-g1">My final project passes all assessment criteria above</label></li>
+          <li><input type="checkbox" id="w6-g2" data-week="6"><label for="w6-g2">I can read an unfamiliar Playwright test and explain what it does</label></li>
+          <li><input type="checkbox" id="w6-g3" data-week="6"><label for="w6-g3">I can debug a broken test without asking for help</label></li>
+          <li><input type="checkbox" id="w6-g4" data-week="6"><label for="w6-g4">I have submitted my project as a Pull Request</label></li>
+          <li><input type="checkbox" id="w6-g5" data-week="6"><label for="w6-g5">I can explain my test code to a colleague</label></li>
+        </ul>
+      </div>
+
+      <hr>
+
+      <!-- ══════════════════════════════════════════════ -->
+      <!-- COMMON PITFALLS -->
+      <!-- ══════════════════════════════════════════════ -->
+
+      <h2 id="pitfalls">Common Pitfalls</h2>
+      <p>These are the most frequent mistakes when learning automation for the first time. Knowing them saves time.</p>
+
+      <table>
+        <tr><th>Pitfall</th><th>Why It Happens</th><th>Fix</th></tr>
+        <tr><td>Skipping the TypeScript week</td><td>Playwright looks like the real work</td><td>Week 2 is not optional. Weak TypeScript causes 80% of test bugs.</td></tr>
+        <tr><td>Not using <code class="inline-code">await</code></td><td>Easy to forget &mdash; the code still runs, just wrongly</td><td>Rule: every Playwright method call needs <code class="inline-code">await</code>. No exceptions.</td></tr>
+        <tr><td>Using CSS selectors instead of semantic locators</td><td>They look familiar from DevTools</td><td>Try <code class="inline-code">getByRole</code> and <code class="inline-code">getByLabel</code> first. They break less often when the UI changes.</td></tr>
+        <tr><td>Using <code class="inline-code">page.waitForTimeout()</code></td><td>Feels like an easy fix for timing issues</td><td>NEVER use it. Use auto-waiting assertions like <code class="inline-code">expect(...).toBeVisible()</code>.</td></tr>
+        <tr><td>Guessing instead of reading the error</td><td>Errors feel intimidating</td><td>Read the full error message. It usually tells you exactly what is wrong.</td></tr>
+        <tr><td>Tests that only work sometimes</td><td>Race condition or hard waits</td><td>Replace <code class="inline-code">waitForTimeout</code> with <code class="inline-code">expect(...).toBeVisible()</code>.</td></tr>
+        <tr><td>Writing all tests in one file</td><td>Feels simpler at first</td><td>One spec file per feature or flow. Easier to navigate and debug.</td></tr>
+        <tr><td>Forgetting <code class="inline-code">test.only</code> in a PR</td><td>Used for debugging, forgot to remove</td><td>Check your diff before committing. Your CI will run only one test otherwise.</td></tr>
+      </table>
+
+      <hr>
+
+      <!-- ══════════════════════════════════════════════ -->
+      <!-- RESOURCES -->
+      <!-- ══════════════════════════════════════════════ -->
+
+      <h2 id="resources">Resources</h2>
+
+      <h3>TypeScript</h3>
+      <div class="topic-block">
+        <ul>
+          <li><a href="https://www.typescriptlang.org/play" target="_blank">TypeScript Playground</a> &mdash; testing code snippets, no install needed</li>
+          <li><a href="https://www.typescriptlang.org/docs/handbook/2/basic-types.html" target="_blank">TypeScript Handbook &mdash; The Basics</a> &mdash; reference for types and functions</li>
+          <li><a href="https://javascript.info/async-await" target="_blank">javascript.info &mdash; Async/await</a> &mdash; best explanation of async</li>
+        </ul>
+      </div>
+
+      <h3>Playwright</h3>
+      <div class="topic-block">
+        <ul>
+          <li><a href="https://playwright.dev/docs/intro" target="_blank">Playwright &mdash; Getting Started</a> &mdash; installation and first test</li>
+          <li><a href="https://playwright.dev/docs/locators" target="_blank">Playwright &mdash; Locators</a> &mdash; all locator types with examples</li>
+          <li><a href="https://playwright.dev/docs/test-assertions" target="_blank">Playwright &mdash; Assertions</a> &mdash; full list of <code class="inline-code">expect()</code> matchers</li>
+          <li><a href="https://playwright.dev/docs/debug" target="_blank">Playwright &mdash; Debugging</a> &mdash; Trace Viewer and debugging tools</li>
+          <li><a href="https://playwright.dev/docs/test-ui-mode" target="_blank">Playwright &mdash; UI Mode</a> &mdash; interactive development mode</li>
+          <li><a href="https://playwright.dev/docs/codegen" target="_blank">Playwright &mdash; Test Generator (codegen)</a> &mdash; generate tests by clicking</li>
+        </ul>
+      </div>
+
+      <h3>Practice Sites</h3>
+      <div class="topic-block">
+        <ul>
+          <li><a href="https://practicetestautomation.com/practice-test-login/" target="_blank">Practice Test Automation &mdash; Login page</a></li>
+          <li><a href="https://www.saucedemo.com" target="_blank">SauceDemo</a> &mdash; full e-commerce practice site</li>
+          <li><a href="https://demo.playwright.dev/todomvc" target="_blank">Playwright TodoMVC</a> &mdash; simple todo app</li>
+        </ul>
+      </div>
+
+      <hr>
+
+      <!-- ══════════════════════════════════════════════ -->
+      <!-- WHAT'S NEXT -->
+      <!-- ══════════════════════════════════════════════ -->
+
+      <h2 id="next">What Comes Next</h2>
+
+      <div class="callout callout-success">
+        <span class="icon">🎓</span>
+        <div>
+          <p>This program covers the basics. Once you complete it, the next step is <strong>Part 2</strong> covering advanced Page Object patterns, test data management, CI/CD integration, and API testing &mdash; the skills needed to contribute to production test suites at scale.</p>
+          <p style="margin-top: 8px;">Participants should be paired with a senior automation engineer for 2-4 weeks of mentored real-world work: reviewing Pull Requests, writing tests for actual Jira tickets, and participating in code reviews.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="page-footer">
+      <span>Playwright for Manual QA Engineers &bull; 6-Week Learning Path v5.6</span>
+      <span>April 2026</span>
+    </div>
+
+  </main>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- RIGHT SIDEBAR: TABLE OF CONTENTS + PROGRESS -->
+  <!-- ══════════════════════════════════════════════ -->
+  <aside class="toc" id="toc">
+    <div class="toc-progress-box">
+      <div class="overall-label">Overall progress</div>
+      <div class="overall-value"><span id="overall-checked">0</span> / <span id="overall-total">0</span> <span>items</span></div>
+      <div class="progress-bar-bg"><div class="progress-bar-fill" id="overall-bar" style="width: 0%;"></div></div>
+      <button class="toc-reset" onclick="resetProgress()">Reset progress</button>
+    </div>
+
+    <div class="toc-header">On this page</div>
+    <ul>
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#week-0">Week 0 — Setup<span class="pct" data-week-pct="0"></span></a></li>
+      <li><a href="#vscode">VS Code Guide<span class="pct" data-week-pct="vs"></span></a></li>
+      <li><a href="#week-1">Week 1 — First Test<span class="pct" data-week-pct="1"></span></a></li>
+      <li><a href="#week-2">Week 2 — TypeScript<span class="pct" data-week-pct="2"></span></a></li>
+      <li><a href="#week-3">Week 3 — Locators<span class="pct" data-week-pct="3"></span></a></li>
+      <li><a href="#week-4">Week 4 — Writing &amp; Debug<span class="pct" data-week-pct="4"></span></a></li>
+      <li><a href="#week-5">Week 5 — Git &amp; Setup<span class="pct" data-week-pct="5"></span></a></li>
+      <li><a href="#week-6">Week 6 — Final Project<span class="pct" data-week-pct="6"></span></a></li>
+    </ul>
+
+    <div class="toc-section">
+      <div class="toc-section-title">Reference</div>
+      <ul>
+        <li><a href="#pitfalls">Common Pitfalls</a></li>
+        <li><a href="#resources">Resources</a></li>
+        <li><a href="#next">What Comes Next</a></li>
+      </ul>
+    </div>
+  </aside>
+
+</div>
+
+<script>
+  // ── OS tabs ─────────────────────────────────────────────────────────
+  // Clicking any tab syncs the OS choice across ALL OS tab groups on the page
+  // and saves the selection so it persists across visits.
+  const OS_STORAGE_KEY = 'playwright-learning-os';
+
+  function switchOS(os) {
+    document.querySelectorAll('.os-tab').forEach(t => {
+      t.classList.toggle('active', t.dataset.os === os);
+    });
+    document.querySelectorAll('.os-content').forEach(c => {
+      c.classList.toggle('active', c.dataset.os === os);
+    });
+    try { localStorage.setItem(OS_STORAGE_KEY, os); } catch (e) { /* ignore */ }
+  }
+
+  function initOS() {
+    let saved = 'mac';
+    try { saved = localStorage.getItem(OS_STORAGE_KEY) || 'mac'; } catch (e) { }
+    if (['mac', 'windows', 'linux'].includes(saved)) switchOS(saved);
+  }
+
+  // ── Checkbox state persistence ──────────────────────────────────────
+  const STORAGE_KEY = 'playwright-learning-progress-v5';
+
+  function loadProgress() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : {};
+    } catch (e) {
+      return {};
+    }
+  }
+
+  function saveProgress(state) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (e) { /* storage full or disabled */ }
+  }
+
+  function updateProgressUI() {
+    const all = document.querySelectorAll('.checklist input[type="checkbox"]');
+    const total = all.length;
+    const checked = document.querySelectorAll('.checklist input[type="checkbox"]:checked').length;
+
+    document.getElementById('overall-checked').textContent = checked;
+    document.getElementById('overall-total').textContent = total;
+    const pct = total > 0 ? Math.round((checked / total) * 100) : 0;
+    document.getElementById('overall-bar').style.width = pct + '%';
+
+    // Per-week progress
+    const weeks = [0, 'vs', 1, 2, 3, 4, 5, 6];
+    weeks.forEach(w => {
+      const weekBoxes = document.querySelectorAll(`.checklist input[type="checkbox"][data-week="${w}"]`);
+      const weekChecked = document.querySelectorAll(`.checklist input[type="checkbox"][data-week="${w}"]:checked`).length;
+      const weekTotal = weekBoxes.length;
+      const weekPct = weekTotal > 0 ? Math.round((weekChecked / weekTotal) * 100) : 0;
+
+      // TOC percentage
+      const tocPct = document.querySelector(`[data-week-pct="${w}"]`);
+      if (tocPct) {
+        tocPct.textContent = weekTotal > 0 ? weekPct + '%' : '';
+        const tocLink = tocPct.closest('a');
+        if (tocLink) tocLink.classList.toggle('done', weekPct === 100 && weekTotal > 0);
+      }
+
+      // Week header progress badge
+      const weekProg = document.querySelector(`.week-progress[data-week="${w}"]`);
+      if (weekProg) {
+        const pctVal = weekProg.querySelector('.pct-val');
+        pctVal.textContent = weekPct + '%';
+        weekProg.classList.toggle('complete', weekPct === 100 && weekTotal > 0);
+      }
+    });
+  }
+
+  function initCheckboxes() {
+    const state = loadProgress();
+    const boxes = document.querySelectorAll('.checklist input[type="checkbox"]');
+    boxes.forEach(box => {
+      if (state[box.id]) box.checked = true;
+      box.addEventListener('change', () => {
+        const currentState = loadProgress();
+        if (box.checked) currentState[box.id] = true;
+        else delete currentState[box.id];
+        saveProgress(currentState);
+        updateProgressUI();
+      });
+    });
+    updateProgressUI();
+  }
+
+  function resetProgress() {
+    if (!confirm('Reset all progress? This cannot be undone.')) return;
+    localStorage.removeItem(STORAGE_KEY);
+    document.querySelectorAll('.checklist input[type="checkbox"]').forEach(b => b.checked = false);
+    updateProgressUI();
+  }
+
+  // ── Scroll spy for TOC (highlight active section) ──────────────────
+  function initScrollSpy() {
+    const sections = [
+      'overview', 'week-0', 'vscode', 'week-1', 'week-2', 'week-3',
+      'week-4', 'week-5', 'week-6', 'pitfalls', 'resources', 'next'
+    ];
+    const tocLinks = document.querySelectorAll('.toc a');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          tocLinks.forEach(link => {
+            link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+          });
+        }
+      });
+    }, {
+      rootMargin: '-80px 0px -70% 0px',
+      threshold: 0
+    });
+
+    sections.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+  }
+
+  // ── Close mobile TOC when a link is clicked ────────────────────────
+  function initMobileNav() {
+    document.querySelectorAll('.toc a').forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth <= 1100) {
+          document.getElementById('toc').classList.remove('open');
+        }
+      });
+    });
+  }
+
+  // ── Init ────────────────────────────────────────────────────────────
+  document.addEventListener('DOMContentLoaded', () => {
+    initOS();
+    initCheckboxes();
+    initScrollSpy();
+    initMobileNav();
+  });
+</script>
+
+</body>
+</html>
