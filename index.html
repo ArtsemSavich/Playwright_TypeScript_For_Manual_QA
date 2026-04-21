@@ -946,7 +946,7 @@
     <svg viewBox="0 0 32 32" fill="none"><path d="M6.5 16c0-.3.2-.7.5-1l8.6-8.6c.6-.6 1.5-.6 2.1 0l.7.7c.6.6.6 1.5 0 2.1L12.1 16l6.3 6.3c.6.6.6 1.5 0 2.1l-.7.7c-.6.6-1.5.6-2.1 0L7 16.5c-.3-.3-.5-.6-.5-1z" fill="rgba(255,255,255,0.5)"/><path d="M15 16c0-.3.2-.7.5-1l8.6-8.6c.6-.6 1.5-.6 2.1 0l.7.7c.6.6.6 1.5 0 2.1L20.6 16l6.3 6.3c.6.6.6 1.5 0 2.1l-.7.7c-.6.6-1.5.6-2.1 0l-8.6-8.6c-.3-.3-.5-.6-.5-1z" fill="white"/></svg>
     QA Engineering &middot; Learning Path
   </div>
-  <span class="version-badge" id="current-version" title="Current document version">v5.9</span>
+  <span class="version-badge" id="current-version" title="Current document version">v5.11</span>
   <button class="mobile-toc-toggle" onclick="document.getElementById('toc').classList.toggle('open')">☰ Navigation</button>
 </nav>
 
@@ -1106,20 +1106,24 @@ npm --version      # should show 10+</pre></div>
       </div>
 
       <div class="os-content active" data-os="mac">
-        <p><strong>Option A: Homebrew (recommended)</strong></p>
+        <p><strong>Option A: macOS Developer Tools (simplest, no Homebrew needed)</strong></p>
+        <p style="font-size: 13px; color: var(--text-subtle);">Apple's official lightweight CLI package (~500 MB). Installs Git along with a few other command-line utilities you'll likely need later anyway. Not the full Xcode IDE.</p>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">bash</span></div>
+          <div class="code-body"><pre>xcode-select --install</pre></div>
+        </div>
+        <p>A popup appears &rarr; click <strong>Install</strong> &rarr; wait 2-3 minutes. Then verify:</p>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">bash</span></div>
+          <div class="code-body"><pre>git --version    # should show 2.x.x</pre></div>
+        </div>
+        <p style="font-size: 13px; color: var(--text-subtle);">If you see "command line tools are already installed" &mdash; you already have Git, just verify with <code class="inline-code">git --version</code>.</p>
+
+        <p><strong>Option B: Homebrew (if you already use it)</strong></p>
         <div class="code-block">
           <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">bash</span></div>
           <div class="code-body"><pre>brew install git
 git --version    # should show 2.x.x</pre></div>
-        </div>
-
-        <p><strong>Option B: Download installer</strong></p>
-        <div class="topic-block">
-          <ul>
-            <li>Go to <a href="https://git-scm.com/download/mac" target="_blank">git-scm.com/download/mac</a></li>
-            <li>Pick the "Binary installer" link &mdash; download the .dmg and run it</li>
-            <li>Open a new Terminal window, verify: <code class="inline-code">git --version</code></li>
-          </ul>
         </div>
       </div>
 
@@ -1164,7 +1168,7 @@ git --version</pre></div>
         <ul>
           <li>Go to <a href="https://github.com/signup" target="_blank">github.com/signup</a> and create a free account (2 minutes)</li>
           <li>Verify your email &mdash; GitHub will send a confirmation link</li>
-          <li><strong>Use an email you will keep access to</strong> &mdash; ideally your work email, or a personal one you check regularly. You will use this exact email for Git identity in the next step.</li>
+          <li><strong>Recommended: use your <code class="inline-code">@solvd.com</code> email</strong> &mdash; your work on this learning path will be tied to your Solvd identity, which is useful if you want to reference it later (e.g. in a performance review or portfolio). You can always add personal emails to the same GitHub account later via Settings &rarr; Emails.</li>
           <li>Pick a username you are comfortable with professionally &mdash; it will show up on your PRs and commits</li>
         </ul>
       </div>
@@ -1189,9 +1193,9 @@ git --version</pre></div>
       <p>Git needs your name and email for commits. Use the <strong>same email</strong> you registered on GitHub &mdash; this is how GitHub links commits to your profile.</p>
       <div class="code-block">
         <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">bash</span></div>
-        <div class="code-body"><pre># Use the SAME email as your GitHub account
+        <div class="code-body"><pre># Use the SAME email as your GitHub account (your @solvd.com email)
 git config --global user.name "Your Name"
-git config --global user.email "you@company.com"
+git config --global user.email "you@solvd.com"
 git config --global init.defaultBranch main
 
 # Override the Vim editor default with something friendlier
@@ -2908,7 +2912,7 @@ npx playwright show-report               # open last HTML report
     </div>
 
     <div class="page-footer">
-      <span>Playwright for Manual QA Engineers &bull; 6-Week Learning Path v5.9</span>
+      <span>Playwright for Manual QA Engineers &bull; 6-Week Learning Path v5.11</span>
       <span>April 2026</span>
     </div>
 
