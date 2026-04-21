@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>Playwright for Manual QA Engineers — 6-Week Learning Path</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap');
@@ -856,6 +859,84 @@
   @media print {
     .fab-feedback { display: none; }
   }
+
+  /* ── Version badge in top nav ── */
+  .version-badge {
+    margin-left: auto;
+    margin-right: 12px;
+    background: rgba(255,255,255,0.12);
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 12px;
+    letter-spacing: 0.3px;
+    font-family: 'Fira Code', monospace;
+  }
+  @media (max-width: 1100px) {
+    .version-badge { margin-right: 8px; font-size: 10px; padding: 3px 8px; }
+  }
+
+  /* ── Update toast ── */
+  .update-toast {
+    position: fixed;
+    bottom: 24px;
+    left: 24px;
+    z-index: 300;
+    background: var(--nav);
+    color: white;
+    padding: 14px 16px 14px 18px;
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(9,30,66,0.3);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    max-width: 380px;
+    font-size: 14px;
+    transform: translateY(120%);
+    opacity: 0;
+    transition: transform 0.35s ease, opacity 0.35s ease;
+    pointer-events: none;
+  }
+  .update-toast.show {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .update-toast .toast-icon { font-size: 20px; flex-shrink: 0; }
+  .update-toast .toast-body { flex: 1; line-height: 1.4; }
+  .update-toast .toast-title { font-weight: 700; margin-bottom: 2px; }
+  .update-toast .toast-sub { font-size: 12px; opacity: 0.8; }
+  .update-toast .toast-actions { display: flex; gap: 6px; flex-shrink: 0; }
+  .update-toast .toast-btn {
+    background: var(--blue);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 7px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+  }
+  .update-toast .toast-btn:hover { background: #0747A6; }
+  .update-toast .toast-btn.secondary {
+    background: transparent;
+    color: rgba(255,255,255,0.7);
+    padding: 7px 8px;
+  }
+  .update-toast .toast-btn.secondary:hover { color: white; }
+  @media (max-width: 768px) {
+    .update-toast {
+      left: 12px;
+      right: 12px;
+      bottom: 90px;
+      max-width: none;
+    }
+  }
+  @media print {
+    .update-toast, .version-badge { display: none; }
+  }
 </style>
 </head>
 <body>
@@ -865,6 +946,7 @@
     <svg viewBox="0 0 32 32" fill="none"><path d="M6.5 16c0-.3.2-.7.5-1l8.6-8.6c.6-.6 1.5-.6 2.1 0l.7.7c.6.6.6 1.5 0 2.1L12.1 16l6.3 6.3c.6.6.6 1.5 0 2.1l-.7.7c-.6.6-1.5.6-2.1 0L7 16.5c-.3-.3-.5-.6-.5-1z" fill="rgba(255,255,255,0.5)"/><path d="M15 16c0-.3.2-.7.5-1l8.6-8.6c.6-.6 1.5-.6 2.1 0l.7.7c.6.6.6 1.5 0 2.1L20.6 16l6.3 6.3c.6.6.6 1.5 0 2.1l-.7.7c-.6.6-1.5.6-2.1 0l-8.6-8.6c-.3-.3-.5-.6-.5-1z" fill="white"/></svg>
     QA Engineering &middot; Learning Path
   </div>
+  <span class="version-badge" id="current-version" title="Current document version">v5.9</span>
   <button class="mobile-toc-toggle" onclick="document.getElementById('toc').classList.toggle('open')">☰ Navigation</button>
 </nav>
 
@@ -2826,7 +2908,7 @@ npx playwright show-report               # open last HTML report
     </div>
 
     <div class="page-footer">
-      <span>Playwright for Manual QA Engineers &bull; 6-Week Learning Path v5.8</span>
+      <span>Playwright for Manual QA Engineers &bull; 6-Week Learning Path v5.9</span>
       <span>April 2026</span>
     </div>
 
@@ -3013,7 +3095,83 @@ npx playwright show-report               # open last HTML report
     initScrollSpy();
     initMobileNav();
     initFeedbackMenu();
+    initVersionCheck();
   });
+
+  // ── Auto version check ─────────────────────────────────────────────
+  // Reads the version from the badge in the header and periodically checks
+  // the server for a newer version. If newer → show toast.
+  const VERSION_CHECK_INTERVAL_MS = 10 * 60 * 1000; // every 10 minutes
+  const VERSION_CHECK_ON_FOCUS_MIN_GAP_MS = 60 * 1000; // don't hammer on rapid focus/blur
+
+  let currentVersion = null;
+  let lastCheckAt = 0;
+  let updateAvailable = false;
+
+  function getVersionFromDocument(doc) {
+    // Prefer explicit badge; fall back to footer string
+    const badge = doc.getElementById('current-version');
+    if (badge && badge.textContent) return badge.textContent.trim();
+    const footer = doc.querySelector('.page-footer');
+    if (footer) {
+      const m = footer.textContent.match(/v(\d+\.\d+)/);
+      if (m) return 'v' + m[1];
+    }
+    return null;
+  }
+
+  async function checkForUpdate() {
+    if (updateAvailable) return; // already shown
+    try {
+      // Cache-busting query param — force fresh fetch of the HTML
+      const res = await fetch(location.pathname + '?_vc=' + Date.now(), {
+        cache: 'no-store',
+        headers: { 'Cache-Control': 'no-cache' }
+      });
+      if (!res.ok) return;
+      const html = await res.text();
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+      const serverVersion = getVersionFromDocument(doc);
+      if (serverVersion && currentVersion && serverVersion !== currentVersion) {
+        updateAvailable = true;
+        showUpdateToast();
+      }
+    } catch (e) {
+      // Silent fail — network error, don't bother the user
+    }
+    lastCheckAt = Date.now();
+  }
+
+  function showUpdateToast() {
+    const toast = document.getElementById('update-toast');
+    if (toast) toast.classList.add('show');
+  }
+
+  function dismissUpdateToast() {
+    const toast = document.getElementById('update-toast');
+    if (toast) toast.classList.remove('show');
+  }
+
+  function initVersionCheck() {
+    currentVersion = getVersionFromDocument(document);
+    if (!currentVersion) return;
+
+    // Periodic check
+    setInterval(checkForUpdate, VERSION_CHECK_INTERVAL_MS);
+
+    // Also check when user returns to the tab (but throttle)
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') {
+        if (Date.now() - lastCheckAt > VERSION_CHECK_ON_FOCUS_MIN_GAP_MS) {
+          checkForUpdate();
+        }
+      }
+    });
+
+    // First check after 30 seconds (avoid race on initial load)
+    setTimeout(checkForUpdate, 30000);
+  }
 
   // ── Feedback menu ──────────────────────────────────────────────────
   function toggleFeedbackMenu() {
@@ -3076,6 +3234,21 @@ npx playwright show-report               # open last HTML report
         <div class="fab-sub">Browse existing reports</div>
       </div>
     </a>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- UPDATE TOAST (appears when new version is detected) -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="update-toast" id="update-toast" role="alert" aria-live="polite">
+  <span class="toast-icon">📬</span>
+  <div class="toast-body">
+    <div class="toast-title">New version available</div>
+    <div class="toast-sub">Reload to see the latest updates</div>
+  </div>
+  <div class="toast-actions">
+    <button class="toast-btn" onclick="location.reload(true)">Reload</button>
+    <button class="toast-btn secondary" onclick="dismissUpdateToast()" aria-label="Dismiss">×</button>
   </div>
 </div>
 
