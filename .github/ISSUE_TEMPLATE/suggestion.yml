@@ -1,0 +1,52 @@
+name: 💡 Suggestion
+description: An idea to make this guide better
+title: "[Suggestion] "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping us improve the guide! Your suggestion will be reviewed and, if useful for others, added in the next update.
+
+  - type: dropdown
+    id: section
+    attributes:
+      label: Which section does this apply to?
+      options:
+        - Week 0 — Setup
+        - VS Code Guide
+        - Week 1 — First Test
+        - Week 2 — TypeScript
+        - Week 3 — Locators
+        - Week 4 — Writing & Debugging
+        - Week 5 — Git & Project Setup
+        - Week 6 — Final Project
+        - Common Pitfalls
+        - Resources
+        - General / Multiple sections
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: What do you suggest?
+      description: Describe your idea. What should change, be added, or be removed?
+      placeholder: |
+        Example: "Add a short section about running tests in parallel — would help with the final project."
+    validations:
+      required: true
+
+  - type: textarea
+    id: why
+    attributes:
+      label: Why would this help?
+      description: What problem does it solve? Who benefits?
+      placeholder: |
+        Example: "When I tried to speed up my test suite, I had no reference for parallel execution and ended up googling it."
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Did you think of other ways to solve this?

@@ -1,0 +1,75 @@
+name: 🐛 Bug Report
+description: Something broken, wrong, or confusing in the guide
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug! The more detail you give, the faster we can fix it.
+
+  - type: dropdown
+    id: section
+    attributes:
+      label: Which section has the issue?
+      description: Pick the week or section where you found the problem
+      options:
+        - Week 0 — Setup
+        - VS Code Guide
+        - Week 1 — First Test
+        - Week 2 — TypeScript
+        - Week 3 — Locators
+        - Week 4 — Writing & Debugging
+        - Week 5 — Git & Project Setup
+        - Week 6 — Final Project
+        - Common Pitfalls
+        - Resources
+        - Other / Multiple sections
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Describe the problem. What did you expect vs what you got?
+      placeholder: |
+        Example: "I ran `gh auth setup-git` but got 'command not found'. I expected it to configure Git credentials silently."
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: What exact steps did you follow? Include commands, file names, and any error messages.
+      placeholder: |
+        1. Opened the VS Code terminal
+        2. Ran: git commit -m "test"
+        3. Got error: ...
+      render: shell
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - macOS
+        - Windows
+        - Linux
+        - Not relevant
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Document version
+      description: Check the bottom of the page — it shows something like "v5.8"
+      placeholder: "v5.8"
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Anything else?
+      description: Screenshots, links, additional context — anything that helps

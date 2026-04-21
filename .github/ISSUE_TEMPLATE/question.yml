@@ -1,0 +1,44 @@
+name: ❓ Question
+description: Need help understanding something in the guide
+title: "[Question] "
+labels: ["question"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before opening a question here, check if it can be answered faster in the **Teams channel** — it's meant for real-time Q&A. Use GitHub issues for questions that might benefit others who read the guide later.
+
+  - type: dropdown
+    id: section
+    attributes:
+      label: Which section is your question about?
+      options:
+        - Week 0 — Setup
+        - VS Code Guide
+        - Week 1 — First Test
+        - Week 2 — TypeScript
+        - Week 3 — Locators
+        - Week 4 — Writing & Debugging
+        - Week 5 — Git & Project Setup
+        - Week 6 — Final Project
+        - Common Pitfalls
+        - Resources
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: question
+    attributes:
+      label: What's your question?
+      description: Be as specific as possible. Quote the part of the guide that's unclear if it helps.
+      placeholder: |
+        Example: "In Week 4, the guide says 'avoid waitForTimeout'. But how do I handle a slow modal that takes 3 seconds to appear?"
+    validations:
+      required: true
+
+  - type: textarea
+    id: tried
+    attributes:
+      label: What have you already tried?
+      description: Helps us give a better answer (and saves your time).

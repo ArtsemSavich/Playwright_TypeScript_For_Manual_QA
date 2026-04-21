@@ -760,6 +760,102 @@
     .layout { grid-template-columns: 1fr; }
     .page-wrapper { box-shadow: none; max-width: 100%; }
   }
+
+  /* ── Floating Feedback Button ── */
+  .fab-feedback {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 200;
+  }
+  .fab-feedback .fab-btn {
+    background: var(--blue);
+    color: white;
+    border: none;
+    border-radius: 28px;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,82,204,0.35);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .fab-feedback .fab-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,82,204,0.45);
+  }
+  .fab-feedback .fab-menu {
+    position: absolute;
+    bottom: 64px;
+    right: 0;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(9,30,66,0.2);
+    min-width: 280px;
+    padding: 8px;
+    opacity: 0;
+    transform: translateY(8px);
+    pointer-events: none;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+  }
+  .fab-feedback.open .fab-menu {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .fab-feedback .fab-menu-header {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-subtle);
+    padding: 8px 12px 4px;
+  }
+  .fab-feedback .fab-menu a {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 6px;
+    color: var(--text);
+    text-decoration: none;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+  .fab-feedback .fab-menu a:hover { background: var(--sidebar); }
+  .fab-feedback .fab-menu a .fab-icon { font-size: 20px; flex-shrink: 0; }
+  .fab-feedback .fab-menu a .fab-label { font-weight: 600; }
+  .fab-feedback .fab-menu a .fab-sub {
+    font-size: 12px;
+    color: var(--text-subtle);
+    font-weight: 400;
+    margin-top: 2px;
+  }
+  .fab-feedback .fab-close {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: var(--text-subtle);
+    padding: 2px 8px;
+    line-height: 1;
+  }
+  @media (max-width: 768px) {
+    .fab-feedback { bottom: 16px; right: 16px; }
+    .fab-feedback .fab-btn { padding: 10px 16px; font-size: 13px; }
+    .fab-feedback .fab-menu { min-width: calc(100vw - 32px); right: 0; }
+  }
+  @media print {
+    .fab-feedback { display: none; }
+  }
 </style>
 </head>
 <body>
@@ -2730,7 +2826,7 @@ npx playwright show-report               # open last HTML report
     </div>
 
     <div class="page-footer">
-      <span>Playwright for Manual QA Engineers &bull; 6-Week Learning Path v5.7</span>
+      <span>Playwright for Manual QA Engineers &bull; 6-Week Learning Path v5.8</span>
       <span>April 2026</span>
     </div>
 
@@ -2916,8 +3012,72 @@ npx playwright show-report               # open last HTML report
     initCheckboxes();
     initScrollSpy();
     initMobileNav();
+    initFeedbackMenu();
   });
+
+  // ── Feedback menu ──────────────────────────────────────────────────
+  function toggleFeedbackMenu() {
+    document.getElementById('fab-feedback').classList.toggle('open');
+  }
+
+  function initFeedbackMenu() {
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+      const fab = document.getElementById('fab-feedback');
+      if (fab && !fab.contains(e.target)) {
+        fab.classList.remove('open');
+      }
+    });
+    // Close menu on ESC
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        document.getElementById('fab-feedback')?.classList.remove('open');
+      }
+    });
+  }
 </script>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- FLOATING FEEDBACK BUTTON -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="fab-feedback" id="fab-feedback">
+  <button class="fab-btn" onclick="toggleFeedbackMenu()" aria-label="Send feedback">
+    <span>💬</span>
+    <span>Feedback</span>
+  </button>
+  <div class="fab-menu" role="menu" aria-label="Feedback options">
+    <button class="fab-close" onclick="toggleFeedbackMenu()" aria-label="Close menu">×</button>
+    <div class="fab-menu-header">Found something?</div>
+    <a href="https://github.com/ArtsemSavich/Playwright_TypeScript_For_Manual_QA/issues/new?labels=bug&template=bug_report.yml" target="_blank" rel="noopener" role="menuitem">
+      <span class="fab-icon">🐛</span>
+      <div>
+        <div class="fab-label">Report a bug</div>
+        <div class="fab-sub">Something broken, wrong, or confusing</div>
+      </div>
+    </a>
+    <a href="https://github.com/ArtsemSavich/Playwright_TypeScript_For_Manual_QA/issues/new?labels=enhancement&template=suggestion.yml" target="_blank" rel="noopener" role="menuitem">
+      <span class="fab-icon">💡</span>
+      <div>
+        <div class="fab-label">Suggest improvement</div>
+        <div class="fab-sub">Ideas to make this guide better</div>
+      </div>
+    </a>
+    <a href="https://github.com/ArtsemSavich/Playwright_TypeScript_For_Manual_QA/issues/new?labels=question&template=question.yml" target="_blank" rel="noopener" role="menuitem">
+      <span class="fab-icon">❓</span>
+      <div>
+        <div class="fab-label">Ask a question</div>
+        <div class="fab-sub">Need help understanding something</div>
+      </div>
+    </a>
+    <a href="https://github.com/ArtsemSavich/Playwright_TypeScript_For_Manual_QA/issues" target="_blank" rel="noopener" role="menuitem" style="border-top: 1px solid var(--border); margin-top: 4px; padding-top: 12px;">
+      <span class="fab-icon">📋</span>
+      <div>
+        <div class="fab-label">See all issues</div>
+        <div class="fab-sub">Browse existing reports</div>
+      </div>
+    </a>
+  </div>
+</div>
 
 </body>
 </html>

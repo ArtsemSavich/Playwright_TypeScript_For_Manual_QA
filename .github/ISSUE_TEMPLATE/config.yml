@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Quick Q&A on Teams
+    url: https://teams.cloud.microsoft/l/channel/19%3AzMU5VgWhKyJLOdAywQwA0f5gkoQ5Hzs9QP6N0IWRIV41%40thread.tacv2/General?groupId=a617b54d-6539-4dd1-8262-27e144a67494&tenantId=5fd90985-f406-47a0-9043-89ffdca38307
+    about: For fast questions and real-time help, use our Teams channel. (Use GitHub issues for things that should be tracked.)
