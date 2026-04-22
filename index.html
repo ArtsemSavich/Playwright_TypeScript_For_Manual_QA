@@ -1040,7 +1040,7 @@
     <svg viewBox="0 0 32 32" fill="none"><path d="M6.5 16c0-.3.2-.7.5-1l8.6-8.6c.6-.6 1.5-.6 2.1 0l.7.7c.6.6.6 1.5 0 2.1L12.1 16l6.3 6.3c.6.6.6 1.5 0 2.1l-.7.7c-.6.6-1.5.6-2.1 0L7 16.5c-.3-.3-.5-.6-.5-1z" fill="rgba(255,255,255,0.5)"/><path d="M15 16c0-.3.2-.7.5-1l8.6-8.6c.6-.6 1.5-.6 2.1 0l.7.7c.6.6.6 1.5 0 2.1L20.6 16l6.3 6.3c.6.6.6 1.5 0 2.1l-.7.7c-.6.6-1.5.6-2.1 0l-8.6-8.6c-.3-.3-.5-.6-.5-1z" fill="white"/></svg>
     QA Engineering &middot; Learning Path
   </div>
-  <span class="version-badge" id="current-version" title="Current document version">v5.16</span>
+  <span class="version-badge" id="current-version" title="Current document version">v5.17</span>
   <button class="mobile-toc-toggle" onclick="document.getElementById('toc').classList.toggle('open')">☰ Navigation</button>
 </nav>
 
@@ -2075,18 +2075,34 @@ npm init playwright@latest</pre></div>
             <div style="font-size: 12px; color: var(--text-subtle); margin-top: 4px;">📖 Official docs: <a href="https://playwright.dev/docs/test-ui-mode" target="_blank">playwright.dev/docs/test-ui-mode</a></div>
           </label></li>
           <li><input type="checkbox" id="w1-e6" data-week="1"><label for="w1-e6"><strong>Read the HTML report.</strong> After your last CLI test run, execute <code class="inline-code">npx playwright show-report</code> &mdash; a browser tab opens with a visual summary: each test, its duration, screenshots, and trace. If a test failed, click on it to see exactly where it went wrong. This is the report format used in CI/CD systems as well.</label></li>
-          <li><input type="checkbox" id="w1-e7" data-week="1"><label for="w1-e7"><strong>Write your first test from scratch.</strong> In VS Code, create a new file <code class="inline-code">tests/my-first.spec.ts</code> and paste:
+          <li><input type="checkbox" id="w1-e7" data-week="1"><label for="w1-e7"><strong>Write your first test from scratch (positive + negative).</strong> In VS Code, create a new file <code class="inline-code">tests/my-first.spec.ts</code> and paste:
             <div class="code-block" style="margin-top: 8px;">
               <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> tests/my-first.spec.ts <span class="lang">typescript</span></div>
               <div class="code-body"><pre>import { test, expect } from '@playwright/test';
 
-test('my first test', async ({ page }) =&gt; {
+// POSITIVE test — checks that something IS as expected
+test('page has the correct title', async ({ page }) =&gt; {
   await page.goto('https://playwright.dev/');
   await expect(page).toHaveTitle(/Playwright/);
+});
+
+// NEGATIVE test — checks that something is NOT present.
+// In QA, this is just as important as positive checks.
+test('page does not contain error text', async ({ page }) =&gt; {
+  await page.goto('https://playwright.dev/');
+  // .not.toBeVisible() = assert the element is NOT visible on the page
+  await expect(page.getByText('404 Page Not Found')).not.toBeVisible();
 });</pre></div>
             </div>
-            Then run it: <code class="inline-code">npx playwright test my-first --project=chromium</code>. Green checkmark? You just wrote and ran your first Playwright test. Don't worry about understanding every keyword yet &mdash; <a href="#week-2">Week 2</a> covers TypeScript and <a href="#week-3">Week 3</a> covers locators. For now, the win is: <strong>you created a test file from scratch and it passed</strong>. 🎉
-            <div style="font-size: 13px; color: var(--text-subtle); margin-top: 8px;">See also &mdash; this exact pattern comes from the official Playwright documentation: <a href="https://playwright.dev/docs/writing-tests" target="_blank">playwright.dev/docs/writing-tests</a></div>
+            Then run it: <code class="inline-code">npx playwright test my-first --project=chromium</code>. Two green checkmarks? You just wrote and ran your first <strong>positive and negative</strong> Playwright tests &mdash; the two main test shapes you will write for the rest of your career. 🎉
+            <div class="callout callout-info" style="margin-top: 12px;">
+              <span class="icon">🔒</span>
+              <div><strong>Test isolation (auto-cleanup).</strong> Notice how each test got its own fresh <code class="inline-code">page</code>? Playwright automatically creates a <strong>new browser context</strong> for every test and closes it when the test finishes &mdash; a clean slate, every time. No leftover cookies, no shared state, no manual cleanup. This is one of Playwright's core features and the reason tests do not accidentally affect each other. You do not need to write <code class="inline-code">page.close()</code> or <code class="inline-code">afterEach</code> hooks for this &mdash; it happens automatically.
+              <div style="font-size: 12px; color: var(--text-subtle); margin-top: 4px;">📖 <a href="https://playwright.dev/docs/browser-contexts" target="_blank">playwright.dev/docs/browser-contexts</a></div>
+              </div>
+            </div>
+            <p style="font-size: 13px; color: var(--text-subtle); margin-top: 8px;"><strong>Why positive AND negative?</strong> A positive test confirms "the happy path works". A negative test confirms "the app behaves correctly when something is wrong or missing". Real QA suites are roughly 60% positive / 40% negative &mdash; you will be writing both from <a href="#week-4">Week 4</a> onwards.</p>
+            <div style="font-size: 13px; color: var(--text-subtle); margin-top: 6px;">See also &mdash; the <code class="inline-code">toHaveTitle</code> pattern comes straight from <a href="https://playwright.dev/docs/writing-tests" target="_blank">playwright.dev/docs/writing-tests</a>.</div>
           </label></li>
         </ol>
       </div>
@@ -2123,7 +2139,7 @@ test('my first test', async ({ page }) =&gt; {
           <li><input type="checkbox" id="w1-r3" data-week="1"><label for="w1-r3">I know how to make the browser visible during test runs (headed mode)</label></li>
           <li><input type="checkbox" id="w1-r4" data-week="1"><label for="w1-r4">I can open and read the HTML report</label></li>
           <li><input type="checkbox" id="w1-r5" data-week="1"><label for="w1-r5">I can name every file in the project and explain what it does</label></li>
-          <li><input type="checkbox" id="w1-r6" data-week="1"><label for="w1-r6">I wrote <code class="inline-code">my-first.spec.ts</code> from scratch and it passes</label></li>
+          <li><input type="checkbox" id="w1-r6" data-week="1"><label for="w1-r6">I wrote <code class="inline-code">my-first.spec.ts</code> with a positive and a negative test, and both pass</label></li>
         </ul>
       </div>
 
@@ -3212,19 +3228,31 @@ npx playwright show-report               # open last HTML report
       <div class="changelog">
         <article class="changelog-entry">
           <header class="changelog-head">
-            <span class="changelog-version">v5.16</span>
+            <span class="changelog-version">v5.17</span>
             <span class="changelog-date">Apr 23, 2026</span>
           </header>
           <ul>
-            <li>Added the <strong>contents of <code class="inline-code">tests/example.spec.ts</code></strong> directly in the Week 1 Topics &mdash; now you can see what the test you're running actually does before you run it. Explained in plain English what each test checks.</li>
-            <li>Added a <strong>"Your <code class="inline-code">playwright.config.ts</code> &mdash; what's inside"</strong> topic block with the full generated default config + a table of the 4 keys you'll care about now. Fields you don't need yet (<code class="inline-code">baseURL</code>, <code class="inline-code">retries</code>, <code class="inline-code">workers</code>) are flagged as "you'll meet these later" with the exact week/part they're covered in.</li>
-            <li>Removed two duplicate blocks (old simplified config + old "How to run tests" table) &mdash; they overlapped with v5.15's CLI cheat sheet.</li>
-            <li>Exercise 4 now asks you to <strong>read <code class="inline-code">example.spec.ts</code> in VS Code</strong> before running it. Also clarifies what "headless" means.</li>
+            <li>Exercise 7 (Write your first test) now has <strong>two tests: a positive and a negative one</strong>. You write both the "check that X is correct" and the "check that Y is NOT present" shapes from day one &mdash; the two core patterns in any QA suite.</li>
+            <li>Added a <strong>test isolation callout</strong> explaining that Playwright automatically creates a fresh browser context for every test and closes it on finish &mdash; no manual <code class="inline-code">page.close()</code> or <code class="inline-code">afterEach</code> needed. Answers the common "do I need to close the browser myself?" question.</li>
+            <li>Ready-to-Move-On checklist updated: you now need <strong>both</strong> positive and negative tests passing in your <code class="inline-code">my-first.spec.ts</code>.</li>
           </ul>
         </article>
 
         <details class="changelog-older">
           <summary>Show older updates (2)</summary>
+
+          <article class="changelog-entry">
+            <header class="changelog-head">
+              <span class="changelog-version">v5.16</span>
+              <span class="changelog-date">Apr 23, 2026</span>
+            </header>
+            <ul>
+              <li>Added the <strong>contents of <code class="inline-code">tests/example.spec.ts</code></strong> directly in the Week 1 Topics &mdash; now you can see what the test you're running actually does before you run it. Explained in plain English what each test checks.</li>
+              <li>Added a <strong>"Your <code class="inline-code">playwright.config.ts</code> &mdash; what's inside"</strong> topic block with the full generated default config + a table of the 4 keys you'll care about now. Fields you don't need yet (<code class="inline-code">baseURL</code>, <code class="inline-code">retries</code>, <code class="inline-code">workers</code>) are flagged as "you'll meet these later" with the exact week/part they're covered in.</li>
+              <li>Removed two duplicate blocks (old simplified config + old "How to run tests" table) &mdash; they overlapped with v5.15's CLI cheat sheet.</li>
+              <li>Exercise 4 now asks you to <strong>read <code class="inline-code">example.spec.ts</code> in VS Code</strong> before running it. Also clarifies what "headless" means.</li>
+            </ul>
+          </article>
 
           <article class="changelog-entry">
             <header class="changelog-head">
@@ -3236,17 +3264,6 @@ npx playwright show-report               # open last HTML report
               <li>Reworked <a href="#week-1">Week 1</a> exercises: reduced from 9 to 7 with a clear UI-vs-CLI split. Exercise 4 = run via VS Code extension, Exercise 5 = run via CLI. New callout explains why tests run headless by default and how to enable "Show browser"</li>
               <li>Added a <strong>CLI options cheat sheet</strong> table in <a href="#week-1">Week 1</a> so students do not need to memorize flags &mdash; just bookmark the reference</li>
               <li>Added a UI-differences warning in the <strong>Window Anatomy</strong> section (VS Code Guide) &mdash; clarifies that the diagram is a simplification and points to authoritative Playwright docs for real screenshots</li>
-            </ul>
-          </article>
-
-          <article class="changelog-entry">
-            <header class="changelog-head">
-              <span class="changelog-version">v5.14</span>
-              <span class="changelog-date">Apr 23, 2026</span>
-            </header>
-            <ul>
-              <li>Recent Updates section now shows only the <strong>latest version by default</strong>. Older updates are hidden behind a "Show older updates" toggle to keep the page clean</li>
-              <li>When a 4th update is added, the oldest entry is dropped &mdash; only the 3 most recent versions are kept</li>
             </ul>
           </article>
         </details>
@@ -3271,7 +3288,7 @@ npx playwright show-report               # open last HTML report
     </div>
 
     <div class="page-footer">
-      <span>Playwright for Manual QA Engineers &bull; 6-Week Learning Path v5.16 &middot; <a href="#recent-updates" style="color: inherit;">updated Apr 23, 2026</a></span>
+      <span>Playwright for Manual QA Engineers &bull; 6-Week Learning Path v5.17 &middot; <a href="#recent-updates" style="color: inherit;">updated Apr 23, 2026</a></span>
       <span>April 2026</span>
     </div>
 
