@@ -296,6 +296,59 @@
   .wdvs .week-badge { background: #007ACC; }
   .wdvs .week-badge span { font-size: 24px; }
 
+  /* ── Changelog / Recent Updates ── */
+  .changelog {
+    margin: 20px 0;
+  }
+  .changelog-entry {
+    background: var(--sidebar);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--blue);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin: 14px 0;
+  }
+  .changelog-entry:first-child {
+    border-left-color: var(--green);
+    background: #F4FCF7;
+  }
+  .changelog-head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .changelog-version {
+    font-family: 'Fira Code', monospace;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--nav);
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2px 8px;
+  }
+  .changelog-entry:first-child .changelog-version {
+    color: var(--green);
+    border-color: #ABF5D1;
+  }
+  .changelog-date {
+    font-size: 13px;
+    color: var(--text-subtle);
+    font-weight: 500;
+  }
+  .changelog-entry ul {
+    margin: 0 0 0 18px;
+    padding: 0;
+  }
+  .changelog-entry li {
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 6px 0;
+  }
+
   /* ── IDE mockup diagram ── */
   .ide-mockup {
     background: #1E1E1E;
@@ -946,7 +999,7 @@
     <svg viewBox="0 0 32 32" fill="none"><path d="M6.5 16c0-.3.2-.7.5-1l8.6-8.6c.6-.6 1.5-.6 2.1 0l.7.7c.6.6.6 1.5 0 2.1L12.1 16l6.3 6.3c.6.6.6 1.5 0 2.1l-.7.7c-.6.6-1.5.6-2.1 0L7 16.5c-.3-.3-.5-.6-.5-1z" fill="rgba(255,255,255,0.5)"/><path d="M15 16c0-.3.2-.7.5-1l8.6-8.6c.6-.6 1.5-.6 2.1 0l.7.7c.6.6.6 1.5 0 2.1L20.6 16l6.3 6.3c.6.6.6 1.5 0 2.1l-.7.7c-.6.6-1.5.6-2.1 0l-8.6-8.6c-.3-.3-.5-.6-.5-1z" fill="white"/></svg>
     QA Engineering &middot; Learning Path
   </div>
-  <span class="version-badge" id="current-version" title="Current document version">v5.12</span>
+  <span class="version-badge" id="current-version" title="Current document version">v5.13</span>
   <button class="mobile-toc-toggle" onclick="document.getElementById('toc').classList.toggle('open')">☰ Navigation</button>
 </nav>
 
@@ -3045,6 +3098,55 @@ npx playwright show-report               # open last HTML report
       <hr>
 
       <!-- ══════════════════════════════════════════════ -->
+      <!-- RECENT UPDATES / CHANGELOG -->
+      <!-- ══════════════════════════════════════════════ -->
+
+      <h2 id="recent-updates">📬 Recent Updates</h2>
+      <p style="font-size: 14px; color: var(--text-subtle);">This document is actively maintained. When something is added, fixed, or clarified, it is listed here. When you see the "New version available" toast at the bottom left of the page, come here to see what changed.</p>
+
+      <div class="changelog">
+        <article class="changelog-entry">
+          <header class="changelog-head">
+            <span class="changelog-version">v5.13</span>
+            <span class="changelog-date">Apr 23, 2026</span>
+          </header>
+          <ul>
+            <li>Added <strong>Recent Updates</strong> section (you are here) so you can see exactly what changes between versions</li>
+            <li>Added <strong>last-updated date</strong> next to the version in the footer</li>
+            <li>Update toast now has a <strong>"See Changes"</strong> button that jumps you here instead of forcing an immediate reload</li>
+          </ul>
+        </article>
+
+        <article class="changelog-entry">
+          <header class="changelog-head">
+            <span class="changelog-version">v5.12</span>
+            <span class="changelog-date">Apr 22, 2026</span>
+          </header>
+          <ul>
+            <li>Renamed <a href="#week-1">Week 1</a> to "Environment Setup &amp; Your First Playwright Test" &mdash; and added a hands-on <strong>Exercise 9</strong> where you write <code class="inline-code">tests/my-first.spec.ts</code> from scratch and see it pass</li>
+            <li>Rewrote the <strong>Playwright Extension</strong> section in the VS Code Guide: now matches the real UI with all 5 TOOLS (Pick locator, Record new, Record at cursor, Reveal test output, Close all browsers) plus the 6-icon recording toolbar</li>
+            <li>Set <strong>final PR deadline: Friday, June 12</strong> (buffer week after Week 6 for slower starts)</li>
+            <li>Added <strong>deep-links to official Playwright docs</strong> in 7+ places throughout the course: locators, assertions, auto-waiting, trace viewer, POM, best practices, and more</li>
+            <li>Expanded the <a href="#resources">Resources</a> Playwright section from 6 to 11 links with Writing Tests, Trace Viewer, POM, Best Practices, and the official VS Code Extension guide</li>
+            <li>Added a prominent callout: "Opening the Testing Sidebar" with a link to the canonical VS Code extension guide</li>
+          </ul>
+        </article>
+
+        <article class="changelog-entry">
+          <header class="changelog-head">
+            <span class="changelog-version">v5.11</span>
+            <span class="changelog-date">Apr 22, 2026</span>
+          </header>
+          <ul>
+            <li>Recommend using your <strong><code class="inline-code">@solvd.com</code> email</strong> when creating the GitHub account &mdash; ties your learning path work to your Solvd identity for performance reviews and portfolio references</li>
+            <li>Updated the Git identity config example to show <code class="inline-code">you@solvd.com</code></li>
+          </ul>
+        </article>
+      </div>
+
+      <hr>
+
+      <!-- ══════════════════════════════════════════════ -->
       <!-- WHAT'S NEXT -->
       <!-- ══════════════════════════════════════════════ -->
 
@@ -3061,7 +3163,7 @@ npx playwright show-report               # open last HTML report
     </div>
 
     <div class="page-footer">
-      <span>Playwright for Manual QA Engineers &bull; 6-Week Learning Path v5.12</span>
+      <span>Playwright for Manual QA Engineers &bull; 6-Week Learning Path v5.13 &middot; <a href="#recent-updates" style="color: inherit;">updated Apr 23, 2026</a></span>
       <span>April 2026</span>
     </div>
 
@@ -3096,6 +3198,7 @@ npx playwright show-report               # open last HTML report
       <ul>
         <li><a href="#pitfalls">Common Pitfalls</a></li>
         <li><a href="#resources">Resources</a></li>
+        <li><a href="#recent-updates">Recent Updates</a></li>
         <li><a href="#next">What Comes Next</a></li>
       </ul>
     </div>
@@ -3306,6 +3409,15 @@ npx playwright show-report               # open last HTML report
     if (toast) toast.classList.remove('show');
   }
 
+  function viewChangelogFromToast() {
+    // Scroll to Recent Updates section, dismiss toast
+    const target = document.getElementById('recent-updates');
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    dismissUpdateToast();
+  }
+
   function initVersionCheck() {
     currentVersion = getVersionFromDocument(document);
     if (!currentVersion) return;
@@ -3397,9 +3509,10 @@ npx playwright show-report               # open last HTML report
   <span class="toast-icon">📬</span>
   <div class="toast-body">
     <div class="toast-title">New version available</div>
-    <div class="toast-sub">Reload to see the latest updates</div>
+    <div class="toast-sub">See what changed or reload now</div>
   </div>
   <div class="toast-actions">
+    <button class="toast-btn secondary" onclick="viewChangelogFromToast()" title="Jump to Recent Updates section">See changes</button>
     <button class="toast-btn" onclick="location.reload(true)">Reload</button>
     <button class="toast-btn secondary" onclick="dismissUpdateToast()" aria-label="Dismiss">×</button>
   </div>
