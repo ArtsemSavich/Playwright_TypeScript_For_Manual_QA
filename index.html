@@ -946,7 +946,7 @@
     <svg viewBox="0 0 32 32" fill="none"><path d="M6.5 16c0-.3.2-.7.5-1l8.6-8.6c.6-.6 1.5-.6 2.1 0l.7.7c.6.6.6 1.5 0 2.1L12.1 16l6.3 6.3c.6.6.6 1.5 0 2.1l-.7.7c-.6.6-1.5.6-2.1 0L7 16.5c-.3-.3-.5-.6-.5-1z" fill="rgba(255,255,255,0.5)"/><path d="M15 16c0-.3.2-.7.5-1l8.6-8.6c.6-.6 1.5-.6 2.1 0l.7.7c.6.6.6 1.5 0 2.1L20.6 16l6.3 6.3c.6.6.6 1.5 0 2.1l-.7.7c-.6.6-1.5.6-2.1 0l-8.6-8.6c-.3-.3-.5-.6-.5-1z" fill="white"/></svg>
     QA Engineering &middot; Learning Path
   </div>
-  <span class="version-badge" id="current-version" title="Current document version">v5.11</span>
+  <span class="version-badge" id="current-version" title="Current document version">v5.12</span>
   <button class="mobile-toc-toggle" onclick="document.getElementById('toc').classList.toggle('open')">☰ Navigation</button>
 </nav>
 
@@ -970,7 +970,7 @@
 
       <table>
         <tr><th>Week</th><th>Theme</th><th>Goal</th><th>Deliverable</th><th>Time</th></tr>
-        <tr><td><strong>1</strong></td><td>Environment &amp; First Test</td><td>Install tools, run a test, understand every file</td><td>First test running + HTML report</td><td>5-6 hrs</td></tr>
+        <tr><td><strong>1</strong></td><td>Environment &amp; Your First Test</td><td>Install tools, run examples, write your first test</td><td>Your own <code class="inline-code">my-first.spec.ts</code> passing + HTML report</td><td>5-6 hrs</td></tr>
         <tr><td><strong>2</strong></td><td>TypeScript for QA</td><td>Read and understand TypeScript test code</td><td>Annotated test file with comments</td><td>5-6 hrs</td></tr>
         <tr><td><strong>3</strong></td><td>Locators</td><td>Find any element on the page reliably</td><td>Locator exercise file (10 locators)</td><td>6-7 hrs</td></tr>
         <tr><td><strong>4</strong></td><td>Writing &amp; Debugging Tests</td><td>Write tests, read errors, fix failures</td><td>login.spec.ts (3 cases) + 2 fixed tests</td><td>6-7 hrs</td></tr>
@@ -1588,29 +1588,140 @@ gh --version</pre></div>
         </div>
       </div>
 
+      <div class="callout callout-info">
+        <span class="icon">📍</span>
+        <div><strong>Where to find the tools.</strong> Open the <strong>Testing panel</strong> (🧪 flask icon in the left sidebar). Scroll down in that panel &mdash; you will see a <strong>PLAYWRIGHT</strong> section with a <strong>TOOLS</strong> subsection containing: Pick locator, Record new, Record at cursor, Reveal test output, Close all browsers.</div>
+      </div>
+
       <div class="topic-block">
-        <span class="topic-tag tag-new">Extension</span>
-        <h4>3. Pick Locator &mdash; visual locator picker</h4>
-        <p>In the Testing panel, find the "Playwright" section at the bottom. Click <strong>"Pick locator"</strong>. A browser opens. Hover any element on the page &mdash; VS Code suggests a locator in real time. Click to copy it to clipboard.</p>
-        <p>This is faster than opening DevTools and writing locators by hand. And it automatically suggests <code class="inline-code">getByRole</code> / <code class="inline-code">getByText</code> &mdash; the good locators.</p>
+        <h4>Opening the Testing Sidebar</h4>
+        <p>Click the <strong>🧪 Testing icon</strong> in the VS Code Activity Bar to open the Test Explorer. The Test Explorer is where your tests appear, alongside the <strong>PLAYWRIGHT</strong> sidebar for managing projects, tools, and settings.</p>
+        <p style="font-size: 13px; color: var(--text-subtle); margin-top: 8px;">📖 Official docs: <a href="https://playwright.dev/docs/getting-started-vscode" target="_blank">playwright.dev/docs/getting-started-vscode</a> &mdash; full VS Code extension guide with screenshots.</p>
       </div>
 
       <div class="topic-block">
         <span class="topic-tag tag-new">Extension</span>
-        <h4>4. Record new test</h4>
-        <p>In the Playwright section, click <strong>"Record new"</strong>. A browser opens. Every click, type, and navigation you do is converted into Playwright code. When you finish, the generated test is inserted into your file.</p>
-        <p><strong>Warning:</strong> the generated code often uses brittle locators. Use it as a starting point, then improve the locators (<a href="#week-3">Week 3</a> skill).</p>
+        <h4>3. Pick locator &mdash; visual locator picker</h4>
+        <p>In <strong>Testing panel &rarr; PLAYWRIGHT &rarr; TOOLS</strong>, click <strong>🖱️ Pick locator</strong>.</p>
+        <p>A <strong>blank Chromium window</strong> opens. Here is what to do:</p>
+        <ol>
+          <li>Type a URL in the browser's address bar (e.g. <code class="inline-code">https://playwright.dev/</code>) and press <kbd>Enter</kbd></li>
+          <li>Once the page loads, <strong>hover any element</strong> &mdash; the <strong>PLAYWRIGHT panel at the bottom of VS Code</strong> shows a live locator in the <code class="inline-code">Locator</code> field (e.g. <code class="inline-code">getByRole('link', { name: 'Get started' })</code>)</li>
+          <li><strong>Click the element</strong> to freeze the locator &mdash; then copy it from the field</li>
+        </ol>
+        <div class="callout callout-success">
+          <span class="icon">💡</span>
+          <div>Enable the <strong>"Copy on pick"</strong> checkbox in the PLAYWRIGHT panel &mdash; clicks will automatically copy the locator to your clipboard, no manual copy needed.</div>
+        </div>
+        <div class="callout callout-warning">
+          <span class="icon">⚠️</span>
+          <div>If the Locator field shows <code class="inline-code">locator('body')</code> and hovering does nothing &mdash; the browser is still on a blank page. Navigate to a real URL first.</div>
+        </div>
+        <p>This is faster than opening DevTools and writing locators by hand. It automatically suggests <code class="inline-code">getByRole</code> / <code class="inline-code">getByText</code> &mdash; the good locators.</p>
       </div>
 
       <div class="topic-block">
         <span class="topic-tag tag-new">Extension</span>
-        <h4>5. Show browser / Run in headed mode</h4>
-        <p>In the Playwright section there are checkboxes:</p>
+        <h4>4. Record new &mdash; generate a test by clicking through your app</h4>
+        <p>In <strong>Testing panel &rarr; PLAYWRIGHT &rarr; TOOLS</strong>, click <strong>⊕ Record new</strong>.</p>
+        <p>Two things open side by side:</p>
         <ul>
-          <li><strong>Show browser</strong> &mdash; run tests with the browser visible (like <code class="inline-code">--headed</code>)</li>
-          <li><strong>Show trace viewer</strong> &mdash; open the trace after the test finishes</li>
+          <li>A new <code class="inline-code">test-N.spec.ts</code> file in VS Code &mdash; generated code appears here as you interact</li>
+          <li>A <strong>Chromium browser</strong> with a floating <strong>Playwright recording toolbar</strong> at the top</li>
+        </ul>
+
+        <p><strong>The recording toolbar has 6 icons:</strong></p>
+        <table>
+          <tr><th>Icon</th><th>Action</th><th>What it does</th></tr>
+          <tr><td>🔴</td><td><strong>Stop Recording</strong></td><td>Ends the session. Code stays in the spec file.</td></tr>
+          <tr><td>🖱️</td><td><strong>Pick locator</strong></td><td>Switches to "just pick a locator" mode &mdash; no action is recorded, you just grab a locator.</td></tr>
+          <tr><td>👁</td><td><strong>Assert visibility</strong></td><td>Click an element &rarr; adds <code class="inline-code">expect(...).toBeVisible()</code> to the test.</td></tr>
+          <tr><td><code class="inline-code">ab</code></td><td><strong>Assert text</strong></td><td>Click an element &rarr; adds <code class="inline-code">expect(...).toContainText(...)</code>.</td></tr>
+          <tr><td>💬</td><td><strong>Assert value</strong></td><td>Click an input &rarr; adds <code class="inline-code">expect(...).toHaveValue(...)</code>.</td></tr>
+          <tr><td><code class="inline-code">&lt;/&gt;</code></td><td><strong>Assert snapshot</strong></td><td>Captures an ARIA snapshot of the element as a readable tree for structural assertions.</td></tr>
+        </table>
+
+        <p><strong>What to do:</strong></p>
+        <ol>
+          <li>Type a URL in the browser's address bar and press <kbd>Enter</kbd></li>
+          <li>Click, type, navigate &mdash; every action generates a line of Playwright code in the spec file (you can watch it grow in real time)</li>
+          <li>Use the assertion icons (👁, <code class="inline-code">ab</code>, 💬) to add checks at key moments</li>
+          <li>When done, click <strong>🔴 Stop Recording</strong> &mdash; or simply close the browser</li>
+        </ol>
+
+        <div class="callout callout-warning">
+          <span class="icon">⚠️</span>
+          <div><strong>About DevTools:</strong> they are not open by default during recording &mdash; this is intentional, DevTools and the recorder can conflict. You do not need them for recording &mdash; use the 🖱️ toolbar icon instead of DevTools Elements panel. If you really want DevTools, open them manually with <kbd>Cmd</kbd>+<kbd>Option</kbd>+<kbd>I</kbd> (Mac) / <kbd>F12</kbd> (Windows).</div>
+        </div>
+
+        <div class="callout callout-error">
+          <span class="icon">⚠️</span>
+          <div><strong>Generated locators are not always ideal.</strong> The recorder sometimes picks <code class="inline-code">getByText</code> on dynamic content or brittle selectors. Use the output as a <strong>starting point</strong>, then refine locators using <a href="#week-3">Week 3</a> knowledge.</div>
+        </div>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-new">Extension</span>
+        <h4>5. Record at cursor &mdash; extend an existing test</h4>
+        <p>Same as Record new, but <strong>inserts generated code at your cursor position</strong> in an existing test file instead of creating a new file.</p>
+
+        <p><strong>When to use:</strong></p>
+        <ul>
+          <li>You have an existing test and want to add more steps in the middle</li>
+          <li>You are extending a <code class="inline-code">beforeEach</code> block with setup actions</li>
+          <li>You are maintaining a test suite and adding new scenarios incrementally</li>
+        </ul>
+
+        <p><strong>How:</strong></p>
+        <ol>
+          <li>Open the <code class="inline-code">.spec.ts</code> file you want to extend</li>
+          <li>Place your cursor <strong>inside</strong> a <code class="inline-code">test(...)</code> or <code class="inline-code">test.beforeEach(...)</code> block &mdash; at the exact line where new code should appear</li>
+          <li>In <strong>Testing panel &rarr; PLAYWRIGHT &rarr; TOOLS</strong>, click <strong>✏️ Record at cursor</strong></li>
+          <li>A browser opens with the same toolbar as Record new &mdash; interact with the page, and code appears at your cursor position</li>
+        </ol>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-new">Extension</span>
+        <h4>6. Reveal test output &mdash; find out why things broke</h4>
+        <p>In <strong>Testing panel &rarr; PLAYWRIGHT &rarr; TOOLS</strong>, click <strong>📄 Reveal test output</strong>.</p>
+        <p>This opens the <strong>OUTPUT panel</strong> at the bottom of VS Code, switched to the <strong>Playwright channel</strong>. Use it when:</p>
+        <ul>
+          <li>Tests fail mysteriously and you want to see the full Playwright logs</li>
+          <li>The extension itself misbehaves (e.g. "Record new" does nothing) &mdash; errors are logged here</li>
+          <li>You want to see the exact CLI command the extension ran</li>
+        </ul>
+        <div class="callout callout-success">
+          <span class="icon">💡</span>
+          <div>If things break and you do not know why &mdash; <strong>this is the first place to look</strong>. Before asking for help, check these logs.</div>
+        </div>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-new">Extension</span>
+        <h4>7. Close all browsers &mdash; quick cleanup</h4>
+        <p>In <strong>Testing panel &rarr; PLAYWRIGHT &rarr; TOOLS</strong>, click <strong>✕ Close all browsers</strong>.</p>
+        <p>Useful when:</p>
+        <ul>
+          <li>A recording session left a zombie browser window</li>
+          <li>Tests crashed and Chromium is still hanging around eating memory</li>
+        </ul>
+        <p>Quick cleanup, nothing more.</p>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-new">Extension</span>
+        <h4>8. Show browser / Show trace viewer &mdash; run tests visually</h4>
+        <p>In the Testing panel, click the <strong>⋮</strong> menu next to <strong>TEST EXPLORER</strong>. You will see toggles:</p>
+        <ul>
+          <li><strong>Show browser</strong> &mdash; run tests with the browser visible (equivalent to the <code class="inline-code">--headed</code> CLI flag)</li>
+          <li><strong>Show trace viewer</strong> &mdash; automatically open the Trace Viewer after each test run (great for debugging)</li>
         </ul>
         <p>Check these when you want to watch tests run visually without switching to the terminal.</p>
+        <div class="callout callout-warning">
+          <span class="icon">⚠️</span>
+          <div><strong>Turn them off before committing / pushing.</strong> These toggles slow tests down and should stay off in CI.</div>
+        </div>
       </div>
 
       <h3>Git Integration &mdash; commit without the terminal</h3>
@@ -1676,7 +1787,7 @@ code .                             # open it in VS Code</pre></div>
           <li><input type="checkbox" id="vs-e13" data-week="vs"><label for="vs-e13"><strong>Go to Definition.</strong> Place your cursor on <code class="inline-code">test</code> (inside <code class="inline-code">test("...", async...)</code>) and press <kbd>F12</kbd>. See where it is defined inside <code class="inline-code">@playwright/test</code>. Press <kbd>⌘/Ctrl</kbd>+<kbd>-</kbd> to go back.</label></li>
           <li><input type="checkbox" id="vs-e14" data-week="vs"><label for="vs-e14"><strong>Open the Testing panel</strong> (🧪 icon in Activity Bar). See the example tests listed there.</label></li>
           <li><input type="checkbox" id="vs-e15" data-week="vs"><label for="vs-e15"><strong>Run a test from the gutter.</strong> Click the green ▶ next to any <code class="inline-code">test(...)</code> line in <code class="inline-code">example.spec.ts</code>. Watch the test run without using the terminal.</label></li>
-          <li><input type="checkbox" id="vs-e16" data-week="vs"><label for="vs-e16"><strong>Try Pick Locator.</strong> In the Testing panel &rarr; Playwright section &rarr; "Pick locator". A browser opens. Hover elements, see suggested locators, copy one.</label></li>
+          <li><input type="checkbox" id="vs-e16" data-week="vs"><label for="vs-e16"><strong>Try Pick locator.</strong> In the Testing panel &rarr; PLAYWRIGHT &rarr; TOOLS &rarr; <strong>Pick locator</strong>. A blank browser opens &mdash; navigate to a real URL first (e.g. <code class="inline-code">https://playwright.dev/</code>). Hover elements, watch the locator appear in the PLAYWRIGHT panel at the bottom of VS Code. Enable <strong>"Copy on pick"</strong> and grab a locator.</label></li>
           <li><input type="checkbox" id="vs-e17" data-week="vs"><label for="vs-e17"><strong>Create a TypeScript error on purpose.</strong> In a test, remove the <code class="inline-code">import { test, expect }</code> line. Red squiggles appear. Hover to read the message. Undo (<kbd>⌘/Ctrl</kbd>+<kbd>Z</kbd>).</label></li>
           <li><input type="checkbox" id="vs-e18" data-week="vs"><label for="vs-e18"><strong>Look at Source Control</strong> (🔀 icon in Activity Bar). If your project has a Git repo, you'll see changed files. (You will use this more in <a href="#week-5">Week 5</a>.)</label></li>
         </ol>
@@ -1701,7 +1812,7 @@ code .                             # open it in VS Code</pre></div>
       <div class="week-divider wd1" id="week-1">
         <div class="week-badge"><span>1</span></div>
         <div class="week-info">
-          <h2 style="border:none;">Environment Setup &amp; First Test</h2>
+          <h2 style="border:none;">Environment Setup &amp; Your First Playwright Test</h2>
           <div class="week-goal">Estimated time: 5-6 hours</div>
         </div>
         <div class="week-progress" data-week="1"><span class="pct-val">0%</span>done</div>
@@ -1715,6 +1826,7 @@ code .                             # open it in VS Code</pre></div>
           <li>Run tests (all browsers, one browser, one test file)</li>
           <li>Read the HTML report</li>
           <li>Name every file in the project and explain what it does</li>
+          <li>Write and run your first Playwright test from scratch</li>
         </ul>
       </div>
 
@@ -1823,13 +1935,26 @@ npm init playwright@latest</pre></div>
           <li><input type="checkbox" id="w1-e6" data-week="1"><label for="w1-e6"><strong>Open the HTML report.</strong> Run <code class="inline-code">npx playwright show-report</code>. Click on a test to see its steps.</label></li>
           <li><input type="checkbox" id="w1-e7" data-week="1"><label for="w1-e7"><strong>Try UI mode.</strong> Run <code class="inline-code">npx playwright test --ui</code>. This is the tool you will use most often during development.</label></li>
           <li><input type="checkbox" id="w1-e8" data-week="1"><label for="w1-e8"><strong>File quiz.</strong> In VS Code, for each file and folder, write a one-sentence description of what it does. Compare with the table above.</label></li>
+          <li><input type="checkbox" id="w1-e9" data-week="1"><label for="w1-e9"><strong>Write your first test from scratch.</strong> In VS Code, create a new file <code class="inline-code">tests/my-first.spec.ts</code> and paste:
+            <div class="code-block" style="margin-top: 8px;">
+              <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> tests/my-first.spec.ts <span class="lang">typescript</span></div>
+              <div class="code-body"><pre>import { test, expect } from '@playwright/test';
+
+test('my first test', async ({ page }) =&gt; {
+  await page.goto('https://playwright.dev/');
+  await expect(page).toHaveTitle(/Playwright/);
+});</pre></div>
+            </div>
+            Then run it: <code class="inline-code">npx playwright test my-first --project=chromium</code>. Green checkmark? You just wrote and ran your first Playwright test. Don't worry about understanding every keyword yet &mdash; <a href="#week-2">Week 2</a> covers TypeScript and <a href="#week-3">Week 3</a> covers locators. For now, the win is: <strong>you created a test file from scratch and it passed</strong>. 🎉
+            <div style="font-size: 12px; color: var(--text-subtle); margin-top: 6px;">Reference: <a href="https://playwright.dev/docs/writing-tests" target="_blank">playwright.dev/docs/writing-tests</a></div>
+          </label></li>
         </ol>
       </div>
 
       <div class="deliverable">
         <h4>Deliverable</h4>
-        <p>A working Playwright project with the example tests running. You can open the HTML report and explain what every file in the project does.</p>
-        <p>Verify: <code class="inline-code">npx playwright test --project=chromium</code> runs without errors. <code class="inline-code">npx playwright show-report</code> opens the report.</p>
+        <p>A working Playwright project with the example tests running, <strong>plus your own <code class="inline-code">tests/my-first.spec.ts</code> that you wrote from scratch and that passes</strong>.</p>
+        <p>Verify: <code class="inline-code">npx playwright test --project=chromium</code> runs without errors &mdash; both example tests and your <code class="inline-code">my-first.spec.ts</code>. <code class="inline-code">npx playwright show-report</code> opens the report.</p>
       </div>
 
       <div class="ready-box">
@@ -1840,6 +1965,7 @@ npm init playwright@latest</pre></div>
           <li><input type="checkbox" id="w1-r3" data-week="1"><label for="w1-r3">I can open and read the HTML report</label></li>
           <li><input type="checkbox" id="w1-r4" data-week="1"><label for="w1-r4">I understand why one test shows up 3 times in the report (one per browser project)</label></li>
           <li><input type="checkbox" id="w1-r5" data-week="1"><label for="w1-r5">I can name every file in the project and explain what it does</label></li>
+          <li><input type="checkbox" id="w1-r6" data-week="1"><label for="w1-r6">I wrote <code class="inline-code">my-first.spec.ts</code> from scratch and it passes</label></li>
         </ul>
       </div>
 
@@ -2078,6 +2204,7 @@ page.locator("//div[@class='form']/button[1]")   // By XPath (AVOID)</pre></div>
           <tr><td>3rd</td><td>CSS selector</td><td><code class="inline-code">page.locator(".btn-primary")</code></td><td>CSS classes are meant for styling, not testing</td></tr>
           <tr><td>Last</td><td>XPath</td><td><code class="inline-code">page.locator("//div[2]/button")</code></td><td>Breaks if anything in HTML structure changes</td></tr>
         </table>
+        <p style="font-size: 13px; color: var(--text-subtle); margin-top: 8px;">📖 Official docs: <a href="https://playwright.dev/docs/locators" target="_blank">playwright.dev/docs/locators</a> &mdash; full reference with examples for every locator type.</p>
       </div>
 
       <div class="topic-block">
@@ -2093,6 +2220,7 @@ npx playwright codegen https://your-site.com</pre></div>
           <span class="icon">💡</span>
           <div><strong>Pro tip:</strong> Use codegen to <em>discover</em> locators, then <em>improve</em> them. Codegen might suggest <code class="inline-code">page.locator("#j_idt142\\:email")</code> &mdash; replace with <code class="inline-code">page.getByPlaceholder("Email")</code>.</div>
         </div>
+        <p style="font-size: 13px; color: var(--text-subtle); margin-top: 8px;">📖 Official docs: <a href="https://playwright.dev/docs/codegen" target="_blank">playwright.dev/docs/codegen</a> &mdash; all codegen options including <code class="inline-code">--device</code>, <code class="inline-code">--color-scheme</code>, <code class="inline-code">--save-storage</code> for authenticated flows.</p>
       </div>
 
       <div class="topic-block">
@@ -2131,7 +2259,7 @@ page.locator(".btn.btn-primary.submit-form")                   // ???</pre></div
             </div>
           </label></li>
           <li><input type="checkbox" id="w3-e4" data-week="3"><label for="w3-e4"><strong>Chain a locator.</strong> On any page with a list (products, users, items), write a locator that targets a specific button inside a specific list item using <code class="inline-code">.filter()</code>.</label></li>
-          <li><input type="checkbox" id="w3-e5" data-week="3"><label for="w3-e5"><strong>Use the VS Code "Pick Locator" tool.</strong> Open the Playwright extension sidebar in VS Code. Click "Pick locator" and hover over elements. Notice how it suggests <code class="inline-code">getByRole</code> before CSS.</label></li>
+          <li><input type="checkbox" id="w3-e5" data-week="3"><label for="w3-e5"><strong>Use the VS Code "Pick locator" tool.</strong> Open the Testing panel &rarr; PLAYWRIGHT &rarr; TOOLS &rarr; Pick locator. In the blank browser, navigate to your target site. Hover over elements and notice how the tool suggests <code class="inline-code">getByRole</code> before CSS selectors.</label></li>
         </ol>
       </div>
 
@@ -2233,7 +2361,7 @@ await page.locator(".spinner").waitFor({ state: "hidden" });</pre></div>
 
       <div class="callout callout-error">
         <span class="icon">🚫</span>
-        <div><strong>Never use <code class="inline-code">page.waitForTimeout(3000)</code>.</strong> It pauses the test for a fixed time regardless of what the page is doing. This is the #1 cause of flaky tests. Playwright's assertions (<code class="inline-code">expect(...).toBeVisible()</code>) already wait automatically &mdash; use them instead.</div>
+        <div><strong>Never use <code class="inline-code">page.waitForTimeout(3000)</code>.</strong> It pauses the test for a fixed time regardless of what the page is doing. This is the #1 cause of flaky tests. Playwright's assertions (<code class="inline-code">expect(...).toBeVisible()</code>) already wait automatically &mdash; use them instead. 📖 See <a href="https://playwright.dev/docs/actionability" target="_blank">playwright.dev/docs/actionability</a> for how auto-waiting works.</div>
       </div>
 
       <div class="topic-block">
@@ -2253,6 +2381,7 @@ await expect(page.getByRole("button", { name: "Submit" })).toBeEnabled();
 await expect(page.getByRole("button", { name: "Submit" })).toBeDisabled();</pre></div>
         </div>
         <p><strong>Tip:</strong> Add a failure message to assertions: <code class="inline-code">expect(locator, 'Error should be visible after wrong password').toBeVisible()</code></p>
+        <p style="font-size: 13px; color: var(--text-subtle); margin-top: 8px;">📖 Official docs: <a href="https://playwright.dev/docs/test-assertions" target="_blank">playwright.dev/docs/test-assertions</a> &mdash; full list of <code class="inline-code">expect()</code> matchers with examples.</p>
       </div>
 
       <div class="topic-block">
@@ -2266,6 +2395,7 @@ await expect(page.getByRole("button", { name: "Submit" })).toBeDisabled();</pre>
           <tr><td><code class="inline-code">test.skip("reason")</code></td><td>Temporarily skip a test (better than commenting out)</td></tr>
           <tr><td><code class="inline-code">test.only("name")</code></td><td>Run ONLY this test (for debugging &mdash; remove before committing!)</td></tr>
         </table>
+        <p style="font-size: 13px; color: var(--text-subtle); margin-top: 8px;">📖 Official docs: <a href="https://playwright.dev/docs/writing-tests" target="_blank">playwright.dev/docs/writing-tests</a> &mdash; writing tests guide with annotations, fixtures, and hooks.</p>
       </div>
 
       <div class="callout callout-info">
@@ -2344,6 +2474,7 @@ npx playwright show-trace test-results/.../trace.zip</pre></div>
           <span class="icon">💡</span>
           <div><strong>Your day-to-day tool should be <code class="inline-code">npx playwright test --ui</code>.</strong> The VS Code Playwright extension also gives you run/debug buttons next to each test &mdash; try both and see which you prefer.</div>
         </div>
+        <p style="font-size: 13px; color: var(--text-subtle); margin-top: 8px;">📖 Official docs: <a href="https://playwright.dev/docs/debug" target="_blank">playwright.dev/docs/debug</a> + <a href="https://playwright.dev/docs/trace-viewer" target="_blank">playwright.dev/docs/trace-viewer</a> &mdash; Trace Viewer deep dive with time-travel debugging.</p>
       </div>
 
       <div class="topic-block">
@@ -2658,6 +2789,11 @@ gh pr create --title "Add search tests for product catalog" --body "Adds 3 tests
         <p>This week also introduces the <strong>Page Object Model</strong> &mdash; a simple pattern that keeps your locators organized. You will use it in your final project.</p>
       </div>
 
+      <div class="callout callout-warning">
+        <span class="icon">📅</span>
+        <div><strong>Final Pull Request deadline: Friday, June 12.</strong> Week 6 runs June 1-7, and we add a buffer week (June 8-12) for students who need extra time. After June 12, code review from the coach is not guaranteed. Submit your PR by Friday, June 12, end of day (your local time) to ensure feedback.</div>
+      </div>
+
       <p class="section-label">NEW TOPIC &mdash; PAGE OBJECT MODEL</p>
 
       <div class="topic-block">
@@ -2695,6 +2831,7 @@ export class LoginPage {
 }</pre></div>
         </div>
         <p><strong>Where to save:</strong> Create a <code class="inline-code">pages/</code> folder next to <code class="inline-code">tests/</code>. One file per page of your app.</p>
+        <p style="font-size: 13px; color: var(--text-subtle); margin-top: 8px;">📖 Official docs: <a href="https://playwright.dev/docs/pom" target="_blank">playwright.dev/docs/pom</a> &mdash; full Page Object Models guide including how to use them with fixtures.</p>
       </div>
 
       <div class="topic-block">
@@ -2842,6 +2979,7 @@ npx playwright show-report               # open last HTML report
 
       <h2 id="pitfalls">Common Pitfalls</h2>
       <p>These are the most frequent mistakes when learning automation for the first time. Knowing them saves time.</p>
+      <p style="font-size: 13px; color: var(--text-subtle);">📖 Official docs: <a href="https://playwright.dev/docs/best-practices" target="_blank">playwright.dev/docs/best-practices</a> &mdash; Playwright's own list of recommended practices. Bookmark this page.</p>
 
       <table>
         <tr><th>Pitfall</th><th>Why It Happens</th><th>Fix</th></tr>
@@ -2863,6 +3001,11 @@ npx playwright show-report               # open last HTML report
 
       <h2 id="resources">Resources</h2>
 
+      <div class="callout callout-info">
+        <span class="icon">📖</span>
+        <div><strong>Official Playwright documentation is your primary source of truth.</strong> This course is a curated introduction; the full official docs at <a href="https://playwright.dev/docs/intro" target="_blank">playwright.dev/docs</a> are always up-to-date and comprehensive. When in doubt, check there first &mdash; especially for version-specific behavior. Bookmark it.</div>
+      </div>
+
       <h3>TypeScript</h3>
       <div class="topic-block">
         <ul>
@@ -2876,11 +3019,17 @@ npx playwright show-report               # open last HTML report
       <div class="topic-block">
         <ul>
           <li><a href="https://playwright.dev/docs/intro" target="_blank">Playwright &mdash; Getting Started</a> &mdash; installation and first test</li>
+          <li><a href="https://playwright.dev/docs/writing-tests" target="_blank">Playwright &mdash; Writing Tests</a> &mdash; test structure, hooks, annotations</li>
           <li><a href="https://playwright.dev/docs/locators" target="_blank">Playwright &mdash; Locators</a> &mdash; all locator types with examples</li>
           <li><a href="https://playwright.dev/docs/test-assertions" target="_blank">Playwright &mdash; Assertions</a> &mdash; full list of <code class="inline-code">expect()</code> matchers</li>
-          <li><a href="https://playwright.dev/docs/debug" target="_blank">Playwright &mdash; Debugging</a> &mdash; Trace Viewer and debugging tools</li>
+          <li><a href="https://playwright.dev/docs/actionability" target="_blank">Playwright &mdash; Auto-waiting</a> &mdash; how Playwright waits automatically (critical concept)</li>
+          <li><a href="https://playwright.dev/docs/debug" target="_blank">Playwright &mdash; Debugging</a> &mdash; debugging tools and workflows</li>
+          <li><a href="https://playwright.dev/docs/trace-viewer" target="_blank">Playwright &mdash; Trace Viewer</a> &mdash; time-travel debugging through test execution</li>
           <li><a href="https://playwright.dev/docs/test-ui-mode" target="_blank">Playwright &mdash; UI Mode</a> &mdash; interactive development mode</li>
           <li><a href="https://playwright.dev/docs/codegen" target="_blank">Playwright &mdash; Test Generator (codegen)</a> &mdash; generate tests by clicking</li>
+          <li><a href="https://playwright.dev/docs/pom" target="_blank">Playwright &mdash; Page Object Models</a> &mdash; the pattern you'll use in <a href="#week-6">Week 6</a></li>
+          <li><a href="https://playwright.dev/docs/best-practices" target="_blank">Playwright &mdash; Best Practices</a> &mdash; Playwright's official recommendations (bookmark this)</li>
+          <li><a href="https://playwright.dev/docs/getting-started-vscode" target="_blank">Playwright &mdash; VS Code Extension</a> &mdash; official guide to the extension</li>
         </ul>
       </div>
 
@@ -2912,7 +3061,7 @@ npx playwright show-report               # open last HTML report
     </div>
 
     <div class="page-footer">
-      <span>Playwright for Manual QA Engineers &bull; 6-Week Learning Path v5.11</span>
+      <span>Playwright for Manual QA Engineers &bull; 6-Week Learning Path v5.12</span>
       <span>April 2026</span>
     </div>
 
