@@ -1040,7 +1040,7 @@
     <svg viewBox="0 0 32 32" fill="none"><path d="M6.5 16c0-.3.2-.7.5-1l8.6-8.6c.6-.6 1.5-.6 2.1 0l.7.7c.6.6.6 1.5 0 2.1L12.1 16l6.3 6.3c.6.6.6 1.5 0 2.1l-.7.7c-.6.6-1.5.6-2.1 0L7 16.5c-.3-.3-.5-.6-.5-1z" fill="rgba(255,255,255,0.5)"/><path d="M15 16c0-.3.2-.7.5-1l8.6-8.6c.6-.6 1.5-.6 2.1 0l.7.7c.6.6.6 1.5 0 2.1L20.6 16l6.3 6.3c.6.6.6 1.5 0 2.1l-.7.7c-.6.6-1.5.6-2.1 0l-8.6-8.6c-.3-.3-.5-.6-.5-1z" fill="white"/></svg>
     QA Engineering &middot; Learning Path
   </div>
-  <span class="version-badge" id="current-version" title="Current document version">v5.14</span>
+  <span class="version-badge" id="current-version" title="Current document version">v5.15</span>
   <button class="mobile-toc-toggle" onclick="document.getElementById('toc').classList.toggle('open')">☰ Navigation</button>
 </nav>
 
@@ -1064,7 +1064,7 @@
 
       <table>
         <tr><th>Week</th><th>Theme</th><th>Goal</th><th>Deliverable</th><th>Time</th></tr>
-        <tr><td><strong>1</strong></td><td>Environment &amp; Your First Test</td><td>Install tools, run examples, write your first test</td><td>Your own <code class="inline-code">my-first.spec.ts</code> passing + HTML report</td><td>5-6 hrs</td></tr>
+        <tr><td><strong>1</strong></td><td>First Playwright Project &amp; Test</td><td>Create a project, run example tests, write your own first test</td><td>Your own <code class="inline-code">my-first.spec.ts</code> passing + HTML report</td><td>5-6 hrs</td></tr>
         <tr><td><strong>2</strong></td><td>TypeScript for QA</td><td>Read and understand TypeScript test code</td><td>Annotated test file with comments</td><td>5-6 hrs</td></tr>
         <tr><td><strong>3</strong></td><td>Locators</td><td>Find any element on the page reliably</td><td>Locator exercise file (10 locators)</td><td>6-7 hrs</td></tr>
         <tr><td><strong>4</strong></td><td>Writing &amp; Debugging Tests</td><td>Write tests, read errors, fix failures</td><td>login.spec.ts (3 cases) + 2 fixed tests</td><td>6-7 hrs</td></tr>
@@ -1529,6 +1529,11 @@ gh --version</pre></div>
       <h3>Window Anatomy</h3>
       <p>VS Code has 5 main areas. Knowing their names helps when reading tutorials or asking for help.</p>
 
+      <div class="callout callout-info">
+        <span class="icon">💡</span>
+        <div><strong>Your UI may look slightly different.</strong> The diagram below is a simplified representation. Your actual VS Code window may vary depending on version, theme, installed extensions, and screen size. For authoritative screenshots of the Playwright extension, see the official docs: <a href="https://playwright.dev/docs/getting-started-vscode" target="_blank">playwright.dev/docs/getting-started-vscode</a> &mdash; full VS Code extension guide with screenshots.</div>
+      </div>
+
       <div class="ide-mockup">
         <div class="ide-titlebar">
           <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
@@ -1906,7 +1911,7 @@ code .                             # open it in VS Code</pre></div>
       <div class="week-divider wd1" id="week-1">
         <div class="week-badge"><span>1</span></div>
         <div class="week-info">
-          <h2 style="border:none;">Environment Setup &amp; Your First Playwright Test</h2>
+          <h2 style="border:none;">Your First Playwright Project &amp; Test</h2>
           <div class="week-goal">Estimated time: 5-6 hours</div>
         </div>
         <div class="week-progress" data-week="1"><span class="pct-val">0%</span>done</div>
@@ -1917,9 +1922,9 @@ code .                             # open it in VS Code</pre></div>
         <ul>
           <li>Understand what Playwright is and why it is used</li>
           <li>Create a Playwright project from scratch</li>
-          <li>Run tests (all browsers, one browser, one test file)</li>
-          <li>Read the HTML report</li>
           <li>Name every file in the project and explain what it does</li>
+          <li>Run tests two ways: via the VS Code extension and via the terminal (CLI)</li>
+          <li>Read the HTML report</li>
           <li>Write and run your first Playwright test from scratch</li>
         </ul>
       </div>
@@ -2022,14 +2027,25 @@ npm init playwright@latest</pre></div>
             </div>
             Accept the defaults. Playwright installs browsers and creates the project files.
           </label></li>
-          <li><input type="checkbox" id="w1-e2" data-week="1"><label for="w1-e2"><strong>Open the project in VS Code.</strong> Run <code class="inline-code">code .</code> from the project folder.</label></li>
-          <li><input type="checkbox" id="w1-e3" data-week="1"><label for="w1-e3"><strong>Run the example tests (headless).</strong> Run <code class="inline-code">npx playwright test</code>. You should see a summary of passed/failed tests.</label></li>
-          <li><input type="checkbox" id="w1-e4" data-week="1"><label for="w1-e4"><strong>Run with visible browser, one project only.</strong> Run <code class="inline-code">npx playwright test --headed --project=chromium</code>. Watch the browser open, navigate, click, and close automatically.</label></li>
-          <li><input type="checkbox" id="w1-e5" data-week="1"><label for="w1-e5"><strong>Run a single test file.</strong> Run <code class="inline-code">npx playwright test example.spec.ts</code>. Notice how it is faster.</label></li>
-          <li><input type="checkbox" id="w1-e6" data-week="1"><label for="w1-e6"><strong>Open the HTML report.</strong> Run <code class="inline-code">npx playwright show-report</code>. Click on a test to see its steps.</label></li>
-          <li><input type="checkbox" id="w1-e7" data-week="1"><label for="w1-e7"><strong>Try UI mode.</strong> Run <code class="inline-code">npx playwright test --ui</code>. This is the tool you will use most often during development.</label></li>
-          <li><input type="checkbox" id="w1-e8" data-week="1"><label for="w1-e8"><strong>File quiz.</strong> In VS Code, for each file and folder, write a one-sentence description of what it does. Compare with the table above.</label></li>
-          <li><input type="checkbox" id="w1-e9" data-week="1"><label for="w1-e9"><strong>Write your first test from scratch.</strong> In VS Code, create a new file <code class="inline-code">tests/my-first.spec.ts</code> and paste:
+          <li><input type="checkbox" id="w1-e2" data-week="1"><label for="w1-e2"><strong>Open the project in VS Code.</strong> Run <code class="inline-code">code .</code> from the project folder. You should see the generated files in the Explorer panel.</label></li>
+          <li><input type="checkbox" id="w1-e3" data-week="1"><label for="w1-e3"><strong>File quiz.</strong> In VS Code, for each file and folder in the project, write a one-sentence description of what it does. Compare with the table above. This step exists to stop you from being intimidated by the project structure &mdash; you will be working with these files for the next 6 weeks.</label></li>
+          <li><input type="checkbox" id="w1-e4" data-week="1"><label for="w1-e4"><strong>Run tests via the VS Code extension.</strong> Open the Testing panel (🧪 flask icon in the left sidebar). Click ▶ next to <code class="inline-code">example.spec.ts</code> &rarr; <code class="inline-code">has title</code>. The test runs and shows a green checkmark (or red X). This is your daily-dev way of running tests.
+            <div class="callout callout-success" style="margin-top: 8px;">
+              <span class="icon">💡</span>
+              <div>Don't see the browser open? Tests run <strong>headless</strong> by default. In the Testing panel, click the <strong>⋮</strong> menu next to TEST EXPLORER and enable <strong>"Show browser"</strong> &mdash; now you will see Chromium pop up on each run.</div>
+            </div>
+          </label></li>
+          <li><input type="checkbox" id="w1-e5" data-week="1"><label for="w1-e5"><strong>Run tests via the CLI (terminal).</strong> Open the integrated terminal (<kbd>Ctrl</kbd>+<kbd>`</kbd>) and run:
+            <div class="code-block" style="margin-top: 8px;">
+              <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">bash</span></div>
+              <div class="code-body"><pre>npx playwright test --ui</pre></div>
+            </div>
+            This opens Playwright's <strong>UI Mode</strong> &mdash; an interactive runner with watch mode, time-travel debugging, and a built-in locator picker. This is what you should use every day during development.
+            <div style="font-size: 13px; color: var(--text-subtle); margin-top: 6px;">Why both UI and CLI? VS Code extension is faster for one-click runs. CLI works in CI/CD pipelines where there is no UI. Every QA automation engineer needs both.</div>
+            <div style="font-size: 12px; color: var(--text-subtle); margin-top: 4px;">📖 Official docs: <a href="https://playwright.dev/docs/test-ui-mode" target="_blank">playwright.dev/docs/test-ui-mode</a></div>
+          </label></li>
+          <li><input type="checkbox" id="w1-e6" data-week="1"><label for="w1-e6"><strong>Read the HTML report.</strong> After your last CLI test run, execute <code class="inline-code">npx playwright show-report</code> &mdash; a browser tab opens with a visual summary: each test, its duration, screenshots, and trace. If a test failed, click on it to see exactly where it went wrong. This is the report format used in CI/CD systems as well.</label></li>
+          <li><input type="checkbox" id="w1-e7" data-week="1"><label for="w1-e7"><strong>Write your first test from scratch.</strong> In VS Code, create a new file <code class="inline-code">tests/my-first.spec.ts</code> and paste:
             <div class="code-block" style="margin-top: 8px;">
               <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> tests/my-first.spec.ts <span class="lang">typescript</span></div>
               <div class="code-body"><pre>import { test, expect } from '@playwright/test';
@@ -2040,24 +2056,42 @@ test('my first test', async ({ page }) =&gt; {
 });</pre></div>
             </div>
             Then run it: <code class="inline-code">npx playwright test my-first --project=chromium</code>. Green checkmark? You just wrote and ran your first Playwright test. Don't worry about understanding every keyword yet &mdash; <a href="#week-2">Week 2</a> covers TypeScript and <a href="#week-3">Week 3</a> covers locators. For now, the win is: <strong>you created a test file from scratch and it passed</strong>. 🎉
-            <div style="font-size: 12px; color: var(--text-subtle); margin-top: 6px;">Reference: <a href="https://playwright.dev/docs/writing-tests" target="_blank">playwright.dev/docs/writing-tests</a></div>
+            <div style="font-size: 13px; color: var(--text-subtle); margin-top: 8px;">See also &mdash; this exact pattern comes from the official Playwright documentation: <a href="https://playwright.dev/docs/writing-tests" target="_blank">playwright.dev/docs/writing-tests</a></div>
           </label></li>
         </ol>
       </div>
 
+      <div class="topic-block">
+        <span class="topic-tag tag-reference">Reference</span>
+        <h4>CLI options cheat sheet</h4>
+        <p>You do not need to memorize these &mdash; the Testing panel and UI Mode cover 90% of daily use. But these CLI flags come up in CI configs, README files, and team chats. Bookmark this table.</p>
+        <table>
+          <tr><th>Command</th><th>What it does</th></tr>
+          <tr><td><code class="inline-code">npx playwright test</code></td><td>Run ALL tests across ALL configured browsers (headless)</td></tr>
+          <tr><td><code class="inline-code">npx playwright test --ui</code></td><td>Open UI Mode &mdash; best for local dev</td></tr>
+          <tr><td><code class="inline-code">npx playwright test --headed</code></td><td>Show the browser window while tests run</td></tr>
+          <tr><td><code class="inline-code">npx playwright test --project=chromium</code></td><td>Run only on Chromium (skips Firefox/WebKit &mdash; faster)</td></tr>
+          <tr><td><code class="inline-code">npx playwright test login.spec.ts</code></td><td>Run only tests in this file</td></tr>
+          <tr><td><code class="inline-code">npx playwright test -g "login"</code></td><td>Run only tests whose name matches "login"</td></tr>
+          <tr><td><code class="inline-code">npx playwright show-report</code></td><td>Open the last HTML report in a browser</td></tr>
+          <tr><td><code class="inline-code">npx playwright install</code></td><td>Download browsers (Chromium/Firefox/WebKit) &mdash; one-time</td></tr>
+        </table>
+        <p style="font-size: 13px; color: var(--text-subtle); margin-top: 8px;">📖 Full CLI reference: <a href="https://playwright.dev/docs/test-cli" target="_blank">playwright.dev/docs/test-cli</a></p>
+      </div>
+
       <div class="deliverable">
         <h4>Deliverable</h4>
-        <p>A working Playwright project with the example tests running, <strong>plus your own <code class="inline-code">tests/my-first.spec.ts</code> that you wrote from scratch and that passes</strong>.</p>
+        <p>A working Playwright project with the example tests running, <strong>plus your own <code class="inline-code">tests/my-first.spec.ts</code> that you wrote from scratch and that passes</strong>. You can run tests both via the VS Code Testing panel and via the terminal.</p>
         <p>Verify: <code class="inline-code">npx playwright test --project=chromium</code> runs without errors &mdash; both example tests and your <code class="inline-code">my-first.spec.ts</code>. <code class="inline-code">npx playwright show-report</code> opens the report.</p>
       </div>
 
       <div class="ready-box">
         <h4>Ready to Move On When</h4>
         <ul class="checklist">
-          <li><input type="checkbox" id="w1-r1" data-week="1"><label for="w1-r1">I can create and run a Playwright project without help</label></li>
-          <li><input type="checkbox" id="w1-r2" data-week="1"><label for="w1-r2">I can run all tests, one project, one file, and one test by name</label></li>
-          <li><input type="checkbox" id="w1-r3" data-week="1"><label for="w1-r3">I can open and read the HTML report</label></li>
-          <li><input type="checkbox" id="w1-r4" data-week="1"><label for="w1-r4">I understand why one test shows up 3 times in the report (one per browser project)</label></li>
+          <li><input type="checkbox" id="w1-r1" data-week="1"><label for="w1-r1">I can create a Playwright project from scratch without help</label></li>
+          <li><input type="checkbox" id="w1-r2" data-week="1"><label for="w1-r2">I can run tests two ways: via the VS Code Testing panel and via the terminal</label></li>
+          <li><input type="checkbox" id="w1-r3" data-week="1"><label for="w1-r3">I know how to make the browser visible during test runs (headed mode)</label></li>
+          <li><input type="checkbox" id="w1-r4" data-week="1"><label for="w1-r4">I can open and read the HTML report</label></li>
           <li><input type="checkbox" id="w1-r5" data-week="1"><label for="w1-r5">I can name every file in the project and explain what it does</label></li>
           <li><input type="checkbox" id="w1-r6" data-week="1"><label for="w1-r6">I wrote <code class="inline-code">my-first.spec.ts</code> from scratch and it passes</label></li>
         </ul>
@@ -3148,17 +3182,30 @@ npx playwright show-report               # open last HTML report
       <div class="changelog">
         <article class="changelog-entry">
           <header class="changelog-head">
-            <span class="changelog-version">v5.14</span>
+            <span class="changelog-version">v5.15</span>
             <span class="changelog-date">Apr 23, 2026</span>
           </header>
           <ul>
-            <li>Recent Updates section now shows only the <strong>latest version by default</strong>. Older updates are hidden behind a "Show older updates" toggle to keep the page clean</li>
-            <li>When a 4th update is added, the oldest entry is dropped &mdash; only the 3 most recent versions are kept</li>
+            <li>Renamed <a href="#week-1">Week 1</a> from "Environment Setup &amp; Your First Playwright Test" to <strong>"Your First Playwright Project &amp; Test"</strong> &mdash; more accurate since environment setup happens in Week 0</li>
+            <li>Reworked <a href="#week-1">Week 1</a> exercises: reduced from 9 to 7 with a clear UI-vs-CLI split. Exercise 4 = run via VS Code extension, Exercise 5 = run via CLI. New callout explains why tests run headless by default and how to enable "Show browser"</li>
+            <li>Added a <strong>CLI options cheat sheet</strong> table in <a href="#week-1">Week 1</a> so students do not need to memorize flags &mdash; just bookmark the reference</li>
+            <li>Added a UI-differences warning in the <strong>Window Anatomy</strong> section (VS Code Guide) &mdash; clarifies that the diagram is a simplification and points to authoritative Playwright docs for real screenshots</li>
           </ul>
         </article>
 
         <details class="changelog-older">
           <summary>Show older updates (2)</summary>
+
+          <article class="changelog-entry">
+            <header class="changelog-head">
+              <span class="changelog-version">v5.14</span>
+              <span class="changelog-date">Apr 23, 2026</span>
+            </header>
+            <ul>
+              <li>Recent Updates section now shows only the <strong>latest version by default</strong>. Older updates are hidden behind a "Show older updates" toggle to keep the page clean</li>
+              <li>When a 4th update is added, the oldest entry is dropped &mdash; only the 3 most recent versions are kept</li>
+            </ul>
+          </article>
 
           <article class="changelog-entry">
             <header class="changelog-head">
@@ -3169,21 +3216,6 @@ npx playwright show-report               # open last HTML report
               <li>Added <strong>Recent Updates</strong> section (you are here) so you can see exactly what changes between versions</li>
               <li>Added <strong>last-updated date</strong> next to the version in the footer</li>
               <li>Update toast now has a <strong>"See Changes"</strong> button that jumps you here instead of forcing an immediate reload</li>
-            </ul>
-          </article>
-
-          <article class="changelog-entry">
-            <header class="changelog-head">
-              <span class="changelog-version">v5.12</span>
-              <span class="changelog-date">Apr 22, 2026</span>
-            </header>
-            <ul>
-              <li>Renamed <a href="#week-1">Week 1</a> to "Environment Setup &amp; Your First Playwright Test" &mdash; and added a hands-on <strong>Exercise 9</strong> where you write <code class="inline-code">tests/my-first.spec.ts</code> from scratch and see it pass</li>
-              <li>Rewrote the <strong>Playwright Extension</strong> section in the VS Code Guide: now matches the real UI with all 5 TOOLS (Pick locator, Record new, Record at cursor, Reveal test output, Close all browsers) plus the 6-icon recording toolbar</li>
-              <li>Set <strong>final PR deadline: Friday, June 12</strong> (buffer week after Week 6 for slower starts)</li>
-              <li>Added <strong>deep-links to official Playwright docs</strong> in 7+ places throughout the course: locators, assertions, auto-waiting, trace viewer, POM, best practices, and more</li>
-              <li>Expanded the <a href="#resources">Resources</a> Playwright section from 6 to 11 links with Writing Tests, Trace Viewer, POM, Best Practices, and the official VS Code Extension guide</li>
-              <li>Added a prominent callout: "Opening the Testing Sidebar" with a link to the canonical VS Code extension guide</li>
             </ul>
           </article>
         </details>
@@ -3208,7 +3240,7 @@ npx playwright show-report               # open last HTML report
     </div>
 
     <div class="page-footer">
-      <span>Playwright for Manual QA Engineers &bull; 6-Week Learning Path v5.14 &middot; <a href="#recent-updates" style="color: inherit;">updated Apr 23, 2026</a></span>
+      <span>Playwright for Manual QA Engineers &bull; 6-Week Learning Path v5.15 &middot; <a href="#recent-updates" style="color: inherit;">updated Apr 23, 2026</a></span>
       <span>April 2026</span>
     </div>
 
