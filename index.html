@@ -1040,7 +1040,7 @@
     <svg viewBox="0 0 32 32" fill="none"><path d="M6.5 16c0-.3.2-.7.5-1l8.6-8.6c.6-.6 1.5-.6 2.1 0l.7.7c.6.6.6 1.5 0 2.1L12.1 16l6.3 6.3c.6.6.6 1.5 0 2.1l-.7.7c-.6.6-1.5.6-2.1 0L7 16.5c-.3-.3-.5-.6-.5-1z" fill="rgba(255,255,255,0.5)"/><path d="M15 16c0-.3.2-.7.5-1l8.6-8.6c.6-.6 1.5-.6 2.1 0l.7.7c.6.6.6 1.5 0 2.1L20.6 16l6.3 6.3c.6.6.6 1.5 0 2.1l-.7.7c-.6.6-1.5.6-2.1 0l-8.6-8.6c-.3-.3-.5-.6-.5-1z" fill="white"/></svg>
     QA Engineering &middot; Learning Path
   </div>
-  <span class="version-badge" id="current-version" title="Current document version">v5.17</span>
+  <span class="version-badge" id="current-version" title="Current document version">v5.18</span>
   <button class="mobile-toc-toggle" onclick="document.getElementById('toc').classList.toggle('open')">☰ Navigation</button>
 </nav>
 
@@ -1065,14 +1065,14 @@
       <table>
         <tr><th>Week</th><th>Theme</th><th>Goal</th><th>Deliverable</th><th>Time</th></tr>
         <tr><td><strong>1</strong></td><td>First Playwright Project &amp; Test</td><td>Create a project, run example tests, write your own first test</td><td>Your own <code class="inline-code">my-first.spec.ts</code> passing + HTML report</td><td>5-6 hrs</td></tr>
-        <tr><td><strong>2</strong></td><td>TypeScript for QA</td><td>Read and understand TypeScript test code</td><td>Annotated test file with comments</td><td>5-6 hrs</td></tr>
+        <tr><td><strong>2</strong></td><td>TypeScript for QA</td><td>Read, understand, and debug TypeScript test code</td><td>Annotated test file + fixed type errors</td><td>8-10 hrs</td></tr>
         <tr><td><strong>3</strong></td><td>Locators</td><td>Find any element on the page reliably</td><td>Locator exercise file (10 locators)</td><td>6-7 hrs</td></tr>
         <tr><td><strong>4</strong></td><td>Writing &amp; Debugging Tests</td><td>Write tests, read errors, fix failures</td><td>login.spec.ts (3 cases) + 2 fixed tests</td><td>6-7 hrs</td></tr>
         <tr><td><strong>5</strong></td><td>Git &amp; Project Setup</td><td>Learn Git workflow, set up final project</td><td>Git repo on GitHub + project plan</td><td>5-6 hrs</td></tr>
         <tr><td><strong>6</strong></td><td>POM &amp; Final Project</td><td>Learn Page Objects, write a test suite, deliver via PR</td><td>3-5 passing tests with POM + Pull Request</td><td>6-7 hrs</td></tr>
       </table>
 
-      <p style="font-size: 14px; color: var(--text-subtle); margin-top: 4px;">Total estimated time: 32-38 hours over 6 weeks</p>
+      <p style="font-size: 14px; color: var(--text-subtle); margin-top: 4px;">Total estimated time: 35-42 hours over 6 weeks</p>
 
       <div class="callout callout-info">
         <span class="icon">📋</span>
@@ -2151,7 +2151,7 @@ test('page does not contain error text', async ({ page }) =&gt; {
         <div class="week-badge"><span>2</span></div>
         <div class="week-info">
           <h2 style="border:none;">TypeScript for QA</h2>
-          <div class="week-goal">Estimated time: 5-6 hours</div>
+          <div class="week-goal">Estimated time: 8-10 hours</div>
         </div>
         <div class="week-progress" data-week="2"><span class="pct-val">0%</span>done</div>
       </div>
@@ -2160,161 +2160,594 @@ test('page does not contain error text', async ({ page }) =&gt; {
       <div class="topic-block">
         <ul>
           <li>Read TypeScript test code and understand what each line does</li>
-          <li>Understand <code class="inline-code">const</code>, <code class="inline-code">let</code>, types, and template strings</li>
-          <li>Understand <code class="inline-code">async/await</code> &mdash; the pattern used in every Playwright test</li>
-          <li>Understand <code class="inline-code">import</code> and how <code class="inline-code">package.json</code> manages dependencies</li>
+          <li>Understand variables, types, objects, and functions &mdash; the building blocks of every test</li>
+          <li>Understand <code class="inline-code">async/await</code> &mdash; the pattern used in every Playwright action</li>
+          <li>Read TypeScript error messages and fix the most common ones</li>
+          <li>Understand <code class="inline-code">import</code> statements and how test files connect to each other</li>
         </ul>
       </div>
 
       <div class="callout callout-warning">
         <span class="icon">💡</span>
-        <div><strong>You do not need to become a developer.</strong> The goal is to read TypeScript well enough to understand what a test does, spot errors, and make small edits. Think of it like reading a recipe &mdash; you do not need to be a chef.</div>
+        <div><strong>You do not need to become a developer.</strong> Your goal is not to design the whole kitchen &mdash; only to read the recipe, spot mistakes, and make small changes safely.</div>
       </div>
 
-      <p class="section-label">TOPICS</p>
+      <div class="callout callout-info">
+        <span class="icon">👀</span>
+        <div>
+          <strong>Where this week is going.</strong> By the end, you should be able to read a test like this and explain every line:
+          <div class="code-block" style="margin: 10px 0 4px;">
+            <div class="code-body"><pre>import { test, expect } from "@playwright/test";
+
+test("login shows dashboard", async ({ page }) => {
+  await page.goto("https://staging.example.com/login");
+  await page.getByPlaceholder("Email").fill("user@test.com");
+  await page.getByRole("button", { name: "Login" }).click();
+  await expect(page).toHaveURL(/.*dashboard/);
+});</pre></div>
+          </div>
+          If this looks alien right now &mdash; that is fine. It will make sense by Part 9.
+        </div>
+      </div>
+
+      <div class="callout callout-info">
+        <span class="icon">📚</span>
+        <div>
+          <strong>This material is a condensed overview.</strong> It covers what you need to start writing Playwright tests, not everything TypeScript can do. For deeper learning:
+          <ul style="margin: 8px 0 0 18px; font-size: 14px;">
+            <li><strong>Official TypeScript docs:</strong> <a href="https://www.typescriptlang.org/docs/handbook/2/basic-types.html" target="_blank">TypeScript Handbook &mdash; The Basics</a> &mdash; the best reference when you want to understand a concept fully</li>
+            <li><strong>Pluralsight course:</strong> <a href="https://app.pluralsight.com/" target="_blank">TypeScript: Getting Started</a> on Pluralsight (Solvd has corporate access &mdash; request via your RM if you do not have it yet)</li>
+          </ul>
+          You do not need to read these before starting &mdash; go through this week first, then use them as a reference when you want to go deeper on a specific topic.
+        </div>
+      </div>
+
+      <!-- ── Part 1: What TypeScript Is ── -->
+
+      <p class="section-label">PART 1 &mdash; WHAT TYPESCRIPT IS</p>
 
       <div class="topic-block">
         <span class="topic-tag tag-theory">Theory</span>
-        <h4>Variables, types, and strings</h4>
+        <h4>TypeScript = JavaScript + type checking</h4>
+        <p>TypeScript is JavaScript with one addition: it checks that you are using the right types of data in the right places. If you pass a number where a string is expected, TypeScript catches that <strong>before</strong> you run the test &mdash; not after. VS Code uses TypeScript under the hood to give you autocompletion, red underlines, and hover tooltips.</p>
+        <p><strong>Why QA needs this:</strong> fewer silly mistakes, better editor hints, easier debugging. Every Playwright test is written in TypeScript.</p>
+      </div>
+
+      <!-- ── Part 2: Variables and Type Inference ── -->
+
+      <p class="section-label">PART 2 &mdash; VARIABLES AND TYPE INFERENCE</p>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-theory">Theory</span>
+        <h4><code class="inline-code">const</code> vs <code class="inline-code">let</code></h4>
         <div class="code-block">
           <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">typescript</span></div>
-          <div class="code-body"><pre>// Variables
-const username = "john@test.com";   // const = value will not change
-let attempts = 0;                    // let = value can change later
-attempts = 3;                        // OK — let allows reassignment
+          <div class="code-body"><pre>// const = value will not change
+const username = "john@test.com";
 
-// Types — TypeScript knows what type each value is
-const name: string = "Alice";        // text
-const age: number = 30;              // number
-const isAdmin: boolean = true;       // true or false
-
-// Template strings — inserting variables into text
-const greeting = `Hello, ${name}! You are ${age} years old.`;
-
-// Arrays — lists of values
-const browsers: string[] = ["chromium", "firefox", "webkit"];</pre></div>
+// let = value can change later
+let attempts = 0;
+attempts = 3;  // OK — let allows reassignment</pre></div>
         </div>
-        <p><strong>Key takeaway:</strong> <code class="inline-code">const</code> = fixed, <code class="inline-code">let</code> = changeable. The <code class="inline-code">: string</code> part tells TypeScript what kind of data the variable holds.</p>
+        <p><strong>Rule of thumb:</strong> use <code class="inline-code">const</code> by default. Use <code class="inline-code">let</code> only when you need to change the value later.</p>
       </div>
 
       <div class="topic-block">
         <span class="topic-tag tag-theory">Theory</span>
-        <h4>Functions and async/await</h4>
-        <p>Two common ways to declare a function in TypeScript:</p>
+        <h4>Types and type inference</h4>
         <div class="code-block">
-          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> Option 1: function keyword <span class="lang">typescript</span></div>
-          <div class="code-body"><pre>function greet(name: string): string {
-  return `Hello, ${name}`;
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">typescript</span></div>
+          <div class="code-body"><pre>// TypeScript figures out the type automatically — this is called "type inference"
+const name = "Alice";          // TypeScript knows: string
+const retries = 3;             // TypeScript knows: number
+const isLoggedIn = false;      // TypeScript knows: boolean
+
+// You CAN write the type explicitly, but you don't have to
+const email: string = "alice@test.com";
+const maxRetries: number = 5;
+
+// When to add explicit types:
+// → when it helps YOU understand the code
+// → when TypeScript can't figure it out on its own
+// → otherwise, let TypeScript infer</pre></div>
+        </div>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-theory">Theory</span>
+        <h4>Template strings &mdash; inserting variables into text</h4>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">typescript</span></div>
+          <div class="code-body"><pre>const name = "Alice";
+const env = "staging";
+
+// Use backticks ` ` and ${...} to insert variables
+const greeting = `Hello, ${name}!`;
+const url = `https://${env}.example.com/login`;
+
+// This is much cleaner than string concatenation:
+// const url = "https://" + env + ".example.com/login";</pre></div>
+        </div>
+      </div>
+
+      <!-- ── Part 3: Arrays and Objects ── -->
+
+      <p class="section-label">PART 3 &mdash; ARRAYS AND OBJECTS</p>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-theory">Theory</span>
+        <h4>Arrays &mdash; lists of values</h4>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">typescript</span></div>
+          <div class="code-body"><pre>const browsers = ["chromium", "firefox", "webkit"];              // string[]
+const requiredFields = ["email", "password", "confirm password"]; // string[]
+
+// Access by index (starts at 0)
+console.log(browsers[0]);       // "chromium"
+console.log(browsers.length);   // 3</pre></div>
+        </div>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-theory">Theory</span>
+        <h4>Objects &mdash; groups of related data</h4>
+        <p>Objects are how you store test data, user credentials, expected values &mdash; anything with multiple fields.</p>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">typescript</span></div>
+          <div class="code-body"><pre>// Simple object — TypeScript infers the types of each field
+const user = {
+  email: "john@test.com",
+  password: "Secret123",
+  isAdmin: false,
+};
+
+// Use it in a test
+await page.getByPlaceholder("Email").fill(user.email);
+await page.getByPlaceholder("Password").fill(user.password);</pre></div>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> Typed objects <span class="lang">typescript</span></div>
+          <div class="code-body"><pre>// You can define the shape of an object with a "type"
+type User = {
+  email: string;
+  password: string;
+  role?: string;  // ? means optional — can be missing
+};
+
+// Now TypeScript enforces this shape
+const admin: User = {
+  email: "admin@test.com",
+  password: "Admin123",
+  role: "admin",
+};
+
+const guest: User = {
+  email: "guest@test.com",
+  password: "Guest123",
+  // role is optional — OK to skip it
+};</pre></div>
+        </div>
+
+        <p><strong>Why this matters for QA:</strong> test data, API responses, and fixtures are all objects. You will read and write them constantly.</p>
+      </div>
+
+      <!-- ── Part 4: Destructuring ── -->
+
+      <p class="section-label">PART 4 &mdash; DESTRUCTURING</p>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-theory">Theory</span>
+        <h4>Pulling values out of objects</h4>
+        <p>You see this pattern in <strong>every Playwright test</strong>:</p>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">typescript</span></div>
+          <div class="code-body"><pre>// This is destructuring — pulling "page" out of the object Playwright gives you
+test("example", async ({ page }) => {
+  await page.goto("https://example.com");
+});
+
+// Same idea with your own data:
+const user = { email: "john@test.com", password: "Secret123" };
+
+// Instead of writing user.email and user.password everywhere:
+const { email, password } = user;
+// Now: email = "john@test.com", password = "Secret123"
+
+// Use directly
+await page.getByPlaceholder("Email").fill(email);
+await page.getByPlaceholder("Password").fill(password);</pre></div>
+        </div>
+        <p><strong>Key takeaway:</strong> <code class="inline-code">{ page }</code> in test functions is not special syntax &mdash; it is standard destructuring. The curly braces mean "take the <code class="inline-code">page</code> property out of the object."</p>
+      </div>
+
+      <!-- ── Part 5: Functions in Test Code ── -->
+
+      <p class="section-label">PART 5 &mdash; FUNCTIONS IN TEST CODE</p>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-theory">Theory</span>
+        <h4>Function declaration and arrow functions</h4>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">typescript</span></div>
+          <div class="code-body"><pre>// Regular function
+function formatTestEmail(name: string): string {
+  return `${name.toLowerCase()}@test.com`;
 }
 
-greet("Alice");   // "Hello, Alice"</pre></div>
-        </div>
-        <div class="code-block">
-          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> Option 2: arrow function (shorter syntax, same result) <span class="lang">typescript</span></div>
-          <div class="code-body"><pre>const greetShort = (name: string): string =&gt; `Hello, ${name}`;
+// Arrow function — shorter syntax, same idea
+const buildLoginUrl = (env: string): string => {
+  return `https://${env}.example.com/login`;
+};
 
-greetShort("Alice");   // "Hello, Alice"</pre></div>
+// Use them
+const email = formatTestEmail("Alice");    // "alice@test.com"
+const url = buildLoginUrl("staging");      // "https://staging.example.com/login"</pre></div>
         </div>
-        <p>Now the important one — <code class="inline-code">async/await</code>:</p>
+
+        <table>
+          <tr><th>Part</th><th>What it means</th></tr>
+          <tr><td><code class="inline-code">name: string</code></td><td>Parameter <code class="inline-code">name</code> must be a string</td></tr>
+          <tr><td><code class="inline-code">: string</code> (after parentheses)</td><td>The function returns a string</td></tr>
+          <tr><td><code class="inline-code">: void</code></td><td>The function does not return anything</td></tr>
+        </table>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-practice">Hands-on</span>
+        <h4>Functions you will actually see in tests</h4>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> Helper functions <span class="lang">typescript</span></div>
+          <div class="code-body"><pre>// Build a URL for a specific environment
+function getLoginUrl(env: string): string {
+  return `https://${env}.example.com/login`;
+}
+
+// Function that takes an object as parameter
+type Credentials = {
+  email: string;
+  password: string;
+};
+
+function logCredentials(creds: Credentials): void {
+  console.log(`Logging in as: ${creds.email}`);
+}</pre></div>
+        </div>
+        <p>This is the exact syntax you will see in helper files, page objects, and test data utilities.</p>
+      </div>
+
+      <!-- ── Part 6: async/await in Playwright ── -->
+
+      <p class="section-label">PART 6 &mdash; ASYNC/AWAIT IN PLAYWRIGHT</p>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-theory">Theory</span>
+        <h4>Why browser actions need <code class="inline-code">await</code></h4>
+        <p>Browser actions take time: loading a page, clicking a button, typing text. <code class="inline-code">await</code> means "do not go to the next line until this action is done."</p>
         <div class="code-block">
           <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">typescript</span></div>
-          <div class="code-body"><pre>// async/await — "wait for this to finish before continuing"
-// Playwright uses this EVERYWHERE because browser actions take time
-async function login(page) {
-  await page.goto("https://example.com/login");  // wait for page load
-  await page.fill("#email", "user@test.com");     // wait for typing
-  await page.click("button[type=submit]");        // wait for click
+          <div class="code-body"><pre>import { Page } from "@playwright/test";
+
+async function login(page: Page): Promise&lt;void&gt; {
+  await page.goto("https://example.com/login");     // wait for page to load
+  await page.getByPlaceholder("Email").fill("user@test.com");  // wait for typing
+  await page.getByRole("button", { name: "Login" }).click();   // wait for click
 }
 
 // Without "await", the test would try to click
 // before the page even finishes loading!</pre></div>
         </div>
-        <p><strong>Key takeaway:</strong> Every Playwright action starts with <code class="inline-code">await</code>. It means "do not go to the next line until this is done."</p>
+
+        <table>
+          <tr><th>Part</th><th>What it means</th></tr>
+          <tr><td><code class="inline-code">async</code></td><td>Marks the function as asynchronous &mdash; it can use <code class="inline-code">await</code> inside</td></tr>
+          <tr><td><code class="inline-code">await</code></td><td>"Wait for this to finish before continuing"</td></tr>
+          <tr><td><code class="inline-code">Promise&lt;void&gt;</code></td><td>The function returns a Promise and produces no value. <code class="inline-code">async</code> functions always return a Promise; <code class="inline-code">await</code> waits for it.</td></tr>
+          <tr><td><code class="inline-code">Page</code></td><td>The Playwright type for a browser tab &mdash; imported from <code class="inline-code">@playwright/test</code></td></tr>
+        </table>
+
+        <div class="callout callout-error">
+          <span class="icon">&#9888;&#65039;</span>
+          <div><strong>The #1 beginner mistake:</strong> forgetting <code class="inline-code">await</code>. The code will still run without errors &mdash; but it will do things in the wrong order and fail randomly. Rule: <strong>use <code class="inline-code">await</code> with Playwright actions (<code class="inline-code">.click()</code>, <code class="inline-code">.fill()</code>, <code class="inline-code">.goto()</code>) and assertions (<code class="inline-code">expect</code>)</strong>. Locators like <code class="inline-code">page.getByRole(...)</code> do not need <code class="inline-code">await</code> by themselves &mdash; only the action on them does.</div>
+        </div>
+      </div>
+
+      <!-- ── Part 7: Common TypeScript Errors ── -->
+
+      <p class="section-label">PART 7 &mdash; COMMON TYPESCRIPT ERRORS AND HOW TO FIX THEM</p>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-theory">Theory</span>
+        <h4>Error #1: <code class="inline-code">string | undefined</code></h4>
+        <p>This is the most common TypeScript error you will see. It means: "this value might be a string, or it might not exist at all."</p>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> The error <span class="lang">text</span></div>
+          <div class="code-body"><pre>Argument of type 'string | undefined' is not assignable
+to parameter of type 'string'.</pre></div>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> Fix: check before using <span class="lang">typescript</span></div>
+          <div class="code-body"><pre>// Problem: promoCode might be undefined
+function applyPromoCode(code: string | undefined) {
+  // console.log(code.toUpperCase());  // ERROR — code might be undefined!
+
+  // Fix: check first, then use
+  if (code) {
+    console.log(code.toUpperCase());  // OK — TypeScript knows code is string here
+  }
+}</pre></div>
+        </div>
+        <p><strong>What happens:</strong> <code class="inline-code">string | undefined</code> means the value can be a string OR it can be missing. Before you use it as a string, you need to check. After <code class="inline-code">if (code)</code>, TypeScript "narrows" the type and knows it is definitely a string.</p>
       </div>
 
       <div class="topic-block">
         <span class="topic-tag tag-theory">Theory</span>
-        <h4>Imports and dependencies</h4>
+        <h4>Error #2: "Property does not exist"</h4>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> The error <span class="lang">text</span></div>
+          <div class="code-body"><pre>Property 'fullName' does not exist on type '{ email: string; password: string; }'.</pre></div>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> Why it happens <span class="lang">typescript</span></div>
+          <div class="code-body"><pre>const user = { email: "john@test.com", password: "Secret123" };
+
+console.log(user.fullName);  // ERROR — there is no "fullName" property
+
+// Fix: use only properties that exist, or add the missing one
+console.log(user.email);  // OK</pre></div>
+        </div>
+        <p><strong>This is TypeScript protecting you</strong> from typos and missing data. Read the error carefully &mdash; it tells you exactly which property is missing and on which object.</p>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-theory">Theory</span>
+        <h4>Error #3: "Argument is not assignable"</h4>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> The error <span class="lang">text</span></div>
+          <div class="code-body"><pre>Argument of type 'number' is not assignable to parameter of type 'string'.</pre></div>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> Why it happens <span class="lang">typescript</span></div>
+          <div class="code-body"><pre>function fillField(value: string) {
+  console.log(value);
+}
+
+fillField(42);              // ERROR — number is not a string
+fillField("42");            // OK — "42" is a string
+fillField(String(42));      // OK — converted to string</pre></div>
+        </div>
+        <p>TypeScript checks that you pass the right type. This catches real bugs: you would not want to type a number into a text field without converting it first.</p>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-reference">Reference</span>
+        <h4>Optional chaining <code class="inline-code">?.</code> &mdash; safe access to nested data</h4>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">typescript</span></div>
+          <div class="code-body"><pre>type ApiResponse = {
+  error?: {
+    message?: string;
+  };
+};
+
+const response: ApiResponse = {};
+
+// Without ?. — crashes if response.error is undefined
+// const message = response.error.message;  // ERROR!
+
+// With ?. — returns undefined instead of crashing
+const message = response.error?.message;   // undefined, no crash</pre></div>
+        </div>
+        <p><strong>Rule:</strong> if the thing on the left might be <code class="inline-code">null</code> or <code class="inline-code">undefined</code>, use <code class="inline-code">?.</code> to avoid a crash. You will see this in API responses, parsed JSON, and debug helpers.</p>
+      </div>
+
+      <!-- ── Part 8: Imports ── -->
+
+      <p class="section-label">PART 8 &mdash; IMPORTS</p>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-theory">Theory</span>
+        <h4>How test files connect to each other</h4>
         <div class="code-block">
           <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">typescript</span></div>
           <div class="code-body"><pre>// Import from an installed package (lives in node_modules/)
 import { test, expect } from "@playwright/test";
+import { Page, Locator } from "@playwright/test";
 
-// Import from your own file (relative path — starts with ./)
+// Import from your own file (relative path — starts with ./ or ../)
 import { LoginPage } from "./pages/LoginPage";</pre></div>
         </div>
-        <table>
+
+        <p><strong>Three rules &mdash; that is all you need:</strong></p>
+        <ol style="margin-left: 18px; font-size: 14px;">
+          <li><code class="inline-code">@...</code> or a package name (no dot) &rarr; installed library, lives in <code class="inline-code">node_modules/</code></li>
+          <li><code class="inline-code">./</code> or <code class="inline-code">../</code> &rarr; your own file, relative to the current file</li>
+          <li>If the import is wrong &rarr; VS Code shows a red underline and the test will not run</li>
+        </ol>
+
+        <table style="margin-top: 12px;">
           <tr><th>Concept</th><th>What it means</th></tr>
-          <tr><td><code class="inline-code">dependencies</code></td><td>Libraries your code needs to run</td></tr>
-          <tr><td><code class="inline-code">devDependencies</code></td><td>Libraries needed only during development/testing</td></tr>
-          <tr><td><code class="inline-code">^1.40.0</code></td><td>Version 1.40.0 or compatible newer (not 2.0)</td></tr>
-          <tr><td><code class="inline-code">node_modules/</code></td><td>Where npm downloads library code</td></tr>
-          <tr><td><code class="inline-code">npm install</code></td><td>Downloads everything listed in package.json</td></tr>
-          <tr><td><code class="inline-code">npm install -D name</code></td><td>Add new library to devDependencies</td></tr>
+          <tr><td><code class="inline-code">node_modules/</code></td><td>Folder where npm downloads library code. Never edit it.</td></tr>
+          <tr><td><code class="inline-code">package.json</code></td><td>Lists your project's dependencies and their versions</td></tr>
         </table>
       </div>
+
+      <!-- ── Part 9: Reading a Real Playwright Test ── -->
+
+      <p class="section-label">PART 9 &mdash; READING A REAL PLAYWRIGHT TEST</p>
 
       <div class="topic-block">
         <span class="topic-tag tag-reference">Reference</span>
         <h4>Anatomy of a Playwright test file</h4>
         <div class="code-block">
           <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> example.spec.ts <span class="lang">typescript</span></div>
-          <div class="code-body"><pre>import { test, expect } from "@playwright/test";
+          <div class="code-body"><pre>import { test, expect } from "@playwright/test";       // 1. Import tools
 
-test.describe("Login page", () =&gt; {
+test.describe("Login page", () => {                     // 2. Group of related tests
 
-  test.beforeEach(async ({ page }) =&gt; {
+  test.beforeEach(async ({ page }) => {                 // 3. Runs before EVERY test
     await page.goto("https://example.com/login");
   });
 
-  test("should show error for wrong password", async ({ page }) =&gt; {
-    await page.fill("#email", "user@test.com");
-    await page.fill("#password", "wrongpassword");
-    await page.click("button[type=submit]");
+  test("should show error for wrong password", async ({ page }) => {  // 4. One test case
+    await page.getByPlaceholder("Email").fill("user@test.com");       // 5. Type into field
+    await page.getByPlaceholder("Password").fill("wrongpassword");
+    await page.getByRole("button", { name: "Login" }).click();        // 6. Click button
 
-    await expect(page.locator(".error-message")).toBeVisible();
-    await expect(page.locator(".error-message")).toHaveText("Invalid credentials");
+    const errorMessage = page.getByText("Invalid credentials");       // 7. Find element
+    await expect(errorMessage).toBeVisible();                         // 8. Assert it's visible
   });
 });</pre></div>
         </div>
         <table>
-          <tr><th>Keyword</th><th>What it means</th></tr>
-          <tr><td><code class="inline-code">import { test, expect }</code></td><td>Load tools from the Playwright library</td></tr>
-          <tr><td><code class="inline-code">test.describe("name", ...)</code></td><td>Group related tests (like a folder)</td></tr>
-          <tr><td><code class="inline-code">test.beforeEach</code></td><td>Runs before EVERY test &mdash; good for setup</td></tr>
-          <tr><td><code class="inline-code">test("name", async ({ page }) =&gt; ...)</code></td><td>One test case. <code class="inline-code">page</code> = your browser tab.</td></tr>
-          <tr><td><code class="inline-code">await</code></td><td>"Wait for this to finish"</td></tr>
-          <tr><td><code class="inline-code">expect(...).toBeVisible()</code></td><td>Assertion: "I expect this element to be visible"</td></tr>
+          <tr><th>Line</th><th>What it does</th><th>Concepts from this week</th></tr>
+          <tr><td>1</td><td>Load <code class="inline-code">test</code> and <code class="inline-code">expect</code> from the Playwright library</td><td>Import (Part 8)</td></tr>
+          <tr><td>2</td><td>Group related tests together (like a folder)</td><td>Arrow function (Part 5)</td></tr>
+          <tr><td>3</td><td>Navigate to the login page before each test</td><td>Destructuring <code class="inline-code">{ page }</code> (Part 4), <code class="inline-code">async/await</code> (Part 6)</td></tr>
+          <tr><td>4</td><td>Define one test case with a descriptive name</td><td>Destructuring, <code class="inline-code">async</code></td></tr>
+          <tr><td>5-6</td><td>Interact with the page: type text, click button</td><td><code class="inline-code">await</code> (Part 6), string values (Part 2)</td></tr>
+          <tr><td>7</td><td>Store a locator in a variable</td><td><code class="inline-code">const</code> (Part 2), type inference</td></tr>
+          <tr><td>8</td><td>Assert the error message is visible</td><td><code class="inline-code">await</code> on assertion</td></tr>
         </table>
       </div>
+
+      <!-- ── EXERCISES ── -->
 
       <p class="section-label">EXERCISES</p>
 
       <div class="topic-block exercises">
         <span class="topic-tag tag-practice">Hands-on</span>
-        <ol class="checklist">
-          <li><input type="checkbox" id="w2-e1" data-week="2"><label for="w2-e1"><strong>Read the example test.</strong> Open <code class="inline-code">tests/example.spec.ts</code> in VS Code. For each line, write a comment above it explaining what it does.</label></li>
-          <li><input type="checkbox" id="w2-e2" data-week="2"><label for="w2-e2"><strong>Identify the keywords.</strong> Find and highlight: all <code class="inline-code">await</code>, all <code class="inline-code">const</code>/<code class="inline-code">let</code>, all <code class="inline-code">import</code> statements, and all <code class="inline-code">expect</code> assertions.</label></li>
-          <li><input type="checkbox" id="w2-e3" data-week="2"><label for="w2-e3"><strong>Break it on purpose.</strong> Remove one <code class="inline-code">await</code> from a Playwright call. Run the test. Read the error. Put it back.</label></li>
-          <li><input type="checkbox" id="w2-e4" data-week="2"><label for="w2-e4"><strong>Change a string value.</strong> In a test, change the URL or expected text to something wrong. Run the test. Read the error &mdash; what does it say?</label></li>
-          <li><input type="checkbox" id="w2-e5" data-week="2"><label for="w2-e5"><strong>Check package.json.</strong> Open <code class="inline-code">package.json</code>. Write down: what is in <code class="inline-code">devDependencies</code>? What version of Playwright is installed?</label></li>
+        <h4>Reading and annotating</h4>
+        <ol>
+          <li><strong>Annotate the example test.</strong> Open <code class="inline-code">tests/example.spec.ts</code> in VS Code. For each line, write a comment above it explaining what it does. Use the table from Part 9 as a guide.</li>
+          <li><strong>Identify the building blocks.</strong> In the same file, find and highlight: all <code class="inline-code">await</code> keywords, all <code class="inline-code">const</code>/<code class="inline-code">let</code> declarations, all <code class="inline-code">import</code> statements, all assertions (<code class="inline-code">expect</code>), and the destructuring pattern <code class="inline-code">{ page }</code>.</li>
+          <li><strong>Check <code class="inline-code">package.json</code>.</strong> Open it and write down: what is in <code class="inline-code">devDependencies</code>? What version of Playwright is installed?</li>
         </ol>
       </div>
 
+      <div class="topic-block exercises">
+        <span class="topic-tag tag-practice">Hands-on</span>
+        <h4>Breaking things on purpose</h4>
+        <ol>
+          <li><strong>Remove an <code class="inline-code">await</code>.</strong> Remove one <code class="inline-code">await</code> from a Playwright call. Run the test. Read the error. Put it back.</li>
+          <li><strong>Change a string value.</strong> In a test, change the expected text to something wrong. Run the test. Read the error &mdash; what does it say? Does it tell you what it expected vs what it got?</li>
+          <li><strong>Create a type mismatch.</strong> Write this in a new file <code class="inline-code">playground.ts</code> and see what VS Code shows:
+            <div class="code-block">
+              <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> playground.ts <span class="lang">typescript</span></div>
+              <div class="code-body"><pre>const retries: number = "five";  // What does VS Code show?
+const user = { email: "john@test.com" };
+console.log(user.password);      // What does VS Code show?</pre></div>
+            </div>
+          </li>
+        </ol>
+      </div>
+
+      <div class="topic-block exercises">
+        <span class="topic-tag tag-practice">Hands-on</span>
+        <h4>Fix the type errors</h4>
+        <p>Each snippet below has a TypeScript error. Read the red underline in VS Code, understand the problem, fix it.</p>
+        <ol>
+          <li>
+            <div class="code-block">
+              <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> Fix this <span class="lang">typescript</span></div>
+              <div class="code-body"><pre>function getTimeout(seconds: number): string {
+  return seconds * 1000;  // Hint: look at the return type
+}</pre></div>
+            </div>
+          </li>
+          <li>
+            <div class="code-block">
+              <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> Fix this <span class="lang">typescript</span></div>
+              <div class="code-body"><pre>const config = { baseURL: "https://staging.example.com" };
+console.log(config.baseUrl);  // Hint: case matters</pre></div>
+            </div>
+          </li>
+          <li>
+            <div class="code-block">
+              <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> Fix this <span class="lang">typescript</span></div>
+              <div class="code-body"><pre>function printName(name: string) {
+  console.log(name);
+}
+const userName: string | undefined = undefined;
+printName(userName);  // Hint: what if userName is undefined?</pre></div>
+            </div>
+          </li>
+        </ol>
+      </div>
+
+      <div class="topic-block exercises">
+        <span class="topic-tag tag-practice">Hands-on</span>
+        <h4>Write test data</h4>
+        <ol>
+          <li><strong>Create a <code class="inline-code">type</code> for test data.</strong> Define a <code class="inline-code">Product</code> type with <code class="inline-code">name</code> (string), <code class="inline-code">price</code> (number), and <code class="inline-code">inStock</code> (boolean). Create two products using this type.</li>
+          <li><strong>Write a helper function.</strong> Write a function <code class="inline-code">formatPrice(price: number): string</code> that returns the price with a dollar sign, e.g. <code class="inline-code">"$9.99"</code>. Use a template string.</li>
+        </ol>
+      </div>
+
+      <div class="topic-block exercises">
+        <span class="topic-tag tag-practice">Hands-on</span>
+        <h4>Combine what you learned (optional challenge)</h4>
+        <p>This exercise ties together objects, types, functions, and imports &mdash; everything from this week in one small file. It is optional but strongly recommended.</p>
+        <ol>
+          <li><strong>Create <code class="inline-code">test-data.ts</code></strong> in your project root. Inside it:
+            <ul style="margin-left: 18px; margin-top: 6px;">
+              <li>Define a <code class="inline-code">type Credentials</code> with <code class="inline-code">email</code> (string), <code class="inline-code">password</code> (string), and <code class="inline-code">role?</code> (optional string)</li>
+              <li>Create one <code class="inline-code">const</code> object <code class="inline-code">validUser</code> using this type</li>
+              <li>Write a function <code class="inline-code">getLoginUrl(env: string): string</code> that returns <code class="inline-code">`https://${env}.example.com/login`</code></li>
+              <li>Export both: the object and the function</li>
+            </ul>
+          </li>
+          <li><strong>Use it in a test.</strong> Create <code class="inline-code">tests/login-practice.spec.ts</code>:
+            <div class="code-block">
+              <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> tests/login-practice.spec.ts <span class="lang">typescript</span></div>
+              <div class="code-body"><pre>import { test } from "@playwright/test";
+import { validUser, getLoginUrl } from "../test-data";
+
+test("test data is wired correctly", async () => {
+  const { email, password } = validUser;  // destructuring!
+  console.log("URL:", getLoginUrl("staging"));
+  console.log("Email:", email);
+  console.log("Password:", password);
+  // Does it print what you expect?
+});</pre></div>
+            </div>
+          </li>
+          <li><strong>Run it.</strong> Execute <code class="inline-code">npx playwright test tests/login-practice.spec.ts</code>. The test should pass. Check the output.</li>
+        </ol>
+        <div class="callout callout-success">
+          <span class="icon">💡</span>
+          <div>If this works, you have just written a typed data file, imported it into a test, and used destructuring &mdash; the exact pattern you will use in every real project from <a href="#week-3">Week 3</a> onward.</div>
+        </div>
+      </div>
+
+      <!-- ── DELIVERABLE ── -->
+
       <div class="deliverable">
         <h4>Deliverable</h4>
-        <p>A copy of <code class="inline-code">example.spec.ts</code> with your comments above every line explaining what each line does.</p>
+        <p><strong>Required:</strong></p>
+        <ul style="margin-left: 18px; font-size: 13px;">
+          <li>A copy of <code class="inline-code">example.spec.ts</code> with your comments above every line explaining what each line does</li>
+          <li>Completed "Fix the type errors" exercises &mdash; showing the corrected code</li>
+        </ul>
+        <p style="margin-top: 10px;"><strong>Optional challenge:</strong></p>
+        <ul style="margin-left: 18px; font-size: 13px;">
+          <li><code class="inline-code">test-data.ts</code> + <code class="inline-code">tests/login-practice.spec.ts</code> from the capstone exercise, running without errors</li>
+        </ul>
+        <p style="margin-top: 8px;">Verify: <code class="inline-code">npx playwright test tests/login-practice.spec.ts</code> passes.</p>
       </div>
 
       <div class="ready-box">
         <h4>Ready to Move On When</h4>
         <ul class="checklist">
           <li><input type="checkbox" id="w2-r1" data-week="2"><label for="w2-r1">I can read a Playwright test and explain what each line does</label></li>
-          <li><input type="checkbox" id="w2-r2" data-week="2"><label for="w2-r2">I understand what <code class="inline-code">const</code>, <code class="inline-code">async/await</code>, and <code class="inline-code">import</code> mean</label></li>
-          <li><input type="checkbox" id="w2-r3" data-week="2"><label for="w2-r3">I can explain in one sentence what <code class="inline-code">await</code> does</label></li>
-          <li><input type="checkbox" id="w2-r4" data-week="2"><label for="w2-r4">I know where dependencies are listed and how to check their versions</label></li>
+          <li><input type="checkbox" id="w2-r2" data-week="2"><label for="w2-r2">I understand <code class="inline-code">const</code>, <code class="inline-code">let</code>, objects, and type annotations</label></li>
+          <li><input type="checkbox" id="w2-r3" data-week="2"><label for="w2-r3">I can explain what <code class="inline-code">{ page }</code> means in a test function</label></li>
+          <li><input type="checkbox" id="w2-r4" data-week="2"><label for="w2-r4">I can explain in one sentence what <code class="inline-code">await</code> does</label></li>
+          <li><input type="checkbox" id="w2-r5" data-week="2"><label for="w2-r5">I can read a TypeScript error in VS Code and understand what it is asking me to fix</label></li>
+          <li><input type="checkbox" id="w2-r6" data-week="2"><label for="w2-r6">I can write a simple typed object and a function with parameters</label></li>
         </ul>
       </div>
+
 
       <!-- ══════════════════════════════════════════════════════════════════ -->
       <!--                          W E E K   3                             -->
@@ -3228,13 +3661,15 @@ npx playwright show-report               # open last HTML report
       <div class="changelog">
         <article class="changelog-entry">
           <header class="changelog-head">
-            <span class="changelog-version">v5.17</span>
+            <span class="changelog-version">v5.18</span>
             <span class="changelog-date">Apr 23, 2026</span>
           </header>
           <ul>
-            <li>Exercise 7 (Write your first test) now has <strong>two tests: a positive and a negative one</strong>. You write both the "check that X is correct" and the "check that Y is NOT present" shapes from day one &mdash; the two core patterns in any QA suite.</li>
-            <li>Added a <strong>test isolation callout</strong> explaining that Playwright automatically creates a fresh browser context for every test and closes it on finish &mdash; no manual <code class="inline-code">page.close()</code> or <code class="inline-code">afterEach</code> needed. Answers the common "do I need to close the browser myself?" question.</li>
-            <li>Ready-to-Move-On checklist updated: you now need <strong>both</strong> positive and negative tests passing in your <code class="inline-code">my-first.spec.ts</code>.</li>
+            <li><strong>Complete rewrite of <a href="#week-2">Week 2</a> (TypeScript for QA).</strong> Expanded from 4 topics to 9 parts: added objects &amp; typed data (Part 3), destructuring (Part 4), common TypeScript errors with fixes (Part 7), and optional chaining. Time estimate raised to 8-10 hours.</li>
+            <li>Added a <strong>preview snippet</strong> at the top of Week 2 &mdash; a 7-line test that shows where the week is going before any theory starts.</li>
+            <li>New exercise blocks: <strong>"Fix the type errors"</strong> (3 broken snippets to debug), <strong>"Write test data"</strong> (create a type + helper function), and an <strong>optional capstone</strong> combining objects, types, functions, destructuring, and imports in one file.</li>
+            <li>Deliverable split into <strong>Required</strong> (annotated test + fixed errors) and <strong>Optional challenge</strong> (capstone files) &mdash; slower students are not blocked.</li>
+            <li>Added links to <strong>TypeScript Handbook</strong> and <strong>Pluralsight</strong> (Solvd corporate access) for deeper learning.</li>
           </ul>
         </article>
 
@@ -3243,27 +3678,25 @@ npx playwright show-report               # open last HTML report
 
           <article class="changelog-entry">
             <header class="changelog-head">
-              <span class="changelog-version">v5.16</span>
+              <span class="changelog-version">v5.17</span>
               <span class="changelog-date">Apr 23, 2026</span>
             </header>
             <ul>
-              <li>Added the <strong>contents of <code class="inline-code">tests/example.spec.ts</code></strong> directly in the Week 1 Topics &mdash; now you can see what the test you're running actually does before you run it. Explained in plain English what each test checks.</li>
-              <li>Added a <strong>"Your <code class="inline-code">playwright.config.ts</code> &mdash; what's inside"</strong> topic block with the full generated default config + a table of the 4 keys you'll care about now. Fields you don't need yet (<code class="inline-code">baseURL</code>, <code class="inline-code">retries</code>, <code class="inline-code">workers</code>) are flagged as "you'll meet these later" with the exact week/part they're covered in.</li>
-              <li>Removed two duplicate blocks (old simplified config + old "How to run tests" table) &mdash; they overlapped with v5.15's CLI cheat sheet.</li>
-              <li>Exercise 4 now asks you to <strong>read <code class="inline-code">example.spec.ts</code> in VS Code</strong> before running it. Also clarifies what "headless" means.</li>
+              <li>Exercise 7 (Write your first test) now has <strong>two tests: a positive and a negative one</strong>. You write both the "check that X is correct" and the "check that Y is NOT present" shapes from day one &mdash; the two core patterns in any QA suite.</li>
+              <li>Added a <strong>test isolation callout</strong> explaining that Playwright automatically creates a fresh browser context for every test and closes it on finish &mdash; no manual <code class="inline-code">page.close()</code> or <code class="inline-code">afterEach</code> needed.</li>
+              <li>Ready-to-Move-On checklist updated: you now need <strong>both</strong> positive and negative tests passing in your <code class="inline-code">my-first.spec.ts</code>.</li>
             </ul>
           </article>
 
           <article class="changelog-entry">
             <header class="changelog-head">
-              <span class="changelog-version">v5.15</span>
+              <span class="changelog-version">v5.16</span>
               <span class="changelog-date">Apr 23, 2026</span>
             </header>
             <ul>
-              <li>Renamed <a href="#week-1">Week 1</a> from "Environment Setup &amp; Your First Playwright Test" to <strong>"Your First Playwright Project &amp; Test"</strong> &mdash; more accurate since environment setup happens in Week 0</li>
-              <li>Reworked <a href="#week-1">Week 1</a> exercises: reduced from 9 to 7 with a clear UI-vs-CLI split. Exercise 4 = run via VS Code extension, Exercise 5 = run via CLI. New callout explains why tests run headless by default and how to enable "Show browser"</li>
-              <li>Added a <strong>CLI options cheat sheet</strong> table in <a href="#week-1">Week 1</a> so students do not need to memorize flags &mdash; just bookmark the reference</li>
-              <li>Added a UI-differences warning in the <strong>Window Anatomy</strong> section (VS Code Guide) &mdash; clarifies that the diagram is a simplification and points to authoritative Playwright docs for real screenshots</li>
+              <li>Added the <strong>contents of <code class="inline-code">tests/example.spec.ts</code></strong> directly in the Week 1 Topics &mdash; now you can see what the test you're running actually does before you run it.</li>
+              <li>Added a <strong>"Your <code class="inline-code">playwright.config.ts</code> &mdash; what's inside"</strong> topic block with the full generated default config + a table of the 4 keys you'll care about now.</li>
+              <li>Removed two duplicate blocks (old simplified config + old "How to run tests" table) &mdash; they overlapped with v5.15's CLI cheat sheet.</li>
             </ul>
           </article>
         </details>
@@ -3288,7 +3721,7 @@ npx playwright show-report               # open last HTML report
     </div>
 
     <div class="page-footer">
-      <span>Playwright for Manual QA Engineers &bull; 6-Week Learning Path v5.17 &middot; <a href="#recent-updates" style="color: inherit;">updated Apr 23, 2026</a></span>
+      <span>Playwright for Manual QA Engineers &bull; 6-Week Learning Path v5.18 &middot; <a href="#recent-updates" style="color: inherit;">updated Apr 23, 2026</a></span>
       <span>April 2026</span>
     </div>
 
