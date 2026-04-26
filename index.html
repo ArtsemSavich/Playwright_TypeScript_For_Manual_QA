@@ -1633,7 +1633,7 @@ gh --version</pre></div>
       <div class="topic-block">
         <span class="topic-tag tag-theory">Theory</span>
         <h4>IntelliSense &mdash; autocomplete while you type</h4>
-        <p>Start typing <code class="inline-code">page.</code> in a test file. A dropdown appears with every method Playwright offers: <code class="inline-code">goto</code>, <code class="inline-code">click</code>, <code class="inline-code">fill</code>, <code class="inline-code">getByRole</code>. Pick one with arrow keys + <kbd>Enter</kbd> (or <kbd>Tab</kbd>).</p>
+        <p>Start typing <code class="inline-code">page.</code> in a test file (use the <code class="inline-code">.spec.ts</code> extension, e.g. <code class="inline-code">example.spec.ts</code>). A dropdown appears with every method Playwright offers: <code class="inline-code">goto</code>, <code class="inline-code">click</code>, <code class="inline-code">fill</code>, <code class="inline-code">getByRole</code>. Pick one with arrow keys + <kbd>Enter</kbd> (or <kbd>Tab</kbd>).</p>
         <p>This means: <strong>you do not need to memorize API methods.</strong> Let VS Code show them to you.</p>
       </div>
 
@@ -1705,11 +1705,18 @@ gh --version</pre></div>
         <p>A <strong>blank Chromium window</strong> opens. Here is what to do:</p>
         <ol>
           <li>Type a URL in the browser's address bar (e.g. <code class="inline-code">https://playwright.dev/</code>) and press <kbd>Enter</kbd></li>
-          <li>Once the page loads, <strong>hover any element</strong> &mdash; the <strong>PLAYWRIGHT panel at the bottom of VS Code</strong> shows a live locator in the <code class="inline-code">Locator</code> field (e.g. <code class="inline-code">getByRole('link', { name: 'Get started' })</code>)</li>
-          <li><strong>Click the element</strong> to freeze the locator &mdash; then copy it from the field</li>
+          <li>Once the page loads, hover elements in the browser to highlight them.</li>
+          <li>Click the element you want to inspect — the <strong>PLAYWRIGHT panel at the bottom of VS Code</strong> shows the generated locator in the <code class="inline-code">Locator</code> field.</li>
+          <li>If <strong>Copy on pick</strong> is enabled, the locator is copied to your clipboard automatically after the click.</li>
         </ol>
-        <div class="callout callout-success">
+        <div class="callout callout-info">
           <span class="icon">💡</span>
+          <div style="font-size: 13px;">
+            <strong>Clarification:</strong> Hover is used only to highlight elements. The locator is generated when you click (pick) the element.
+          </div>
+        </div>
+        <div class="callout callout-success">
+          <span class="icon">✨</span>
           <div>Enable the <strong>"Copy on pick"</strong> checkbox in the PLAYWRIGHT panel &mdash; clicks will automatically copy the locator to your clipboard, no manual copy needed.</div>
         </div>
         <div class="callout callout-warning">
@@ -2917,6 +2924,237 @@ page.locator(".item").nth(5);
 page.locator("text=Click here to proceed");</pre></div>
           </div>
         </div>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-theory">Theory</span>
+        <h4>6. How to validate a locator like a QA</h4>
+        
+        <h5 style="margin-top: 16px; margin-bottom: 8px;">A) Key principle</h5>
+        <p><strong>Pick Locator is a starting point, not a final solution.</strong> The VS Code extension generates locators quickly, but you must always validate them before using in production tests.</p>
+
+        <h5 style="margin-top: 16px; margin-bottom: 8px;">B) Why this matters</h5>
+        <p><strong>Bad locator = flaky test.</strong> If your locator breaks because the app changed, your test breaks. The app might work fine, but the test fails. This is noise.</p>
+
+        <h5 style="margin-top: 16px; margin-bottom: 8px;">C) Step-by-step validation process</h5>
+        <ol style="margin-left: 20px; margin-top: 8px;">
+          <li><strong>Generate locator (Pick Locator)</strong> — Use VS Code extension to create a first draft</li>
+          <li><strong>Open DevTools</strong> — <kbd>F12</kbd> (Windows/Linux) or <kbd>⌘</kbd>+<kbd>⌥</kbd>+<kbd>I</kbd> (Mac)</li>
+          <li><strong>Inspect element</strong> — Find your element in the HTML and check its attributes, role, text</li>
+          <li><strong>Look for stable attributes:</strong>
+            <ul style="margin-top: 8px; margin-left: 20px;">
+              <li><code class="inline-code">data-testid</code> — added by developers for testing</li>
+              <li><code class="inline-code">aria-label</code> — accessible label for screen readers</li>
+              <li><code class="inline-code">role</code> + <code class="inline-code">name</code> — semantic HTML (e.g., button with text)</li>
+              <li><code class="inline-code">id</code> — usually stable, but check if it's unique</li>
+            </ul>
+          </li>
+          <li><strong>Avoid unstable selectors:</strong>
+            <ul style="margin-top: 8px; margin-left: 20px;">
+              <li>Dynamic CSS classes (change on page updates)</li>
+              <li>Deep nesting (break when layout changes)</li>
+              <li>Indexes (break when list order changes)</li>
+            </ul>
+          </li>
+          <li><strong>Check uniqueness</strong> — Open DevTools Console and run:
+            <div class="code-block" style="margin-top: 8px;">
+              <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">javascript</span></div>
+              <div class="code-body"><pre>$$('your-selector-here')</pre></div>
+            </div>
+            <p style="margin-top: 8px; font-size: 13px;"><strong>Read the result:</strong></p>
+            <ul style="margin-top: 4px; margin-left: 20px; font-size: 13px;">
+              <li><strong>1 element</strong> = good (unique locator)</li>
+              <li><strong>&gt; 1 elements</strong> = bad (not specific enough)</li>
+              <li><strong>0 elements</strong> = wrong (locator does not match anything)</li>
+            </ul>
+          </li>
+          <li><strong>Simplify locator</strong> — Use the most readable version:
+            <div class="code-block" style="margin-top: 8px;">
+              <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">typescript</span></div>
+              <div class="code-body"><pre>// &#10060; Bad — fragile and hard to read
+page.locator("div > div > form > button.btn-primary:nth-child(3)")
+
+// ✓ Better — semantic and stable
+page.getByRole("button", { name: "Login" })</pre></div>
+            </div>
+          </li>
+        </ol>
+
+        <h5 style="margin-top: 16px; margin-bottom: 8px;">D) Single vs Multiple elements</h5>
+        <p><strong>Single element:</strong> Use when you expect exactly one match.</p>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">typescript</span></div>
+          <div class="code-body"><pre>// Expect one button on page
+await expect(page.getByRole("button", { name: "Login" })).toBeVisible();</pre></div>
+        </div>
+
+        <p style="margin-top: 12px;"><strong>Multiple elements (list):</strong> Use when selecting from a group.</p>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">typescript</span></div>
+          <div class="code-body"><pre>// Select all products in list (returns locator for the group)
+const products = page.locator(".inventory_item");
+
+// Get count
+const count = await products.count();
+
+// Click first product
+await products.first().click();
+
+// Click the 3rd product
+await products.nth(2).click(); // nth is 0-indexed
+
+// Click by text
+await products.filter({ hasText: "Sauce Labs Backpack" }).click();</pre></div>
+        </div>
+
+        <p style="margin-top: 12px; font-size: 13px; color: var(--text-subtle);"><strong>Rule:</strong> Use index (`.nth()`) only if the order is stable and important. Better: filter by text or data-testid.</p>
+
+        <h5 style="margin-top: 16px; margin-bottom: 8px;">E) Working with developers</h5>
+        <p><strong>If there is no stable locator — ask developers to add one.</strong> Do not try to make a flaky test work. Make the element testable instead.</p>
+        <p style="margin-top: 8px;"><strong>Example request:</strong></p>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">html</span></div>
+          <div class="code-body"><pre><!-- Request to developers: -->
+Please add data-testid="login-button" to this element:
+
+&lt;button class="btn btn-blue-500 action-primary"&gt;Login&lt;/button&gt;</pre></div>
+        </div>
+
+        <h5 style="margin-top: 16px; margin-bottom: 8px;">F) XPath: when to use it, when to avoid it</h5>
+        <p><strong>Real talk:</strong> XPath is used heavily in real projects. It's a powerful tool when used correctly, but fragile when used badly. Here's an honest breakdown.</p>
+
+        <p style="margin-top: 12px;"><strong>Why XPath is popular:</strong></p>
+        <ul style="margin-top: 8px; margin-left: 20px;">
+          <li><strong>Universal</strong> — works on any website, any app, any structure</li>
+          <li><strong>Flexible</strong> — can select by position, attribute, text, parent, sibling, complex logic</li>
+          <li><strong>No test attributes required</strong> — works even if developers did not add <code class="inline-code">data-testid</code></li>
+          <li><strong>Complex queries</strong> — can find elements others cannot (by parent, ancestor, following sibling)</li>
+        </ul>
+
+        <p style="margin-top: 12px;"><strong>Problems with XPath:</strong></p>
+        <ul style="margin-top: 8px; margin-left: 20px;">
+          <li><strong>Fragile when used poorly</strong> — bad XPath breaks on any HTML change</li>
+          <li><strong>Hard to read</strong> — future QA will struggle to understand it</li>
+          <li><strong>Slow performance</strong> — complex XPath queries are slower than CSS selectors</li>
+          <li><strong>Not Playwright's recommendation</strong> — but only when you have better options</li>
+        </ul>
+
+        <p style="margin-top: 12px;"><strong>Bad XPath examples (fragile):</strong></p>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">xpath</span></div>
+          <div class="code-body"><pre>// &#10060; Depends on position — breaks if order changes
+//div[3]/button
+
+// &#10060; Deep nesting — breaks on layout changes
+//div/div/div/div/form/div/button
+
+// &#10060; Text matching is exact — breaks on copy changes
+//button[text()='Click here']
+
+// &#10060; Dynamic index — unpredictable
+//*[@class='active'][1]</pre></div>
+        </div>
+
+        <p style="margin-top: 12px;"><strong>Good XPath examples (stable):</strong></p>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">xpath</span></div>
+          <div class="code-body"><pre>// ✓ By stable attribute
+//button[@data-testid='login-button']
+//input[@name='username']
+//a[@id='home-link']
+
+// ✓ By partial text match (flexible)
+//button[contains(text(), 'Login')]
+//span[contains(@class, 'error-message')]
+
+// ✓ By role + accessible name (semantic)
+//button[contains(@aria-label, 'Close')]
+
+// ✓ Smart parent traversal (when needed)
+//input[@name='password']/parent::form//button[@type='submit']
+
+// ✓ By attribute pattern
+//div[starts-with(@id, 'product-')]
+//input[contains(@placeholder, 'Email')]</pre></div>
+        </div>
+
+        <p style="margin-top: 12px;"><strong>When to use XPath (OK cases):</strong></p>
+        <ul style="margin-top: 8px; margin-left: 20px;">
+          <li>Element has stable <code class="inline-code">data-testid</code> or <code class="inline-code">id</code> — use XPath as fallback</li>
+          <li>Need to find by parent/ancestor relationship — XPath is better than CSS</li>
+          <li>Text matching with partial content — <code class="inline-code">contains()</code> is useful</li>
+          <li>Legacy app with no semantic attributes — sometimes XPath is the only option</li>
+        </ul>
+
+        <p style="margin-top: 12px;"><strong>When NOT to use XPath (better alternatives exist):</strong></p>
+        <ul style="margin-top: 8px; margin-left: 20px;">
+          <li>Semantic element with role — use <code class="inline-code">getByRole()</code> instead</li>
+          <li>By text content — use <code class="inline-code">getByText()</code> or <code class="inline-code">getByLabel()</code></li>
+          <li>By visible label — use <code class="inline-code">getByPlaceholder()</code> or <code class="inline-code">getByAltText()</code></li>
+          <li>By position in simple list — use <code class="inline-code">.nth()</code> if order is stable</li>
+        </ul>
+
+        <p style="margin-top: 12px;"><strong>The rule of thumb:</strong></p>
+        <table style="margin-top: 8px; font-size: 13px;">
+          <tr><th>Priority</th><th>Use This</th><th>Why</th></tr>
+          <tr><td>1st</td><td><code class="inline-code">getByRole()</code></td><td>Most accessible, stable by definition</td></tr>
+          <tr><td>2nd</td><td><code class="inline-code">getByTestId()</code></td><td>Stable, intentional for testing</td></tr>
+          <tr><td>3rd</td><td><code class="inline-code">getByText()</code></td><td>Good for buttons, links with visible text</td></tr>
+          <tr><td>4th</td><td>CSS selector</td><td>When Playwright helpers don't work</td></tr>
+          <tr><td>5th</td><td>XPath</td><td>When CSS can't do it + stable attributes</td></tr>
+        </table>
+
+        <p style="margin-top: 12px; font-size: 13px; color: var(--text-subtle);"><strong>In real projects:</strong> Most test suites use a mix. You'll have 80% semantic selectors and 20% XPath for complex edge cases. The key is: <strong>know why you are using XPath</strong>, not just "this selector works".</p>
+
+        <h5 style="margin-top: 16px; margin-bottom: 8px;">G) Practice tasks — validate your locators</h5>
+        <p style="margin-bottom: 12px;">Use your Playwright project or the test file you created in Week 1. For each task, inspect elements with DevTools and use the browser console to verify uniqueness.</p>
+        <ol style="margin-left: 20px;">
+          <li><strong>Task 1 — Full validation cycle.</strong> Pick a locator using VS Code Pick Locator extension. Open DevTools, inspect the element, verify it has stable attributes. Validate uniqueness in console with <code class="inline-code">$$('selector')</code>. Simplify if needed.</li>
+          <li><strong>Task 2 — Fix a bad locator.</strong> Convert this fragile locator to something better:
+            <div class="code-block" style="margin-top: 8px;">
+              <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">typescript</span></div>
+              <div class="code-body"><pre>// &#10060; Bad
+page.locator("div:nth-child(3) > span")
+
+// ✓ Your task: rewrite this using attributes, role, or text</pre></div>
+            </div>
+          </li>
+          <li><strong>Task 3 — List handling.</strong> Find a list on a webpage (e.g., SauceDemo inventory). Count elements using <code class="inline-code">.count()</code>. Click the 2nd element using <code class="inline-code">.nth(1)</code>. Click by text using <code class="inline-code">.filter()</code>.</li>
+          <li><strong>Task 4 — DevTools only (no Pick Locator).</strong> Open any website. Find an element in DevTools. Write a locator for it using the DevTools console. Test it without using the VS Code extension.</li>
+          <li><strong>Task 5 — XPath vs CSS example.</strong> You have this HTML:
+            <div class="code-block" style="margin-top: 8px;">
+              <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">html</span></div>
+              <div class="code-body"><pre>&lt;div class="products"&gt;
+  &lt;div class="item" data-testid="item-1"&gt;Backpack&lt;/div&gt;
+  &lt;div class="item" data-testid="item-2"&gt;Bike&lt;/div&gt;
+  &lt;div class="item" data-testid="item-3"&gt;Hat&lt;/div&gt;
+&lt;/div&gt;</pre></div>
+            </div>
+            <p style="margin-top: 8px; font-size: 13px;">Write two selectors for "Bike":</p>
+            <ul style="margin-top: 4px; margin-left: 20px; font-size: 13px;">
+              <li><strong>XPath (not recommended):</strong> <code class="inline-code">//div[@class='item'][2]</code></li>
+              <li><strong>CSS/Playwright (recommended):</strong> <code class="inline-code">page.getByTestId("item-2")</code></li>
+            </ul>
+          </li>
+          <li><strong>Task 6 — Real-world challenge.</strong> Find an element on a website that has:
+            <ul style="margin-top: 8px; margin-left: 20px;">
+              <li>No <code class="inline-code">id</code></li>
+              <li>No <code class="inline-code">data-testid</code></li>
+              <li>Generic class names (e.g., <code class="inline-code">btn</code>, <code class="inline-code">item</code>)</li>
+            </ul>
+            <p style="margin-top: 8px;">Build a locator using <code class="inline-code">getByRole</code> + name, or <code class="inline-code">getByText</code>, or other semantic methods. Explain why it is stable.</p>
+          </li>
+        </ol>
+
+        <h5 style="margin-top: 16px; margin-bottom: 8px;">H) Final rules — never forget</h5>
+        <ul style="margin-top: 8px; margin-left: 20px;">
+          <li><strong>✔ Always validate locators</strong> — do not blindly trust auto-generated ones</li>
+          <li><strong>✔ Prefer semantic selectors first</strong> — use <code class="inline-code">getByRole</code>, <code class="inline-code">getByTestId</code>, <code class="inline-code">getByText</code></li>
+          <li><strong>✔ Use DevTools</strong> — inspect attributes before writing locators</li>
+          <li><strong>✔ XPath is OK when you need it</strong> — but only with stable attributes (data-testid, id, accessible names)</li>
+          <li><strong>✔ Know WHY you chose the locator</strong> — "it works" is not good enough; understand stability</li>
+          <li><strong>✔ Ask developers for test attributes</strong> — if no stable locator exists, request <code class="inline-code">data-testid</code> or <code class="inline-code">aria-label</code></li>
+        </ul>
       </div>
 
       <p class="section-label">REFERENCE</p>
