@@ -2,7 +2,7 @@
 
 An interactive, self-paced course that takes manual QA engineers from zero to writing real Playwright tests with TypeScript. No prior coding experience required.
 
-🔗 **[Open Course →](https://artsem savich.github.io/Playwright_TypeScript_For_Manual_QA/index.html)**  
+🔗 **[Open Course →](https://artsemsavich.github.io/Playwright_TypeScript_For_Manual_QA/index.html)**  
 *(or clone the repo and open `index.html` in your browser)*
 
 ---
