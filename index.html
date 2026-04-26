@@ -1040,7 +1040,7 @@
     <svg viewBox="0 0 32 32" fill="none"><path d="M6.5 16c0-.3.2-.7.5-1l8.6-8.6c.6-.6 1.5-.6 2.1 0l.7.7c.6.6.6 1.5 0 2.1L12.1 16l6.3 6.3c.6.6.6 1.5 0 2.1l-.7.7c-.6.6-1.5.6-2.1 0L7 16.5c-.3-.3-.5-.6-.5-1z" fill="rgba(255,255,255,0.5)"/><path d="M15 16c0-.3.2-.7.5-1l8.6-8.6c.6-.6 1.5-.6 2.1 0l.7.7c.6.6.6 1.5 0 2.1L20.6 16l6.3 6.3c.6.6.6 1.5 0 2.1l-.7.7c-.6.6-1.5.6-2.1 0l-8.6-8.6c-.3-.3-.5-.6-.5-1z" fill="white"/></svg>
     QA Engineering &middot; Learning Path
   </div>
-  <span class="version-badge" id="current-version" title="Current document version">v5.19</span>
+  <span class="version-badge" id="current-version" title="Current document version">v5.20</span>
   <button class="mobile-toc-toggle" onclick="document.getElementById('toc').classList.toggle('open')">☰ Navigation</button>
 </nav>
 
@@ -2939,7 +2939,7 @@ page.locator("text=Click here to proceed");</pre></div>
         <h5 style="margin-top: 16px; margin-bottom: 8px;">C) Step-by-step validation process</h5>
         <ol style="margin-left: 20px; margin-top: 8px;">
           <li><strong>Generate locator (Pick Locator)</strong> — Use VS Code extension to create a first draft</li>
-          <li><strong>Open DevTools</strong> — <kbd>F12</kbd> (Windows/Linux) or <kbd>⌘</kbd>+<kbd>⌥</kbd>+<kbd>I</kbd> (Mac)</li>
+          <li><strong>Open DevTools</strong> — <kbd>F12</kbd> (Windows/Linux) or <kbd>⌘</kbd>+<kbd>⌥</kbd>+<kbd>I</kbd> / <kbd>fn</kbd>+<kbd>F12</kbd> (Mac) → go to the <strong>Elements</strong> tab</li>
           <li><strong>Inspect element</strong> — Find your element in the HTML and check its attributes, role, text</li>
           <li><strong>Look for stable attributes:</strong>
             <ul style="margin-top: 8px; margin-left: 20px;">
@@ -2956,16 +2956,30 @@ page.locator("text=Click here to proceed");</pre></div>
               <li>Indexes (break when list order changes)</li>
             </ul>
           </li>
-          <li><strong>Check uniqueness</strong> — Open DevTools Console and run:
+          <li><strong>Check uniqueness</strong> — In DevTools <strong>Elements</strong> tab, press <kbd>⌘</kbd>+<kbd>F</kbd> (Mac) or <kbd>Ctrl</kbd>+<kbd>F</kbd> (Windows) to open the search bar. It supports CSS selectors and XPath:
             <div class="code-block" style="margin-top: 8px;">
-              <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">javascript</span></div>
-              <div class="code-body"><pre>$$('your-selector-here')</pre></div>
+              <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">css</span></div>
+              <div class="code-body"><pre># CSS selector example (type directly in Elements search bar):
+.inventory_item
+
+# Result: "3 of 6" — means 6 matches found (not unique!)
+# Result: "1 of 1" — unique, good locator</pre></div>
             </div>
-            <p style="margin-top: 8px; font-size: 13px;"><strong>Read the result:</strong></p>
+            <div class="code-block" style="margin-top: 8px;">
+              <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">xpath</span></div>
+              <div class="code-body"><pre># XPath example (prefix with //  in Elements search bar):
+//button[@data-testid='login-button']
+
+# XPath by text:
+//button[contains(text(), 'Login')]
+
+# Result shown as: "1 of 1" (unique) or "1 of 3" (not unique)</pre></div>
+            </div>
+            <p style="margin-top: 8px; font-size: 13px;"><strong>Read the result (shown in top-right of search bar):</strong></p>
             <ul style="margin-top: 4px; margin-left: 20px; font-size: 13px;">
-              <li><strong>1 element</strong> = good (unique locator)</li>
-              <li><strong>&gt; 1 elements</strong> = bad (not specific enough)</li>
-              <li><strong>0 elements</strong> = wrong (locator does not match anything)</li>
+              <li><strong>1 of 1</strong> = good (unique locator)</li>
+              <li><strong>1 of N (N &gt; 1)</strong> = bad (too many matches, not specific enough)</li>
+              <li><strong>No results</strong> = wrong (locator does not match anything)</li>
             </ul>
           </li>
           <li><strong>Simplify locator</strong> — Use the most readable version:
@@ -4085,6 +4099,24 @@ npx playwright show-report               # open last HTML report
       <div class="changelog">
         <article class="changelog-entry">
           <header class="changelog-head">
+            <span class="changelog-version">v5.20</span>
+            <span class="changelog-date">Apr 26, 2026</span>
+          </header>
+          <ul>
+            <li><strong>DevTools shortcut corrected.</strong> Added <code class="inline-code">fn+F12</code> as an alternative for Mac users in the locator validation section.</li>
+            <li><strong>Uniqueness check moved from Console to Elements tab.</strong> The <code class="inline-code">$$('selector')</code> Console approach is replaced with the DevTools <strong>Elements</strong> search bar (<kbd>⌘/Ctrl</kbd>+<kbd>F</kbd>) — supports both CSS selectors and XPath with clear "1 of N" result indicators.</li>
+            <li><strong>New locator validation section added to Week 3</strong> — "How to validate a locator like a QA" covering: step-by-step process, single vs multiple elements, working with developers, XPath pros/cons, 6 practice tasks, and final rules.</li>
+            <li><strong>XPath section rewritten</strong> with honest, project-realistic guidance: advantages, common pitfalls, good/bad XPath patterns, and a priority table showing when XPath is the right choice.</li>
+            <li>Pick Locator behavior clarified: locator is generated on <strong>click</strong>, not on hover. Added clarification callout for beginners.</li>
+            <li>IntelliSense section: added <code class="inline-code">.spec.ts</code> file extension hint for new VS Code users.</li>
+          </ul>
+        </article>
+
+        <details class="changelog-older">
+          <summary>Show older updates (4)</summary>
+
+          <article class="changelog-entry">
+          <header class="changelog-head">
             <span class="changelog-version">v5.19</span>
             <span class="changelog-date">Apr 26, 2026</span>
           </header>
@@ -4095,9 +4127,6 @@ npx playwright show-report               # open last HTML report
             <li>Updated all cross-references so Weeks 1&ndash;2 correctly point to Week 3 as the first real test-writing week.</li>
           </ul>
         </article>
-
-        <details class="changelog-older">
-          <summary>Show older updates (3)</summary>
 
           <article class="changelog-entry">
           <header class="changelog-head">
@@ -4158,7 +4187,7 @@ npx playwright show-report               # open last HTML report
     </div>
 
     <div class="page-footer">
-      <span>Playwright for Manual QA Engineers &bull; 6-Week Learning Path v5.19 &middot; <a href="#recent-updates" style="color: inherit;">updated Apr 26, 2026</a></span>
+      <span>Playwright for Manual QA Engineers &bull; 6-Week Learning Path v5.20 &middot; <a href="#recent-updates" style="color: inherit;">updated Apr 26, 2026</a></span>
       <span>April 2026</span>
     </div>
 
