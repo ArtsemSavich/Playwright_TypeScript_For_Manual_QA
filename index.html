@@ -1040,7 +1040,7 @@
     <svg viewBox="0 0 32 32" fill="none"><path d="M6.5 16c0-.3.2-.7.5-1l8.6-8.6c.6-.6 1.5-.6 2.1 0l.7.7c.6.6.6 1.5 0 2.1L12.1 16l6.3 6.3c.6.6.6 1.5 0 2.1l-.7.7c-.6.6-1.5.6-2.1 0L7 16.5c-.3-.3-.5-.6-.5-1z" fill="rgba(255,255,255,0.5)"/><path d="M15 16c0-.3.2-.7.5-1l8.6-8.6c.6-.6 1.5-.6 2.1 0l.7.7c.6.6.6 1.5 0 2.1L20.6 16l6.3 6.3c.6.6.6 1.5 0 2.1l-.7.7c-.6.6-1.5.6-2.1 0l-8.6-8.6c-.3-.3-.5-.6-.5-1z" fill="white"/></svg>
     QA Engineering &middot; Learning Path
   </div>
-  <span class="version-badge" id="current-version" title="Current document version">v5.18</span>
+  <span class="version-badge" id="current-version" title="Current document version">v5.19</span>
   <button class="mobile-toc-toggle" onclick="document.getElementById('toc').classList.toggle('open')">☰ Navigation</button>
 </nav>
 
@@ -1066,13 +1066,13 @@
         <tr><th>Week</th><th>Theme</th><th>Goal</th><th>Deliverable</th><th>Time</th></tr>
         <tr><td><strong>1</strong></td><td>First Playwright Project &amp; Test</td><td>Create a project, run example tests, write your own first test</td><td>Your own <code class="inline-code">my-first.spec.ts</code> passing + HTML report</td><td>5-6 hrs</td></tr>
         <tr><td><strong>2</strong></td><td>TypeScript for QA</td><td>Read, understand, and debug TypeScript test code</td><td>Annotated test file + fixed type errors</td><td>8-10 hrs</td></tr>
-        <tr><td><strong>3</strong></td><td>Locators</td><td>Find any element on the page reliably</td><td>Locator exercise file (10 locators)</td><td>6-7 hrs</td></tr>
-        <tr><td><strong>4</strong></td><td>Writing &amp; Debugging Tests</td><td>Write tests, read errors, fix failures</td><td>login.spec.ts (3 cases) + 2 fixed tests</td><td>6-7 hrs</td></tr>
+        <tr><td><strong>3</strong></td><td>Real UI Testing with Playwright</td><td>Write stable UI tests against SauceDemo: login, cart, validation</td><td>saucedemo.spec.ts with 5+ stable tests</td><td>7-8 hrs</td></tr>
+        <tr><td><strong>4</strong></td><td>Debugging &amp; Test Structure</td><td>Debug failures, read traces, refactor tests with describe/beforeEach</td><td>Refactored saucedemo.spec.ts + 3 fixed broken tests</td><td>6-7 hrs</td></tr>
         <tr><td><strong>5</strong></td><td>Git &amp; Project Setup</td><td>Learn Git workflow, set up final project</td><td>Git repo on GitHub + project plan</td><td>5-6 hrs</td></tr>
         <tr><td><strong>6</strong></td><td>POM &amp; Final Project</td><td>Learn Page Objects, write a test suite, deliver via PR</td><td>3-5 passing tests with POM + Pull Request</td><td>6-7 hrs</td></tr>
       </table>
 
-      <p style="font-size: 14px; color: var(--text-subtle); margin-top: 4px;">Total estimated time: 35-42 hours over 6 weeks</p>
+      <p style="font-size: 14px; color: var(--text-subtle); margin-top: 4px;">Total estimated time: 36-44 hours over 6 weeks</p>
 
       <div class="callout callout-info">
         <span class="icon">📋</span>
@@ -1755,7 +1755,7 @@ gh --version</pre></div>
 
         <div class="callout callout-error">
           <span class="icon">⚠️</span>
-          <div><strong>Generated locators are not always ideal.</strong> The recorder sometimes picks <code class="inline-code">getByText</code> on dynamic content or brittle selectors. Use the output as a <strong>starting point</strong>, then refine locators using <a href="#week-3">Week 3</a> knowledge.</div>
+          <div><strong>Generated locators are not always ideal.</strong> The recorder sometimes picks <code class="inline-code">getByText</code> on dynamic content or brittle selectors. Use the output as a <strong>starting point</strong>, then apply <a href="#week-3">Week 3</a> locator and stability knowledge.</div>
         </div>
       </div>
 
@@ -1990,7 +1990,7 @@ test('get started link', async ({ page }) =&gt; {
         </ul>
         <div class="callout callout-info">
           <span class="icon">💡</span>
-          <div><strong>Don't panic about the syntax.</strong> You don't need to understand every keyword yet. The goal right now is: <em>"I can see this is a test file, I know which file to run, and I recognize what it's doing."</em> The details (<code class="inline-code">async/await</code>, arrow functions, <code class="inline-code">getByRole</code>) come in <a href="#week-2">Week 2</a> and <a href="#week-3">Week 3</a>.</div>
+          <div><strong>Don't panic about the syntax.</strong> You don't need to understand every keyword yet. The goal right now is: <em>"I can see this is a test file, I know which file to run, and I recognize what it's doing."</em> The details (<code class="inline-code">async/await</code>, arrow functions, <code class="inline-code">getByRole</code>) come in <a href="#week-2">Week 2</a> and you will use them hands-on in <a href="#week-3">Week 3</a>.</div>
         </div>
       </div>
 
@@ -2101,7 +2101,7 @@ test('page does not contain error text', async ({ page }) =&gt; {
               <div style="font-size: 12px; color: var(--text-subtle); margin-top: 4px;">📖 <a href="https://playwright.dev/docs/browser-contexts" target="_blank">playwright.dev/docs/browser-contexts</a></div>
               </div>
             </div>
-            <p style="font-size: 13px; color: var(--text-subtle); margin-top: 8px;"><strong>Why positive AND negative?</strong> A positive test confirms "the happy path works". A negative test confirms "the app behaves correctly when something is wrong or missing". Real QA suites are roughly 60% positive / 40% negative &mdash; you will be writing both from <a href="#week-4">Week 4</a> onwards.</p>
+            <p style="font-size: 13px; color: var(--text-subtle); margin-top: 8px;"><strong>Why positive AND negative?</strong> A positive test confirms "the happy path works". A negative test confirms "the app behaves correctly when something is wrong or missing". Real QA suites are roughly 60% positive / 40% negative &mdash; you will be writing both from <a href="#week-3">Week 3</a> onwards.</p>
             <div style="font-size: 13px; color: var(--text-subtle); margin-top: 6px;">See also &mdash; the <code class="inline-code">toHaveTitle</code> pattern comes straight from <a href="https://playwright.dev/docs/writing-tests" target="_blank">playwright.dev/docs/writing-tests</a>.</div>
           </label></li>
         </ol>
@@ -2756,8 +2756,8 @@ test("test data is wired correctly", async () => {
       <div class="week-divider wd3" id="week-3">
         <div class="week-badge"><span>3</span></div>
         <div class="week-info">
-          <h2 style="border:none;">Locators &mdash; Finding Elements on the Page</h2>
-          <div class="week-goal">Estimated time: 6-7 hours</div>
+          <h2 style="border:none;">Real UI Testing with Playwright</h2>
+          <div class="week-goal">Estimated time: 7-8 hours</div>
         </div>
         <div class="week-progress" data-week="3"><span class="pct-val">0%</span>done</div>
       </div>
@@ -2765,123 +2765,327 @@ test("test data is wired correctly", async () => {
       <p class="section-label">LEARNING OBJECTIVES</p>
       <div class="topic-block">
         <ul>
-          <li>Find any element on a page using Playwright locators</li>
-          <li>Choose the best locator type for each situation</li>
-          <li>Use Playwright Inspector and codegen to discover locators</li>
-          <li>Chain and filter locators when multiple similar elements exist</li>
+          <li>Write stable UI tests against a real web application</li>
+          <li>Use correct locators in the context of real user flows</li>
+          <li>Understand dynamic UI behavior and element states</li>
+          <li>Avoid flaky tests by using Playwright&rsquo;s built-in waiting mechanisms</li>
+          <li>Think like QA: test <em>behavior</em>, not buttons</li>
         </ul>
       </div>
 
       <div class="callout callout-error">
         <span class="icon">&#9888;&#65039;</span>
-        <div><strong>This is the #1 skill for QA automation.</strong> Bad locators = flaky tests that fail randomly. Good locators = stable tests that only fail when there is a real bug. Spend extra time here.</div>
+        <div><strong>This is where QA automation gets real.</strong> You will test an actual e-commerce app. Every test must have assertions, zero hard waits, and stable locators. If a test is flaky &mdash; the test is wrong, not the app.</div>
       </div>
 
-      <p class="section-label">TOPICS</p>
+      <p class="section-label">PRACTICE ENVIRONMENT</p>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-reference">Setup</span>
+        <h4>Target application &mdash; SauceDemo</h4>
+        <p>This week, all exercises use a real e-commerce demo application:</p>
+        <p style="font-size: 16px; margin: 12px 0;"><strong>&#128073; <a href="https://www.saucedemo.com" target="_blank">https://www.saucedemo.com</a></strong></p>
+        <table>
+          <tr><th>Field</th><th>Value</th></tr>
+          <tr><td>Username</td><td><code class="inline-code">standard_user</code></td></tr>
+          <tr><td>Password</td><td><code class="inline-code">secret_sauce</code></td></tr>
+        </table>
+        <p style="margin-top: 12px;">Add <code class="inline-code">baseURL</code> to your <code class="inline-code">playwright.config.ts</code> so you can use short paths in tests:</p>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> playwright.config.ts <span class="lang">typescript</span></div>
+          <div class="code-body"><pre>export default defineConfig({
+  testDir: './tests',
+  use: {
+    baseURL: 'https://www.saucedemo.com',   // &lt;-- add this
+    trace: 'on-first-retry',
+  },
+  // ...
+});</pre></div>
+        </div>
+        <p>Now in tests you can write <code class="inline-code">page.goto("/")</code> instead of the full URL.</p>
+      </div>
+
+      <p class="section-label">THEORY</p>
 
       <div class="topic-block">
         <span class="topic-tag tag-theory">Theory</span>
-        <h4>What is a locator?</h4>
-        <p>A locator tells Playwright "find this element on the page." Think of it like directions: "the big red button at the top of the form."</p>
+        <h4>1. Modern UI is dynamic</h4>
+        <p>UI is not static HTML &mdash; it changes constantly:</p>
+        <ul>
+          <li>Elements appear after API calls complete</li>
+          <li>Buttons change state (enabled &rarr; disabled &rarr; enabled)</li>
+          <li>Content updates after user actions (e.g., cart badge counter)</li>
+        </ul>
+        <div class="callout callout-warning">
+          <span class="icon">&#9888;&#65039;</span>
+          <div><strong>Your test must wait for the right state, not just execute steps.</strong> A test that clicks a button before the page has loaded will fail &mdash; not because the feature is broken, but because the test is wrong.</div>
+        </div>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-theory">Theory</span>
+        <h4>2. Element states (critical concept)</h4>
+        <p>Before interacting with an element, it must be in the correct state:</p>
+        <table>
+          <tr><th>State</th><th>Meaning</th><th>Example</th></tr>
+          <tr><td><strong>Visible</strong> / Hidden</td><td>The element is rendered and not covered</td><td>A modal overlay hides the form behind it</td></tr>
+          <tr><td><strong>Enabled</strong> / Disabled</td><td>The element accepts user interaction</td><td>Submit button disabled until fields are filled</td></tr>
+          <tr><td><strong>Attached</strong> / Detached</td><td>The element exists in the DOM</td><td>A spinner removed from DOM after data loads</td></tr>
+        </table>
+        <div class="callout callout-error">
+          <span class="icon">&#9888;&#65039;</span>
+          <div><strong>Most test failures happen because you interact with an element too early</strong> &mdash; before it is visible, enabled, or stable. Playwright&rsquo;s auto-waiting helps, but you must understand what it waits for.</div>
+        </div>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-theory">Theory</span>
+        <h4>3. Playwright auto-waiting</h4>
+        <p>When you call <code class="inline-code">.click()</code>, <code class="inline-code">.fill()</code>, or any action, Playwright automatically waits until the element is:</p>
+        <ul>
+          <li>Attached to the DOM</li>
+          <li>Visible</li>
+          <li>Stable (not animating)</li>
+          <li>Able to receive events (not blocked by another element)</li>
+          <li>Enabled (for buttons and inputs)</li>
+        </ul>
+        <div class="callout callout-warning">
+          <span class="icon">&#9888;&#65039;</span>
+          <div><strong>Auto-wait does NOT cover everything.</strong> Playwright does not wait for:
+            <ul style="margin: 8px 0 0 16px;">
+              <li>Data to finish loading from an API</li>
+              <li>Application logic to complete (e.g., cart recalculation)</li>
+              <li>URL to change after a click</li>
+            </ul>
+            For these, use explicit assertions: <code class="inline-code">await expect(page).toHaveURL(/inventory/)</code> or <code class="inline-code">await expect(locator).toBeVisible()</code>.
+          </div>
+        </div>
+        <p style="font-size: 13px; color: var(--text-subtle); margin-top: 8px;">&#128214; Official docs: <a href="https://playwright.dev/docs/actionability" target="_blank">playwright.dev/docs/actionability</a> &mdash; full actionability checks reference.</p>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-reference">Reference</span>
+        <h4>4. Locator strategy (must follow)</h4>
+        <p>When writing locators in tests, always prefer the most resilient type:</p>
+        <table>
+          <tr><th>Priority</th><th>Locator</th><th>SauceDemo example</th></tr>
+          <tr><td>1st &#10003;</td><td><code class="inline-code">getByRole()</code></td><td><code class="inline-code">page.getByRole("button", { name: "Login" })</code></td></tr>
+          <tr><td>2nd &#10003;</td><td><code class="inline-code">getByTestId()</code></td><td><code class="inline-code">page.getByTestId("checkout")</code></td></tr>
+          <tr><td>3rd</td><td><code class="inline-code">getByPlaceholder()</code></td><td><code class="inline-code">page.getByPlaceholder("Username")</code></td></tr>
+          <tr><td>4th</td><td><code class="inline-code">getByText()</code></td><td><code class="inline-code">page.getByText("Sauce Labs Backpack")</code></td></tr>
+          <tr><td>5th</td><td>CSS selector</td><td><code class="inline-code">page.locator(".shopping_cart_badge")</code></td></tr>
+          <tr><td>Last &#10007;</td><td>XPath</td><td><code class="inline-code">page.locator("//div[3]/span")</code> &mdash; AVOID</td></tr>
+        </table>
+        <p style="font-size: 13px; color: var(--text-subtle); margin-top: 8px;">&#128214; Full reference with examples: <a href="https://playwright.dev/docs/locators" target="_blank">playwright.dev/docs/locators</a></p>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-theory">Theory</span>
+        <h4>5. What is a flaky test?</h4>
+        <p>A flaky test is one that:</p>
+        <ul>
+          <li>Passes sometimes, fails sometimes</li>
+          <li>Fails with <strong>no code changes</strong></li>
+          <li>Works locally but breaks in CI</li>
+        </ul>
+        <p><strong>Common causes:</strong></p>
+        <table>
+          <tr><th>Cause</th><th>Why it&rsquo;s bad</th><th>Fix</th></tr>
+          <tr><td>Hard waits (<code class="inline-code">waitForTimeout</code>)</td><td>Too short = fail; too long = slow</td><td>Use assertions that auto-retry</td></tr>
+          <tr><td>Weak locators (XPath, index)</td><td>Break when HTML changes</td><td>Use <code class="inline-code">getByRole</code> / <code class="inline-code">getByTestId</code></td></tr>
+          <tr><td>Timing issues</td><td>Element not ready when test acts</td><td>Wait for the right state, not a fixed time</td></tr>
+          <tr><td>Shared state between tests</td><td>Test B depends on what Test A did</td><td>Each test must start from a clean state</td></tr>
+        </table>
+      </div>
+
+      <div class="callout callout-error">
+        <span class="icon">&#128683;</span>
+        <div>
+          <strong>Anti-patterns &mdash; DO NOT DO THIS:</strong>
+          <div class="code-block" style="margin-top: 8px;">
+            <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">typescript</span></div>
+            <div class="code-body"><pre>// &#10060; Hard wait — NEVER
+await page.waitForTimeout(5000);
+
+// &#10060; Fragile XPath — breaks on any HTML change
+page.locator("//div[3]/span");
+
+// &#10060; Index-based — breaks when list order changes
+page.locator(".item").nth(5);
+
+// &#10060; Text for everything — breaks on translation or copy changes
+page.locator("text=Click here to proceed");</pre></div>
+          </div>
+        </div>
+      </div>
+
+      <p class="section-label">REFERENCE</p>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-reference">Reference</span>
+        <h4>Actions cheat sheet</h4>
         <div class="code-block">
           <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">typescript</span></div>
-          <div class="code-body"><pre>// Different ways to find the same "Login" button:
+          <div class="code-body"><pre>// Navigation
+await page.goto("/");                // uses baseURL from config
+await page.goBack();
+await page.reload();
 
-page.getByRole("button", { name: "Login" })     // By role (BEST)
-page.getByTestId("login-button")                 // By test ID (GREAT)
-page.getByText("Login")                          // By text (GOOD)
-page.getByPlaceholder("Enter your email")        // By placeholder (GOOD)
-page.getByLabel("Password")                      // By label (GOOD)
-page.locator("button.btn-primary")               // By CSS (OK)
-page.locator("#login-btn")                       // By ID (OK)
-page.locator("//div[@class='form']/button[1]")   // By XPath (AVOID)</pre></div>
+// Clicking
+await page.getByRole("button", { name: "Login" }).click();
+await page.getByText("Sauce Labs Backpack").click();
+
+// Typing
+await page.getByPlaceholder("Username").fill("standard_user");
+await page.getByPlaceholder("Password").fill("secret_sauce");
+
+// Keyboard
+await page.keyboard.press("Enter");
+
+// Waiting (only when auto-wait is not enough)
+await page.waitForURL("**/inventory.html");
+await page.locator(".spinner").waitFor({ state: "hidden" });</pre></div>
         </div>
       </div>
 
       <div class="topic-block">
         <span class="topic-tag tag-reference">Reference</span>
-        <h4>Locator priority: best to worst</h4>
-        <table>
-          <tr><th>Priority</th><th>Locator</th><th>Example</th><th>Why</th></tr>
-          <tr><td>1st</td><td><code class="inline-code">getByRole</code></td><td><code class="inline-code">page.getByRole("button", { name: "Submit" })</code></td><td>How a real user thinks &mdash; "click the Submit button"</td></tr>
-          <tr><td>1st</td><td><code class="inline-code">getByTestId</code></td><td><code class="inline-code">page.getByTestId("submit-btn")</code></td><td>Developers add <code class="inline-code">data-testid</code> specifically for tests</td></tr>
-          <tr><td>2nd</td><td><code class="inline-code">getByText</code></td><td><code class="inline-code">page.getByText("Welcome back")</code></td><td>Readable, but breaks if text changes</td></tr>
-          <tr><td>2nd</td><td><code class="inline-code">getByPlaceholder</code></td><td><code class="inline-code">page.getByPlaceholder("Email")</code></td><td>Great for input fields</td></tr>
-          <tr><td>2nd</td><td><code class="inline-code">getByLabel</code></td><td><code class="inline-code">page.getByLabel("Password")</code></td><td>Uses form labels &mdash; accessible and stable</td></tr>
-          <tr><td>3rd</td><td>CSS selector</td><td><code class="inline-code">page.locator(".btn-primary")</code></td><td>CSS classes are meant for styling, not testing</td></tr>
-          <tr><td>Last</td><td>XPath</td><td><code class="inline-code">page.locator("//div[2]/button")</code></td><td>Breaks if anything in HTML structure changes</td></tr>
-        </table>
-        <p style="font-size: 13px; color: var(--text-subtle); margin-top: 8px;">📖 Official docs: <a href="https://playwright.dev/docs/locators" target="_blank">playwright.dev/docs/locators</a> &mdash; full reference with examples for every locator type.</p>
-      </div>
-
-      <div class="topic-block">
-        <span class="topic-tag tag-theory">Theory</span>
-        <h4>Using Playwright Inspector to find locators</h4>
-        <div class="code-block">
-          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">bash</span></div>
-          <div class="code-body"><pre># Open codegen — records your clicks as code
-npx playwright codegen https://your-site.com</pre></div>
-        </div>
-        <p>A browser opens alongside a recording window. Click around your website and Playwright generates test code with locators automatically.</p>
-        <div class="callout callout-success">
-          <span class="icon">💡</span>
-          <div><strong>Pro tip:</strong> Use codegen to <em>discover</em> locators, then <em>improve</em> them. Codegen might suggest <code class="inline-code">page.locator("#j_idt142\\:email")</code> &mdash; replace with <code class="inline-code">page.getByPlaceholder("Email")</code>.</div>
-        </div>
-        <p style="font-size: 13px; color: var(--text-subtle); margin-top: 8px;">📖 Official docs: <a href="https://playwright.dev/docs/codegen" target="_blank">playwright.dev/docs/codegen</a> &mdash; all codegen options including <code class="inline-code">--device</code>, <code class="inline-code">--color-scheme</code>, <code class="inline-code">--save-storage</code> for authenticated flows.</p>
-      </div>
-
-      <div class="topic-block">
-        <span class="topic-tag tag-theory">Theory</span>
-        <h4>Chaining and filtering &mdash; multiple similar elements</h4>
+        <h4>Assertions cheat sheet</h4>
         <div class="code-block">
           <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">typescript</span></div>
-          <div class="code-body"><pre>// Problem: 3 "Delete" buttons on the page
-// Solution: narrow down by parent
+          <div class="code-body"><pre>// Page-level
+await expect(page).toHaveURL(/inventory/);
+await expect(page).toHaveTitle("Swag Labs");
 
-page.locator(".user-settings").getByRole("button", { name: "Delete" })
+// Element visibility
+await expect(page.getByText("Products")).toBeVisible();
+await expect(page.getByText("Error")).not.toBeVisible();
 
-page.locator("tr").first().getByRole("button", { name: "Edit" })
+// Text content
+await expect(page.locator(".shopping_cart_badge")).toHaveText("1");
+await expect(page.getByTestId("error")).toContainText("Username is required");
 
-page.getByRole("listitem").filter({ hasText: "Product A" })
+// Element state
+await expect(page.getByRole("button", { name: "Login" })).toBeEnabled();
 
-page.locator("[data-testid='cart-item']")
-    .filter({ hasText: "Running Shoes" })
-    .getByRole("button", { name: "Remove" })</pre></div>
+// Count
+await expect(page.locator(".inventory_item")).toHaveCount(6);</pre></div>
         </div>
+        <p><strong>Tip:</strong> Add failure messages: <code class="inline-code">expect(locator, 'Cart badge should show 1 item').toHaveText('1')</code></p>
+        <p style="font-size: 13px; color: var(--text-subtle); margin-top: 8px;">&#128214; Official docs: <a href="https://playwright.dev/docs/test-assertions" target="_blank">playwright.dev/docs/test-assertions</a> &mdash; full list of matchers.</p>
+      </div>
+
+      <div class="callout callout-info">
+        <span class="icon">&#128064;</span>
+        <div><strong>Looking ahead:</strong> In this week&rsquo;s exercises you will hardcode locators directly in tests (e.g. <code class="inline-code">page.getByPlaceholder("Username")</code> repeated in each test). <a href="#week-6">Week 6</a> introduces the <strong>Page Object Model</strong>, which moves these into a reusable class. For now, keep it simple &mdash; you will refactor later.</div>
       </div>
 
       <p class="section-label">EXERCISES</p>
 
       <div class="topic-block exercises">
         <span class="topic-tag tag-practice">Hands-on</span>
+        <h4>SauceDemo test suite</h4>
+        <p>Write all tests in <code class="inline-code">tests/saucedemo.spec.ts</code>. Use <code class="inline-code">test.describe</code> and <code class="inline-code">test.beforeEach</code> for organization.</p>
         <ol class="checklist">
-          <li><input type="checkbox" id="w3-e1" data-week="3"><label for="w3-e1"><strong>Find the login form elements.</strong> Open <a href="https://practicetestautomation.com/practice-test-login/" target="_blank">the practice site</a> in your browser. Using DevTools, write a locator for: the username field, the password field, and the submit button. Use <code class="inline-code">getByRole</code>, <code class="inline-code">getByLabel</code>, or <code class="inline-code">getByPlaceholder</code>.</label></li>
-          <li><input type="checkbox" id="w3-e2" data-week="3"><label for="w3-e2"><strong>Write 10 locators.</strong> Open <a href="https://www.saucedemo.com" target="_blank">SauceDemo</a> or your staging site. Write 10 locators for 10 different elements. For each, write which locator type you chose and why.</label></li>
-          <li><input type="checkbox" id="w3-e3" data-week="3"><label for="w3-e3"><strong>Improve bad locators.</strong> Replace these with better alternatives:
+          <li><input type="checkbox" id="w3-e1" data-week="3"><label for="w3-e1"><strong>Task 1 &mdash; Login (happy path).</strong> Open the login page, enter valid credentials, click Login. Verify the user is redirected to the inventory page.
             <div class="code-block">
-              <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> Rewrite these <span class="lang">typescript</span></div>
-              <div class="code-body"><pre>page.locator("#tsf &gt; div:nth-child(2) &gt; div &gt; div &gt; button")  // ???
-page.locator("//div[@class='form-group']/input[1]")            // ???
-page.locator(".btn.btn-primary.submit-form")                   // ???</pre></div>
+              <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> Expected assertion <span class="lang">typescript</span></div>
+              <div class="code-body"><pre>await expect(page).toHaveURL(/inventory/);</pre></div>
             </div>
           </label></li>
-          <li><input type="checkbox" id="w3-e4" data-week="3"><label for="w3-e4"><strong>Chain a locator.</strong> On any page with a list (products, users, items), write a locator that targets a specific button inside a specific list item using <code class="inline-code">.filter()</code>.</label></li>
-          <li><input type="checkbox" id="w3-e5" data-week="3"><label for="w3-e5"><strong>Use the VS Code "Pick locator" tool.</strong> Open the Testing panel &rarr; PLAYWRIGHT &rarr; TOOLS &rarr; Pick locator. In the blank browser, navigate to your target site. Hover over elements and notice how the tool suggests <code class="inline-code">getByRole</code> before CSS selectors.</label></li>
+          <li><input type="checkbox" id="w3-e2" data-week="3"><label for="w3-e2"><strong>Task 2 &mdash; Negative login.</strong> Login with wrong password. Verify that an error message is displayed. <em>Think like QA: test failure, not success.</em>
+            <div class="code-block">
+              <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> Hint <span class="lang">typescript</span></div>
+              <div class="code-body"><pre>await expect(
+  page.getByTestId("error"),
+  "Error should appear for wrong credentials"
+).toBeVisible();</pre></div>
+            </div>
+          </label></li>
+          <li><input type="checkbox" id="w3-e3" data-week="3"><label for="w3-e3"><strong>Task 3 &mdash; Add product to cart.</strong> Login, add one product to the cart. Verify the cart badge shows &ldquo;1&rdquo;.
+            <div class="code-block">
+              <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> Hint <span class="lang">typescript</span></div>
+              <div class="code-body"><pre>await expect(
+  page.locator(".shopping_cart_badge"),
+  "Cart badge should show 1 after adding a product"
+).toHaveText("1");</pre></div>
+            </div>
+          </label></li>
+          <li><input type="checkbox" id="w3-e4" data-week="3"><label for="w3-e4"><strong>Task 4 &mdash; Remove product from cart.</strong> Add a product, then remove it. Verify the cart badge disappears (cart is empty).
+            <div class="code-block">
+              <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> Hint <span class="lang">typescript</span></div>
+              <div class="code-body"><pre>await expect(
+  page.locator(".shopping_cart_badge"),
+  "Cart badge should not be visible after removing product"
+).not.toBeVisible();</pre></div>
+            </div>
+          </label></li>
+          <li><input type="checkbox" id="w3-e5" data-week="3"><label for="w3-e5"><strong>Task 5 &mdash; Empty form validation.</strong> Click the Login button without entering credentials. Verify the validation error is displayed. <em>Bonus: try submitting with only username, then only password.</em></label></li>
+          <li><input type="checkbox" id="w3-e6" data-week="3"><label for="w3-e6"><strong>Task 6 &mdash; Stability challenge.</strong> Review all your tests. Make sure: <strong>no <code class="inline-code">waitForTimeout</code></strong>, no flaky locators, every test has at least one assertion. Run all tests 3 times in a row &mdash; they must pass every time.
+            <div class="code-block">
+              <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">bash</span></div>
+              <div class="code-body"><pre>npx playwright test tests/saucedemo.spec.ts --repeat-each=3</pre></div>
+            </div>
+          </label></li>
+          <li><input type="checkbox" id="w3-e7" data-week="3"><label for="w3-e7"><strong>Task 7 &mdash; Find a bug (real QA thinking).</strong> Try edge cases: empty login, multiple rapid clicks on &ldquo;Add to cart&rdquo;, fast add/remove cycles. Observe UI behavior and error messages. <em>Write a test that documents any unexpected behavior you find.</em></label></li>
         </ol>
+      </div>
+
+      <div class="callout callout-info">
+        <span class="icon">&#129504;</span>
+        <div><strong>Think like QA.</strong> You are not testing buttons. You are testing <em>behavior</em>.
+          <table style="margin-top: 8px;">
+            <tr><th>&#10060; Wrong</th><th>&#9989; Right</th></tr>
+            <tr><td>&ldquo;Click login button&rdquo;</td><td>&ldquo;User cannot login with invalid credentials&rdquo;</td></tr>
+            <tr><td>&ldquo;Check cart icon&rdquo;</td><td>&ldquo;Cart badge updates when product is added&rdquo;</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="callout callout-error">
+        <span class="icon">&#128204;</span>
+        <div>
+          <strong>Rules of this week:</strong>
+          <ul style="margin: 8px 0 0 16px;">
+            <li><strong>Rule #1:</strong> If you use <code class="inline-code">waitForTimeout</code> &mdash; you&rsquo;re doing it wrong</li>
+            <li><strong>Rule #2:</strong> Bad locator = future flaky test</li>
+            <li><strong>Rule #3:</strong> No assertion = not a test</li>
+          </ul>
+        </div>
       </div>
 
       <div class="deliverable">
         <h4>Deliverable</h4>
-        <p>A file <code class="inline-code">locators-practice.spec.ts</code> with 10 locators, each with a comment explaining why you chose that locator type.</p>
+        <p><code class="inline-code">saucedemo.spec.ts</code> &mdash; a test suite with 5+ passing tests:</p>
+        <ul style="margin-left: 18px; font-size: 13px;">
+          <li>Test 1: Successful login &rarr; redirect to inventory</li>
+          <li>Test 2: Wrong credentials &rarr; error message displayed</li>
+          <li>Test 3: Add product &rarr; cart badge shows &ldquo;1&rdquo;</li>
+          <li>Test 4: Remove product &rarr; cart is empty</li>
+          <li>Test 5: Empty form &rarr; validation error</li>
+        </ul>
+        <p>All tests must pass. No <code class="inline-code">waitForTimeout</code>. Every assertion must have a failure message.</p>
+        <p>Verify: <code class="inline-code">npx playwright test tests/saucedemo.spec.ts --repeat-each=3</code></p>
+      </div>
+
+      <div class="topic-block exercises">
+        <span class="topic-tag tag-practice">Bonus</span>
+        <h4>Bonus challenges (for advanced learners)</h4>
+        <ol class="checklist">
+          <li><input type="checkbox" id="w3-b1" data-week="3"><label for="w3-b1"><strong>Multiple products.</strong> Add 3 products to the cart, verify the badge shows &ldquo;3&rdquo;, then remove one and verify it shows &ldquo;2&rdquo;.</label></li>
+          <li><input type="checkbox" id="w3-b2" data-week="3"><label for="w3-b2"><strong>Sorting.</strong> Change the product sort order (e.g., &ldquo;Price (low to high)&rdquo;). Verify the first product name changes.</label></li>
+          <li><input type="checkbox" id="w3-b3" data-week="3"><label for="w3-b3"><strong>State after refresh.</strong> Add a product, refresh the page. Does the cart keep the item? Write a test that checks this.</label></li>
+        </ol>
       </div>
 
       <div class="ready-box">
         <h4>Ready to Move On When</h4>
         <ul class="checklist">
-          <li><input type="checkbox" id="w3-r1" data-week="3"><label for="w3-r1">I can write reliable locators using <code class="inline-code">getByRole</code>, <code class="inline-code">getByTestId</code>, and <code class="inline-code">getByText</code></label></li>
-          <li><input type="checkbox" id="w3-r2" data-week="3"><label for="w3-r2">I can use codegen to discover locators and improve them</label></li>
-          <li><input type="checkbox" id="w3-r3" data-week="3"><label for="w3-r3">I can chain and filter locators to find the exact element</label></li>
-          <li><input type="checkbox" id="w3-r4" data-week="3"><label for="w3-r4">I can find an element using at least 3 different locator types</label></li>
+          <li><input type="checkbox" id="w3-r1" data-week="3"><label for="w3-r1">I can write a login test (happy path + negative) from scratch</label></li>
+          <li><input type="checkbox" id="w3-r2" data-week="3"><label for="w3-r2">I can test cart behavior (add, remove, verify badge)</label></li>
+          <li><input type="checkbox" id="w3-r3" data-week="3"><label for="w3-r3">I use stable locators and zero hard waits in all my tests</label></li>
+          <li><input type="checkbox" id="w3-r4" data-week="3"><label for="w3-r4">All my tests pass reliably when run 3 times in a row</label></li>
+          <li><input type="checkbox" id="w3-r5" data-week="3"><label for="w3-r5">I understand why a test fails and can explain the cause</label></li>
         </ul>
       </div>
 
@@ -2892,7 +3096,7 @@ page.locator(".btn.btn-primary.submit-form")                   // ???</pre></div
       <div class="week-divider wd4" id="week-4">
         <div class="week-badge"><span>4</span></div>
         <div class="week-info">
-          <h2 style="border:none;">Writing &amp; Debugging Tests</h2>
+          <h2 style="border:none;">Debugging &amp; Test Structure</h2>
           <div class="week-goal">Estimated time: 6-7 hours</div>
         </div>
         <div class="week-progress" data-week="4"><span class="pct-val">0%</span>done</div>
@@ -2901,95 +3105,20 @@ page.locator(".btn.btn-primary.submit-form")                   // ???</pre></div
       <p class="section-label">LEARNING OBJECTIVES</p>
       <div class="topic-block">
         <ul>
-          <li>Interact with a page: fill fields, click buttons, select options</li>
-          <li>Write assertions that check what the page shows after an action</li>
-          <li>Write a test that covers a complete user flow (happy path + negative cases)</li>
-          <li>Organize tests with <code class="inline-code">test.describe</code> and <code class="inline-code">beforeEach</code></li>
           <li>Read a Playwright error message and identify what went wrong</li>
-          <li>Use debugging tools to find and fix failures</li>
+          <li>Use debugging tools: UI mode, headed mode, trace viewer, <code class="inline-code">page.pause()</code></li>
+          <li>Organize tests with <code class="inline-code">test.describe</code>, <code class="inline-code">beforeEach</code>, and hooks</li>
+          <li>Fix broken tests by diagnosing the root cause (not by adding hard waits)</li>
+          <li>Write tests that are readable, maintainable, and well-structured</li>
         </ul>
       </div>
 
-      <p class="section-label">SETUP FOR THIS WEEK</p>
-
-      <div class="topic-block">
-        <span class="topic-tag tag-reference">Setup</span>
-        <h4>Add <code class="inline-code">baseURL</code> to your config</h4>
-        <p>Before writing your login test, configure <code class="inline-code">baseURL</code> in <code class="inline-code">playwright.config.ts</code>. This lets you use short relative URLs in tests.</p>
-        <div class="code-block">
-          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> playwright.config.ts <span class="lang">typescript</span></div>
-          <div class="code-body"><pre>export default defineConfig({
-  testDir: './tests',
-  use: {
-    baseURL: 'https://practicetestautomation.com',   // &lt;-- add this
-    trace: 'on-first-retry',
-  },
-  // ...
-});</pre></div>
-        </div>
-        <p>Now in tests you can write <code class="inline-code">page.goto('/practice-test-login/')</code> instead of the full URL.</p>
+      <div class="callout callout-info">
+        <span class="icon">&#128073;</span>
+        <div><strong>Prerequisite:</strong> You should have a working <code class="inline-code">saucedemo.spec.ts</code> from <a href="#week-3">Week 3</a>. This week you will use those tests as the base for debugging and restructuring exercises.</div>
       </div>
 
-      <p class="section-label">TOPICS &mdash; WRITING TESTS</p>
-
-      <div class="topic-block">
-        <span class="topic-tag tag-reference">Reference</span>
-        <h4>Browser actions cheat sheet</h4>
-        <div class="code-block">
-          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">typescript</span></div>
-          <div class="code-body"><pre>// Navigation
-await page.goto("https://example.com");
-await page.goto("/login");           // uses baseURL from config
-await page.goBack();
-await page.reload();
-
-// Clicking
-await page.getByRole("button", { name: "Save" }).click();
-await page.getByText("Learn more").click();
-
-// Typing
-await page.getByPlaceholder("Email").fill("test@example.com");
-await page.getByRole("textbox").clear();
-
-// Dropdowns
-await page.getByLabel("Country").selectOption("US");
-
-// Checkboxes
-await page.getByLabel("I agree to terms").check();
-
-// Keyboard
-await page.keyboard.press("Enter");
-
-// Waiting (only when auto-wait is not enough)
-await page.waitForURL("**/dashboard");
-await page.locator(".spinner").waitFor({ state: "hidden" });</pre></div>
-        </div>
-      </div>
-
-      <div class="callout callout-error">
-        <span class="icon">🚫</span>
-        <div><strong>Never use <code class="inline-code">page.waitForTimeout(3000)</code>.</strong> It pauses the test for a fixed time regardless of what the page is doing. This is the #1 cause of flaky tests. Playwright's assertions (<code class="inline-code">expect(...).toBeVisible()</code>) already wait automatically &mdash; use them instead. 📖 See <a href="https://playwright.dev/docs/actionability" target="_blank">playwright.dev/docs/actionability</a> for how auto-waiting works.</div>
-      </div>
-
-      <div class="topic-block">
-        <span class="topic-tag tag-reference">Reference</span>
-        <h4>Assertions cheat sheet</h4>
-        <div class="code-block">
-          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">typescript</span></div>
-          <div class="code-body"><pre>await expect(page.getByText("Welcome")).toBeVisible();
-await expect(page.getByText("Error")).not.toBeVisible();
-await expect(page.getByTestId("username")).toHaveText("John Doe");
-await expect(page.getByTestId("message")).toContainText("success");
-await expect(page).toHaveURL(/.*dashboard/);
-await expect(page).toHaveTitle("Dashboard - MyApp");
-await expect(page.getByLabel("Email")).toHaveValue("test@example.com");
-await expect(page.getByRole("listitem")).toHaveCount(5);
-await expect(page.getByRole("button", { name: "Submit" })).toBeEnabled();
-await expect(page.getByRole("button", { name: "Submit" })).toBeDisabled();</pre></div>
-        </div>
-        <p><strong>Tip:</strong> Add a failure message to assertions: <code class="inline-code">expect(locator, 'Error should be visible after wrong password').toBeVisible()</code></p>
-        <p style="font-size: 13px; color: var(--text-subtle); margin-top: 8px;">📖 Official docs: <a href="https://playwright.dev/docs/test-assertions" target="_blank">playwright.dev/docs/test-assertions</a> &mdash; full list of <code class="inline-code">expect()</code> matchers with examples.</p>
-      </div>
+      <p class="section-label">TOPICS &mdash; TEST STRUCTURE</p>
 
       <div class="topic-block">
         <span class="topic-tag tag-reference">Reference</span>
@@ -3003,11 +3132,6 @@ await expect(page.getByRole("button", { name: "Submit" })).toBeDisabled();</pre>
           <tr><td><code class="inline-code">test.only("name")</code></td><td>Run ONLY this test (for debugging &mdash; remove before committing!)</td></tr>
         </table>
         <p style="font-size: 13px; color: var(--text-subtle); margin-top: 8px;">📖 Official docs: <a href="https://playwright.dev/docs/writing-tests" target="_blank">playwright.dev/docs/writing-tests</a> &mdash; writing tests guide with annotations, fixtures, and hooks.</p>
-      </div>
-
-      <div class="callout callout-info">
-        <span class="icon">👀</span>
-        <div><strong>Looking ahead:</strong> In this week's exercises you will hardcode locators directly in tests (e.g. <code class="inline-code">page.getByPlaceholder("Email")</code> repeated in each test). <a href="#week-6">Week 6</a> introduces the <strong>Page Object Model</strong>, which moves these into a reusable class. For now, keep it simple &mdash; you will refactor later.</div>
       </div>
 
       <p class="section-label">TOPICS &mdash; DEBUGGING</p>
@@ -3086,6 +3210,20 @@ npx playwright show-trace test-results/.../trace.zip</pre></div>
 
       <div class="topic-block">
         <span class="topic-tag tag-reference">Reference</span>
+        <h4>Debugging in VS Code</h4>
+        <p>The Playwright VS Code extension is the most comfortable way to debug tests day-to-day:</p>
+        <ul>
+          <li><strong>Breakpoints</strong> &mdash; click the gutter next to any line; the test pauses there with full browser state</li>
+          <li><strong>Step-through</strong> &mdash; step over / into each action and watch the browser react in real time</li>
+          <li><strong>Error messages in editor</strong> &mdash; failed assertions are underlined with the exact diff inline</li>
+          <li><strong>Live locator highlighting</strong> &mdash; hover over a locator in code and the matching element lights up in the browser</li>
+        </ul>
+        <p>To start: open the <strong>Testing</strong> sidebar &rarr; click the <strong>Debug</strong> icon (&#9654;&#65039; with a bug) next to any test.</p>
+        <p style="font-size: 13px; color: var(--text-subtle); margin-top: 8px;">&#128214; Official guide: <a href="https://playwright.dev/docs/next/debug" target="_blank">playwright.dev/docs/next/debug</a> &mdash; full debugging walkthrough including VS Code integration, breakpoints, and pick-locator features.</p>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-reference">Reference</span>
         <h4>Debugging process &mdash; use this every time</h4>
         <ol style="margin-left: 18px;">
           <li><strong>Read the error message fully.</strong> What did it expect? What did it get?</li>
@@ -3113,69 +3251,117 @@ npx playwright show-trace test-results/.../trace.zip</pre></div>
 
       <div class="topic-block exercises">
         <span class="topic-tag tag-practice">Hands-on</span>
-        <h4>Writing tests</h4>
+        <h4>Test structure</h4>
         <ol class="checklist">
-          <li><input type="checkbox" id="w4-e1" data-week="4"><label for="w4-e1"><strong>Write a login test (happy path).</strong> Use <a href="https://practicetestautomation.com/practice-test-login/" target="_blank">the practice site</a>. Credentials: username <code class="inline-code">student</code>, password <code class="inline-code">Password123</code>.
-            <div class="code-block">
-              <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> tests/login.spec.ts <span class="lang">typescript</span></div>
-              <div class="code-body"><pre>import { test, expect } from "@playwright/test";
-
-test.describe("Login functionality", () =&gt; {
-
-  test.beforeEach(async ({ page }) =&gt; {
-    await page.goto("/practice-test-login/");   // uses baseURL
-  });
-
-  test("successful login with valid credentials", async ({ page }) =&gt; {
-    await page.getByLabel("Username").fill("student");
-    await page.getByLabel("Password").fill("Password123");
-    await page.getByRole("button", { name: "Submit" }).click();
-
-    await expect(page).toHaveURL(/.*logged-in-successfully/);
-    await expect(page.getByRole("heading", { name: /Logged In Successfully/ })).toBeVisible();
-  });
-});</pre></div>
-            </div>
-          </label></li>
-          <li><input type="checkbox" id="w4-e2" data-week="4"><label for="w4-e2"><strong>Add a negative test.</strong> Submit with a wrong password (<code class="inline-code">student</code> / <code class="inline-code">wrongPass</code>). Assert the error message is visible and contains "Your password is invalid!".</label></li>
-          <li><input type="checkbox" id="w4-e3" data-week="4"><label for="w4-e3"><strong>Add an empty-form test.</strong> Submit without filling anything. Assert the validation message appears.</label></li>
-          <li><input type="checkbox" id="w4-e4" data-week="4"><label for="w4-e4"><strong>Add failure messages.</strong> Go back to all your assertions and add meaningful messages, e.g. <code class="inline-code">expect(element, 'Error should appear after wrong password').toBeVisible()</code></label></li>
-          <li><input type="checkbox" id="w4-e5" data-week="4"><label for="w4-e5"><strong>Run in UI mode.</strong> Run <code class="inline-code">npx playwright test --ui</code> and play with the time-travel view. Click through the steps of one of your tests.</label></li>
+          <li><input type="checkbox" id="w4-e1" data-week="4"><label for="w4-e1"><strong>Organize your SauceDemo tests.</strong> Open your <code class="inline-code">saucedemo.spec.ts</code> from <a href="#week-3">Week 3</a>. Wrap all tests in <code class="inline-code">test.describe("SauceDemo")</code>. Extract the login steps into <code class="inline-code">test.beforeEach</code> so they run automatically before each test that requires an authenticated user.</label></li>
+          <li><input type="checkbox" id="w4-e2" data-week="4"><label for="w4-e2"><strong>Add failure messages to every assertion.</strong> Go through each <code class="inline-code">expect()</code> call and add a human-readable message: <code class="inline-code">expect(locator, 'Cart badge should show 1 item').toHaveText('1')</code></label></li>
+          <li><input type="checkbox" id="w4-e3" data-week="4"><label for="w4-e3"><strong>Run in UI mode.</strong> Run <code class="inline-code">npx playwright test --ui</code> and play with the time-travel view. Click through the steps of one of your tests. Notice how each action is recorded with a screenshot.</label></li>
         </ol>
       </div>
 
       <div class="topic-block exercises">
         <span class="topic-tag tag-practice">Hands-on</span>
-        <h4>Debugging exercises</h4>
-        <p>Your coach will provide 2 broken test files. For each one: read the full error, use a debugging tool, identify the failed step, and fix it.</p>
+        <h4>Broken tests to fix</h4>
+        <p>Below are 3 intentionally broken tests. Each one has <strong>exactly one bug</strong>. Your job: run the test, read the error, diagnose it, fix it, and fill in the report below the code.</p>
+        <p>Save all 3 tests in <code class="inline-code">tests/broken-tests.spec.ts</code> and run:</p>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">bash</span></div>
+          <div class="code-body"><pre>npx playwright test tests/broken-tests.spec.ts --project=chromium</pre></div>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> Broken test #1 &mdash; wrong locator <span class="lang">typescript</span></div>
+          <div class="code-body"><pre>import { test, expect } from "@playwright/test";
+
+test("login should redirect to inventory", async ({ page }) =&gt; {
+  await page.goto("https://www.saucedemo.com");
+  await page.getByPlaceholder("User Name").fill("standard_user");   // ← is this the real placeholder?
+  await page.getByPlaceholder("Password").fill("secret_sauce");
+  await page.getByRole("button", { name: "Login" }).click();
+
+  await expect(page).toHaveURL(/inventory/);
+});</pre></div>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> Broken test #2 &mdash; wrong expected text <span class="lang">typescript</span></div>
+          <div class="code-body"><pre>import { test, expect } from "@playwright/test";
+
+test("error message on wrong password", async ({ page }) =&gt; {
+  await page.goto("https://www.saucedemo.com");
+  await page.getByPlaceholder("Username").fill("standard_user");
+  await page.getByPlaceholder("Password").fill("wrong_password");
+  await page.getByRole("button", { name: "Login" }).click();
+
+  await expect(page.getByTestId("error")).toHaveText(
+    "Username and password do not match"   // ← is this the exact text?
+  );
+});</pre></div>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> Broken test #3 &mdash; missing await <span class="lang">typescript</span></div>
+          <div class="code-body"><pre>import { test, expect } from "@playwright/test";
+
+test("cart badge appears after adding product", async ({ page }) =&gt; {
+  await page.goto("https://www.saucedemo.com");
+  await page.getByPlaceholder("Username").fill("standard_user");
+  await page.getByPlaceholder("Password").fill("secret_sauce");
+  await page.getByRole("button", { name: "Login" }).click();
+
+  page.locator("[data-test=\"add-to-cart-sauce-labs-backpack\"]").click();   // ← something missing here
+
+  await expect(page.locator(".shopping_cart_badge")).toHaveText("1");
+});</pre></div>
+        </div>
+
+        <div class="callout callout-warning">
+          <span class="icon">&#128221;</span>
+          <div><strong>After fixing each test, fill in this report:</strong>
+            <div class="code-block" style="margin-top: 8px;">
+              <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> Fix report template <span class="lang">text</span></div>
+              <div class="code-body"><pre>Root cause:   [what exactly was wrong]
+Fix:          [what you changed]
+How I verified: [command you ran + what you saw]</pre></div>
+            </div>
+            <p style="font-size: 13px; margin-top: 8px;">Example: <em>Root cause: placeholder text was "User Name" but the actual placeholder is "Username". Fix: changed to getByPlaceholder("Username"). How I verified: ran npx playwright test --headed and confirmed the test passes.</em></p>
+          </div>
+        </div>
+
         <ol class="checklist">
-          <li><input type="checkbox" id="w4-d1" data-week="4"><label for="w4-d1"><strong>Broken locator.</strong> A locator that no longer matches the element. Find the correct one using <code class="inline-code">--ui</code> or <code class="inline-code">--debug</code>.</label></li>
-          <li><input type="checkbox" id="w4-d2" data-week="4"><label for="w4-d2"><strong>Wrong assertion value.</strong> The test checks for text that is slightly different from what the page shows. Use the trace to find the mismatch.</label></li>
+          <li><input type="checkbox" id="w4-d1" data-week="4"><label for="w4-d1"><strong>Fix broken test #1.</strong> Run it, read the error, find the wrong locator, fix it, fill in the report.</label></li>
+          <li><input type="checkbox" id="w4-d2" data-week="4"><label for="w4-d2"><strong>Fix broken test #2.</strong> Run it, compare expected vs actual text, fix the assertion, fill in the report.</label></li>
+          <li><input type="checkbox" id="w4-d3" data-week="4"><label for="w4-d3"><strong>Fix broken test #3.</strong> Run it, find the missing <code class="inline-code">await</code>, fix it, fill in the report.</label></li>
+        </ol>
+      </div>
+
+      <div class="topic-block exercises">
+        <span class="topic-tag tag-practice">Hands-on</span>
+        <h4>Trace analysis</h4>
+        <ol class="checklist">
+          <li><input type="checkbox" id="w4-d4" data-week="4"><label for="w4-d4"><strong>Trace walkthrough.</strong> Run your SauceDemo tests with <code class="inline-code">--trace on</code>. Open the trace viewer (<code class="inline-code">npx playwright show-trace</code>) and walk through the timeline. Find the exact moment a test interacts with the page and the resulting DOM change.</label></li>
         </ol>
       </div>
 
       <div class="deliverable">
         <h4>Deliverable</h4>
-        <p><code class="inline-code">login.spec.ts</code> &mdash; 3 login test cases + 2 fixed test files:</p>
+        <p>Refactored <code class="inline-code">saucedemo.spec.ts</code> + 3 fixed broken tests with reports:</p>
         <ul style="margin-left: 18px; font-size: 13px;">
-          <li>Test 1: Correct credentials &rarr; user is logged in</li>
-          <li>Test 2: Wrong password &rarr; error message is shown</li>
-          <li>Test 3: Empty form &rarr; validation message appears</li>
-          <li>2 broken tests identified and fixed</li>
+          <li>Tests organized with <code class="inline-code">test.describe</code> and <code class="inline-code">beforeEach</code></li>
+          <li>Every assertion has a failure message</li>
+          <li>3 broken tests fixed, each with a filled-in report: <strong>Root cause / Fix / How I verified</strong></li>
         </ul>
-        <p>All tests must pass. Each assertion must have a failure message.</p>
-        <p>Verify: <code class="inline-code">npx playwright test --project=chromium</code></p>
+        <p>All tests must pass. Verify: <code class="inline-code">npx playwright test --project=chromium</code></p>
       </div>
 
       <div class="ready-box">
         <h4>Ready to Move On When</h4>
         <ul class="checklist">
-          <li><input type="checkbox" id="w4-r1" data-week="4"><label for="w4-r1">I can fill a form and assert the result without looking at the docs</label></li>
-          <li><input type="checkbox" id="w4-r2" data-week="4"><label for="w4-r2">I know the difference between <code class="inline-code">toHaveText()</code> and <code class="inline-code">toContainText()</code></label></li>
-          <li><input type="checkbox" id="w4-r3" data-week="4"><label for="w4-r3">All my tests pass reliably</label></li>
-          <li><input type="checkbox" id="w4-r4" data-week="4"><label for="w4-r4">I can read an error message and identify what went wrong</label></li>
-          <li><input type="checkbox" id="w4-r5" data-week="4"><label for="w4-r5">I have used at least two debugging tools (UI mode, <code class="inline-code">--headed</code>, <code class="inline-code">--debug</code>, or trace)</label></li>
-          <li><input type="checkbox" id="w4-r6" data-week="4"><label for="w4-r6">I understand why <code class="inline-code">page.waitForTimeout()</code> should be avoided</label></li>
+          <li><input type="checkbox" id="w4-r1" data-week="4"><label for="w4-r1">I can read an error message and identify what went wrong</label></li>
+          <li><input type="checkbox" id="w4-r2" data-week="4"><label for="w4-r2">I have used at least two debugging tools (UI mode, <code class="inline-code">--headed</code>, <code class="inline-code">--debug</code>, or trace)</label></li>
+          <li><input type="checkbox" id="w4-r3" data-week="4"><label for="w4-r3">My tests use <code class="inline-code">test.describe</code> and <code class="inline-code">beforeEach</code> for shared setup</label></li>
+          <li><input type="checkbox" id="w4-r4" data-week="4"><label for="w4-r4">I know the difference between <code class="inline-code">toHaveText()</code> and <code class="inline-code">toContainText()</code></label></li>
+          <li><input type="checkbox" id="w4-r5" data-week="4"><label for="w4-r5">All my tests pass reliably</label></li>
         </ul>
       </div>
 
@@ -3661,6 +3847,22 @@ npx playwright show-report               # open last HTML report
       <div class="changelog">
         <article class="changelog-entry">
           <header class="changelog-head">
+            <span class="changelog-version">v5.19</span>
+            <span class="changelog-date">Apr 26, 2026</span>
+          </header>
+          <ul>
+            <li><strong>Complete rewrite of <a href="#week-3">Week 3</a> (Real UI Testing with Playwright).</strong> Replaced locator-only exercises with 7 practical tasks on <a href="https://www.saucedemo.com" target="_blank">SauceDemo</a>: login happy/negative, cart add/remove, empty form validation, stability challenge, and QA bug-hunt. Added theory on dynamic UI, element states, auto-waiting boundaries, and flaky tests. Included actions &amp; assertions cheat sheets with SauceDemo-specific examples. Time estimate raised to 7-8 hours.</li>
+            <li><strong><a href="#week-4">Week 4</a> refocused on Debugging &amp; Test Structure.</strong> Removed duplicate content (cheat sheets, baseURL setup) now covered in Week 3. Added test organization exercise (<code class="inline-code">describe</code>/<code class="inline-code">beforeEach</code> refactoring) and trace analysis task. Exercises now build on Week 3&rsquo;s SauceDemo test suite.</li>
+            <li>Bonus section added to Week 3: multiple products, sorting validation, and state-after-refresh challenges.</li>
+            <li>Updated all cross-references so Weeks 1&ndash;2 correctly point to Week 3 as the first real test-writing week.</li>
+          </ul>
+        </article>
+
+        <details class="changelog-older">
+          <summary>Show older updates (3)</summary>
+
+          <article class="changelog-entry">
+          <header class="changelog-head">
             <span class="changelog-version">v5.18</span>
             <span class="changelog-date">Apr 23, 2026</span>
           </header>
@@ -3672,9 +3874,6 @@ npx playwright show-report               # open last HTML report
             <li>Added links to <strong>TypeScript Handbook</strong> and <strong>Pluralsight</strong> (Solvd corporate access) for deeper learning.</li>
           </ul>
         </article>
-
-        <details class="changelog-older">
-          <summary>Show older updates (2)</summary>
 
           <article class="changelog-entry">
             <header class="changelog-head">
@@ -3721,7 +3920,7 @@ npx playwright show-report               # open last HTML report
     </div>
 
     <div class="page-footer">
-      <span>Playwright for Manual QA Engineers &bull; 6-Week Learning Path v5.18 &middot; <a href="#recent-updates" style="color: inherit;">updated Apr 23, 2026</a></span>
+      <span>Playwright for Manual QA Engineers &bull; 6-Week Learning Path v5.19 &middot; <a href="#recent-updates" style="color: inherit;">updated Apr 26, 2026</a></span>
       <span>April 2026</span>
     </div>
 
@@ -3745,8 +3944,8 @@ npx playwright show-report               # open last HTML report
       <li><a href="#vscode">VS Code Guide<span class="pct" data-week-pct="vs"></span></a></li>
       <li><a href="#week-1">Week 1 — First Test<span class="pct" data-week-pct="1"></span></a></li>
       <li><a href="#week-2">Week 2 — TypeScript<span class="pct" data-week-pct="2"></span></a></li>
-      <li><a href="#week-3">Week 3 — Locators<span class="pct" data-week-pct="3"></span></a></li>
-      <li><a href="#week-4">Week 4 — Writing &amp; Debug<span class="pct" data-week-pct="4"></span></a></li>
+      <li><a href="#week-3">Week 3 — Real UI Testing<span class="pct" data-week-pct="3"></span></a></li>
+      <li><a href="#week-4">Week 4 — Debug &amp; Structure<span class="pct" data-week-pct="4"></span></a></li>
       <li><a href="#week-5">Week 5 — Git &amp; Setup<span class="pct" data-week-pct="5"></span></a></li>
       <li><a href="#week-6">Week 6 — Final Project<span class="pct" data-week-pct="6"></span></a></li>
     </ul>
