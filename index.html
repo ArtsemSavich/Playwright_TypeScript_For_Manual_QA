@@ -1040,7 +1040,7 @@
     <svg viewBox="0 0 32 32" fill="none"><path d="M6.5 16c0-.3.2-.7.5-1l8.6-8.6c.6-.6 1.5-.6 2.1 0l.7.7c.6.6.6 1.5 0 2.1L12.1 16l6.3 6.3c.6.6.6 1.5 0 2.1l-.7.7c-.6.6-1.5.6-2.1 0L7 16.5c-.3-.3-.5-.6-.5-1z" fill="rgba(255,255,255,0.5)"/><path d="M15 16c0-.3.2-.7.5-1l8.6-8.6c.6-.6 1.5-.6 2.1 0l.7.7c.6.6.6 1.5 0 2.1L20.6 16l6.3 6.3c.6.6.6 1.5 0 2.1l-.7.7c-.6.6-1.5.6-2.1 0l-8.6-8.6c-.3-.3-.5-.6-.5-1z" fill="white"/></svg>
     QA Engineering &middot; Learning Path
   </div>
-  <span class="version-badge" id="current-version" title="Current document version">v5.21</span>
+  <span class="version-badge" id="current-version" title="Current document version">v5.22</span>
   <button class="mobile-toc-toggle" onclick="document.getElementById('toc').classList.toggle('open')">☰ Navigation</button>
 </nav>
 
@@ -1299,6 +1299,11 @@ git config --global core.editor "nano"    # or "notepad" on Windows
 git config --global --list</pre></div>
       </div>
       <p style="font-size: 13px; color: var(--text-subtle);">Later, after VS Code is installed and the <code class="inline-code">code .</code> command works from the terminal, you can switch the editor to VS Code &mdash; see the VS Code "After installation" section below.</p>
+
+      <div class="callout callout-info">
+        <span class="icon">💡</span>
+        <div><strong>Already have Git configured for another account?</strong> If your global Git config already points to a personal GitHub account (or another company), don&rsquo;t change it. In <a href="#week-5">Week 5</a>, when you run <code class="inline-code">git init</code>, you will set a <strong>local override</strong> for this project only &mdash; so your learning repo uses your Solvd identity while everything else stays the same.</div>
+      </div>
 
       <h3>Installing GitHub CLI (<code class="inline-code">gh</code>)</h3>
       <p>The GitHub CLI is a small tool that handles authentication for you. After one command (<code class="inline-code">gh auth login</code>), every <code class="inline-code">git push</code> and <code class="inline-code">git pull</code> just works &mdash; no tokens, no SSH keys, no passwords.</p>
@@ -3700,6 +3705,37 @@ gh repo create my-playwright-learning --public --source=. --remote=origin --push
 
       <div class="topic-block">
         <span class="topic-tag tag-git">Git</span>
+        <h4>Local Git identity &mdash; override for this project only</h4>
+        <p>If your global Git config points to a different GitHub account (personal, another company, etc.), you do not need to change it. You can set a different identity <strong>for this repo only</strong> using local config. Local settings live inside <code class="inline-code">.git/config</code> in the project folder and do not affect your other repos.</p>
+        <p>After running <code class="inline-code">git init</code> (Step 1 above), run these commands inside your project folder:</p>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> Run inside your project folder <span class="lang">bash</span></div>
+          <div class="code-body"><pre># Override identity for THIS repo only (no --global flag!)
+git config user.name "Your Name"
+git config user.email "you@solvd.com"
+
+# Verify &mdash; should show your Solvd email
+git config user.email</pre></div>
+        </div>
+        <p>Without the <code class="inline-code">--global</code> flag, Git saves these settings only for the current project. Your other repos keep using your global identity.</p>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> How to check what Git is using <span class="lang">bash</span></div>
+          <div class="code-body"><pre># Show ALL config with source (global + local merged)
+git config --list --show-origin
+
+# Show only what THIS repo uses
+git config user.email
+git config user.name</pre></div>
+        </div>
+        <p>If the output shows your Solvd email &mdash; you are good. If it shows your personal email &mdash; run the local override commands above.</p>
+        <div class="callout callout-warning">
+          <span class="icon">&#9888;&#65039;</span>
+          <div><strong>GitHub CLI and multiple accounts.</strong> If your <code class="inline-code">gh auth login</code> is connected to a <em>different</em> GitHub account than the one you want to push to, you have two options:<br><br><strong>Option A (recommended):</strong> Add your <code class="inline-code">@solvd.com</code> email to your existing GitHub account (Settings &rarr; Emails &rarr; Add email). This way one GitHub account handles both identities &mdash; just override the local Git email per repo as shown above.<br><br><strong>Option B:</strong> Log out and log in with the other account: <code class="inline-code">gh auth logout</code> then <code class="inline-code">gh auth login</code>. Note: this switches the account globally &mdash; you will need to switch back for your other repos.</div>
+        </div>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-git">Git</span>
         <h4>Branches &mdash; work without breaking things</h4>
         <p>A <strong>branch</strong> is a copy of your project where you can make changes safely. When you are happy, you merge it back into <code class="inline-code">main</code>.</p>
         <div class="code-block">
@@ -4097,6 +4133,16 @@ npx playwright show-report               # open last HTML report
       <div class="changelog">
         <article class="changelog-entry">
           <header class="changelog-head">
+            <span class="changelog-version">v5.22</span>
+            <span class="changelog-date">Apr 27, 2026</span>
+          </header>
+          <ul>
+            <li><strong>Added local Git identity override guide.</strong> Week 0 now has a callout for users who already have Git configured with another account &mdash; points them to Week 5 for the full solution. Week 5 has a new &ldquo;Local Git identity&rdquo; topic block with <code class="inline-code">git config</code> (without <code class="inline-code">--global</code>) commands, verification steps, and guidance for handling multiple GitHub accounts with the <code class="inline-code">gh</code> CLI (Option A: add Solvd email to existing account; Option B: switch accounts).</li>
+          </ul>
+        </article>
+
+        <article class="changelog-entry">
+          <header class="changelog-head">
             <span class="changelog-version">v5.21</span>
             <span class="changelog-date">Apr 26, 2026</span>
           </header>
@@ -4124,7 +4170,7 @@ npx playwright show-report               # open last HTML report
         </article>
 
         <details class="changelog-older">
-          <summary>Show older updates (4)</summary>
+          <summary>Show older updates (5)</summary>
 
           <article class="changelog-entry">
           <header class="changelog-head">
@@ -4198,7 +4244,7 @@ npx playwright show-report               # open last HTML report
     </div>
 
     <div class="page-footer">
-      <span>Playwright for Manual QA Engineers &bull; 6-Week Learning Path v5.21 &middot; <a href="#recent-updates" style="color: inherit;">updated Apr 26, 2026</a></span>
+      <span>Playwright for Manual QA Engineers &bull; 6-Week Learning Path v5.22 &middot; <a href="#recent-updates" style="color: inherit;">updated Apr 27, 2026</a></span>
       <span>April 2026</span>
     </div>
 
