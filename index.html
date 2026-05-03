@@ -1040,7 +1040,7 @@
     <svg viewBox="0 0 32 32" fill="none"><path d="M6.5 16c0-.3.2-.7.5-1l8.6-8.6c.6-.6 1.5-.6 2.1 0l.7.7c.6.6.6 1.5 0 2.1L12.1 16l6.3 6.3c.6.6.6 1.5 0 2.1l-.7.7c-.6.6-1.5.6-2.1 0L7 16.5c-.3-.3-.5-.6-.5-1z" fill="rgba(255,255,255,0.5)"/><path d="M15 16c0-.3.2-.7.5-1l8.6-8.6c.6-.6 1.5-.6 2.1 0l.7.7c.6.6.6 1.5 0 2.1L20.6 16l6.3 6.3c.6.6.6 1.5 0 2.1l-.7.7c-.6.6-1.5.6-2.1 0l-8.6-8.6c-.3-.3-.5-.6-.5-1z" fill="white"/></svg>
     QA Engineering &middot; Learning Path
   </div>
-  <span class="version-badge" id="current-version" title="Current document version">v5.26</span>
+  <span class="version-badge" id="current-version" title="Current document version">v5.27</span>
   <button class="mobile-toc-toggle" onclick="document.getElementById('toc').classList.toggle('open')">☰ Navigation</button>
 </nav>
 
@@ -4263,7 +4263,7 @@ git stash pop
 
       <div class="callout callout-warning">
         <span class="icon">📅</span>
-        <div><strong>Final Pull Request deadline: Friday, June 12.</strong> Week 6 runs June 1&ndash;7, and we add a buffer week (June 8&ndash;12) for students who need extra time. After June 12, code review from the coach is not guaranteed.</div>
+        <div><strong>Current cohort: Final Pull Request deadline is Friday, June 12.</strong> Week 6 runs June 1&ndash;7, with a buffer week (June 8&ndash;12) for extra time. After the deadline, code review from the coach is not guaranteed. <em>Future cohorts: use the deadline announced by your coach.</em></div>
       </div>
 
       <!-- ── READINESS CHECK ── -->
@@ -4272,18 +4272,31 @@ git stash pop
 
       <div class="topic-block">
         <span class="topic-tag tag-project">Readiness check</span>
-        <h4>Verify your setup from <a href="#week-5">Week 5</a></h4>
+        <h4>Before writing code</h4>
+        <p>First, make sure your <a href="#week-5">Week 5</a> practice PR is either merged or closed &mdash; it should not be left open. Your final project starts from the latest <code class="inline-code">main</code>.</p>
         <div class="code-block">
           <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">bash</span></div>
-          <div class="code-body"><pre>git branch              # should show * final-project
+          <div class="code-body"><pre># Start from latest main
+git checkout main
+git pull origin main
+
+# Create your final project branch (skip if already created in Week 5)
+git checkout -b final-project
+git push -u origin final-project
+
+# Verify
+git branch              # should show * final-project
 git status              # should say "nothing to commit, working tree clean"
-git pull                # sync with remote
 npx playwright test --project=chromium   # existing tests should pass</pre></div>
         </div>
+        <div class="callout callout-warning">
+          <span class="icon">💡</span>
+          <div>If <code class="inline-code">git pull</code> fails because your branch has no upstream, run: <code class="inline-code">git push -u origin final-project</code></div>
+        </div>
         <ul class="checklist">
-          <li><input type="checkbox" id="w6-r0a" data-week="6"><label for="w6-r0a">I am on the <code class="inline-code">final-project</code> branch</label></li>
-          <li><input type="checkbox" id="w6-r0b" data-week="6"><label for="w6-r0b">Working tree is clean, existing tests pass</label></li>
-          <li><input type="checkbox" id="w6-r0c" data-week="6"><label for="w6-r0c">I have chosen a track and listed my test cases (from <a href="#week-5">Week 5</a>)</label></li>
+          <li><input type="checkbox" id="w6-r0a" data-week="6"><label for="w6-r0a">My Week 5 practice PR is merged or closed</label></li>
+          <li><input type="checkbox" id="w6-r0b" data-week="6"><label for="w6-r0b">I am on the <code class="inline-code">final-project</code> branch, working tree is clean</label></li>
+          <li><input type="checkbox" id="w6-r0c" data-week="6"><label for="w6-r0c">Existing tests pass, I have chosen a track and test cases (from <a href="#week-5">Week 5</a>)</label></li>
         </ul>
       </div>
 
@@ -4378,11 +4391,19 @@ test.describe("Login", () =&gt; {
         <table>
           <tr><th>&#10003; Good Page Object</th><th>&#10060; Bad Page Object</th></tr>
           <tr><td>Contains locators for one page</td><td>One huge class for the whole app</td></tr>
-          <tr><td>Has methods for user actions (<code class="inline-code">login()</code>, <code class="inline-code">addToCart()</code>)</td><td>Exposes raw locators without methods</td></tr>
+          <tr><td>Has methods for user actions (<code class="inline-code">login()</code>, <code class="inline-code">addToCart()</code>)</td><td>Test performs all actions through raw locators (no methods)</td></tr>
           <tr><td>Hides page details from the test</td><td>Contains test assertions (assertions belong in tests)</td></tr>
           <tr><td>Uses clear method names</td><td>Uses <code class="inline-code">waitForTimeout</code> or XPath</td></tr>
         </table>
-        <p><strong>Simple rule:</strong> actions go in Page Objects, assertions go in tests. One class per page of your app.</p>
+        <p><strong>Simple rule:</strong> user actions go in Page Objects, assertions go in tests. One class per page of your app.</p>
+        <div class="callout callout-info">
+          <span class="icon">💡</span>
+          <div>It is fine to expose locators like <code class="inline-code">errorMessage</code> or <code class="inline-code">cartBadge</code> as <code class="inline-code">readonly</code> properties &mdash; tests need them for assertions. But user <em>actions</em> (click, fill, navigate) should be wrapped in methods like <code class="inline-code">login()</code>, <code class="inline-code">addProductToCart()</code>.</div>
+        </div>
+        <div class="callout callout-warning">
+          <span class="icon">⚠️</span>
+          <div><strong>Do not over-engineer.</strong> Do not create <code class="inline-code">BasePage</code>, custom wrappers, or complex abstractions. For this project, simple and readable Page Objects are better than a "framework". You are writing tests, not building an architecture.</div>
+        </div>
       </div>
 
       <div class="topic-block">
@@ -4410,6 +4431,7 @@ test.describe("Login", () =&gt; {
           <div class="code-body"><pre>test("user can complete checkout", async ({ page }) =&gt; {
   const loginPage = new LoginPage(page);
   const inventoryPage = new InventoryPage(page);
+  const cartPage = new CartPage(page);
   const checkoutPage = new CheckoutPage(page);
 
   await test.step("Login as standard user", async () =&gt; {
@@ -4422,8 +4444,12 @@ test.describe("Login", () =&gt; {
     await expect(inventoryPage.cartBadge).toHaveText("1");
   });
 
+  await test.step("Open cart and start checkout", async () =&gt; {
+    await inventoryPage.openCart();
+    await cartPage.checkout();
+  });
+
   await test.step("Complete checkout", async () =&gt; {
-    await checkoutPage.open();
     await checkoutPage.fillInfo("John", "Smith", "12345");
     await checkoutPage.finish();
     await expect(checkoutPage.successMessage).toBeVisible();
@@ -4473,6 +4499,11 @@ test.describe("Login", () =&gt; {
       <div class="callout callout-info">
         <span class="icon">📋</span>
         <div>Below are QA tickets for <strong>Track A (SauceDemo)</strong>. If you chose Track B or Track C in <a href="#week-5">Week 5</a>, use the required tests from your track as acceptance criteria and structure them the same way.</div>
+      </div>
+
+      <div class="callout callout-warning">
+        <span class="icon">⚠️</span>
+        <div><strong>Track B (Automation Exercise) warning:</strong> public practice sites may show ads, change UI, or behave inconsistently. If the site blocks a flow (e.g. registration or payment steps), document it in your README under "Known limitations" and adjust the test scope. Do not spend 80% of your time fighting the demo site.</div>
       </div>
 
       <div class="topic-block" style="border-left: 4px solid var(--green);">
@@ -4597,6 +4628,22 @@ npx playwright show-report
         </div>
       </div>
 
+      <!-- ── WHAT TO DO IF TESTS FAIL ── -->
+
+      <div class="topic-block">
+        <span class="topic-tag tag-reference">Reference</span>
+        <h4>What to do if tests fail before submitting</h4>
+        <p>This is the debugging flow from <a href="#week-4">Week 4</a> &mdash; use it every time:</p>
+        <ol>
+          <li><strong>Read the error message first.</strong> It usually tells you exactly what went wrong.</li>
+          <li><strong>Run the failed test only:</strong> <code class="inline-code">npx playwright test -g "test name" --project=chromium</code></li>
+          <li><strong>Run in headed mode:</strong> add <code class="inline-code">--headed</code> to see the browser.</li>
+          <li><strong>Open the trace:</strong> <code class="inline-code">npx playwright test --trace on</code>, then <code class="inline-code">npx playwright show-trace</code>.</li>
+          <li><strong>Fix the root cause</strong> &mdash; locator, assertion, or test data.</li>
+          <li><strong>Do not fix flakiness with <code class="inline-code">waitForTimeout</code>.</strong> Ever.</li>
+        </ol>
+      </div>
+
       <!-- ── PR REQUIREMENTS ── -->
 
       <p class="section-label">PULL REQUEST REQUIREMENTS</p>
@@ -4690,10 +4737,11 @@ npx playwright show-report
           <tr><td><strong>Tests</strong></td><td>5 passing tests</td><td>6&ndash;7 meaningful tests</td><td>Covers happy path, negative, state change, data validation</td></tr>
           <tr><td><strong>POM</strong></td><td>2 Page Object classes</td><td>3&ndash;4 focused classes</td><td>Clean methods, no duplicated locators, clear separation</td></tr>
           <tr><td><strong>Locators</strong></td><td>No XPath</td><td>Semantic locators mostly</td><td>Locators are stable, readable, and verified unique</td></tr>
-          <tr><td><strong>Assertions</strong></td><td>Basic assertions present</td><td>Web-first assertions (<code class="inline-code">toBeVisible</code>, <code class="inline-code">toHaveText</code>)</td><td>Assertions verify real business behavior with failure messages</td></tr>
-          <tr><td><strong>No hard waits</strong></td><td>No <code class="inline-code">waitForTimeout</code></td><td>Uses auto-waiting assertions</td><td>Understands why and can explain the alternative</td></tr>
+          <tr><td><strong>Assertions</strong></td><td>Basic assertions present</td><td>Web-first assertions used</td><td>Assertions verify real business behavior with failure messages</td></tr>
+          <tr><td><strong>No hard waits</strong></td><td>No <code class="inline-code">waitForTimeout</code></td><td>Uses auto-waiting assertions</td><td>Can explain why and what to use instead</td></tr>
           <tr><td><strong>Git / PR</strong></td><td>PR submitted</td><td>Clean commits + PR description</td><td>Self-review checklist completed, PR ready for team review</td></tr>
           <tr><td><strong>README</strong></td><td>Basic run instructions</td><td>Includes project structure</td><td>Includes test scope, covered scenarios, and known limitations</td></tr>
+          <tr><td><strong>Reproducibility</strong></td><td>Tests pass locally</td><td><code class="inline-code">npm install</code> + <code class="inline-code">npx playwright test</code> works</td><td>A reviewer can clone, install, and run with the same result</td></tr>
           <tr><td><strong>Debugging</strong></td><td>Can run tests</td><td>Can open HTML report</td><td>Can explain a failure using trace viewer or error message</td></tr>
         </table>
       </div>
@@ -4797,6 +4845,20 @@ npx playwright show-report
       <div class="changelog">
         <article class="changelog-entry">
           <header class="changelog-head">
+            <span class="changelog-version">v5.27</span>
+            <span class="changelog-date">May 3, 2026</span>
+          </header>
+          <ul>
+            <li><strong>Week 6 feedback fixes.</strong> Git flow corrected: readiness check now starts with "merge/close Week 5 PR, pull latest main, then create final-project branch" (prevents upstream errors for beginners). Added <code class="inline-code">push -u</code> troubleshooting tip.</li>
+            <li><strong>POM rules clarified:</strong> exposing locators like <code class="inline-code">errorMessage</code> for assertions is acceptable; user actions should be in methods. Added "do not over-engineer" callout (no BasePage, no custom wrappers).</li>
+            <li><strong><code class="inline-code">test.step</code> example</strong> rewritten as real business flow: login &rarr; inventory &rarr; openCart &rarr; checkout (was opening checkout by direct URL).</li>
+            <li>Added Track B stability warning, cohort-specific deadline, debugging flow mini-section (Week 4 recap), and "Reproducibility" row in assessment rubric.</li>
+            <li>Sidebar fixed: "Week 6 &mdash; Final Sprint" (was "Final Project").</li>
+          </ul>
+        </article>
+
+        <article class="changelog-entry">
+          <header class="changelog-head">
             <span class="changelog-version">v5.26</span>
             <span class="changelog-date">May 3, 2026</span>
           </header>
@@ -4822,6 +4884,9 @@ npx playwright show-report
           </ul>
         </article>
 
+        <details class="changelog-older">
+          <summary>Show older updates (4)</summary>
+
         <article class="changelog-entry">
           <header class="changelog-head">
             <span class="changelog-version">v5.24</span>
@@ -4836,9 +4901,6 @@ npx playwright show-report
             <li>Time estimate raised to 6-8 hours (from 5-6).</li>
           </ul>
         </article>
-
-        <details class="changelog-older">
-          <summary>Show older updates (4)</summary>
 
         <article class="changelog-entry">
           <header class="changelog-head">
@@ -4873,22 +4935,6 @@ npx playwright show-report
           </ul>
         </article>
 
-                  <article class="changelog-entry">
-                    <header class="changelog-head">
-                      <span class="changelog-version">v5.20</span>
-                      <span class="changelog-date">Apr 26, 2026</span>
-                    </header>
-                    <ul>
-                      <li><strong>DevTools shortcut corrected.</strong> Added <code class="inline-code">fn+F12</code> as an alternative for Mac users in the locator validation section.</li>
-                      <li><strong>Uniqueness check moved from Console to Elements tab.</strong> The <code class="inline-code">$$('selector')</code> Console approach is replaced with the DevTools <strong>Elements</strong> search bar (<kbd>⌘/Ctrl</kbd>+<kbd>F</kbd>) — supports both CSS selectors and XPath with clear "1 of N" result indicators.</li>
-                      <li><strong>New locator validation section added to Week 3</strong> — "How to validate a locator like a QA" covering: step-by-step process, single vs multiple elements, working with developers, XPath pros/cons, 6 practice tasks, and final rules.</li>
-                      <li><strong>XPath section rewritten</strong> with honest, project-realistic guidance: advantages, common pitfalls, good/bad XPath patterns, and a priority table showing when XPath is the right choice.</li>
-                      <li>Pick Locator behavior clarified: locator is generated on <strong>click</strong>, not on hover. Added clarification callout for beginners.</li>
-                      <li>IntelliSense section: added <code class="inline-code">.spec.ts</code> file extension hint for new VS Code users.</li>
-                    </ul>
-                  </article>
-
-
         </details>
       </div>
 
@@ -4911,7 +4957,7 @@ npx playwright show-report
     </div>
 
     <div class="page-footer">
-      <span>Playwright for Manual QA Engineers &bull; 6-Week Learning Path v5.26 &middot; <a href="#recent-updates" style="color: inherit;">updated May 3, 2026</a></span>
+      <span>Playwright for Manual QA Engineers &bull; 6-Week Learning Path v5.27 &middot; <a href="#recent-updates" style="color: inherit;">updated May 3, 2026</a></span>
       <span>May 2026</span>
     </div>
 
@@ -4938,7 +4984,7 @@ npx playwright show-report
       <li><a href="#week-3">Week 3 — Real UI Testing<span class="pct" data-week-pct="3"></span></a></li>
       <li><a href="#week-4">Week 4 — Debug &amp; Structure<span class="pct" data-week-pct="4"></span></a></li>
       <li><a href="#week-5">Week 5 — Git &amp; Setup<span class="pct" data-week-pct="5"></span></a></li>
-      <li><a href="#week-6">Week 6 — Final Project<span class="pct" data-week-pct="6"></span></a></li>
+      <li><a href="#week-6">Week 6 — Final Sprint<span class="pct" data-week-pct="6"></span></a></li>
     </ul>
 
     <div class="toc-section">
