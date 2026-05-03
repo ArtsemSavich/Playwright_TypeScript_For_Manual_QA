@@ -1040,7 +1040,7 @@
     <svg viewBox="0 0 32 32" fill="none"><path d="M6.5 16c0-.3.2-.7.5-1l8.6-8.6c.6-.6 1.5-.6 2.1 0l.7.7c.6.6.6 1.5 0 2.1L12.1 16l6.3 6.3c.6.6.6 1.5 0 2.1l-.7.7c-.6.6-1.5.6-2.1 0L7 16.5c-.3-.3-.5-.6-.5-1z" fill="rgba(255,255,255,0.5)"/><path d="M15 16c0-.3.2-.7.5-1l8.6-8.6c.6-.6 1.5-.6 2.1 0l.7.7c.6.6.6 1.5 0 2.1L20.6 16l6.3 6.3c.6.6.6 1.5 0 2.1l-.7.7c-.6.6-1.5.6-2.1 0l-8.6-8.6c-.3-.3-.5-.6-.5-1z" fill="white"/></svg>
     QA Engineering &middot; Learning Path
   </div>
-  <span class="version-badge" id="current-version" title="Current document version">v5.23</span>
+  <span class="version-badge" id="current-version" title="Current document version">v5.24</span>
   <button class="mobile-toc-toggle" onclick="document.getElementById('toc').classList.toggle('open')">☰ Navigation</button>
 </nav>
 
@@ -3636,12 +3636,11 @@ How I verified: [command you ran + what you saw]</pre></div>
       <p class="section-label">LEARNING OBJECTIVES</p>
       <div class="topic-block">
         <ul>
-          <li>Use Git: create a repo, commit changes, create branches, push</li>
+          <li>Create a Git repo, commit changes, push to GitHub</li>
           <li>Use the VS Code Source Control panel for daily Git operations</li>
-          <li>Understand the team workflow: pull, branch, push, Pull Request</li>
-          <li>Know the difference between merge and rebase</li>
-          <li>Resolve a basic merge conflict</li>
-          <li>Set up your final project: choose a target site, plan your tests, create the repo</li>
+          <li>Create a branch, push it, and open a Pull Request</li>
+          <li>Resolve a basic merge conflict in VS Code</li>
+          <li>Set up your final project repo and plan test cases for <a href="#week-6">Week 6</a></li>
         </ul>
       </div>
 
@@ -3651,60 +3650,119 @@ How I verified: [command you ran + what you saw]</pre></div>
       </div>
 
       <div class="callout callout-warning">
-        <span class="icon">💡</span>
-        <div><strong>Terminal commands vs VS Code UI.</strong> This week teaches both: terminal commands first (so you understand <em>what</em> Git does) and then the VS Code Source Control panel (which is how you will do it <strong>80% of the time</strong> in real work). If you already use Git daily, skim the terminal section and focus on the VS Code workflow and the merge/rebase topics.</div>
+        <span class="icon">🎯</span>
+        <div><strong>This week is not just a Git lecture.</strong> You are building the actual repository you will use for your <a href="#week-6">Week 6</a> final project. Every Git command below should be run on your real project &mdash; not a throwaway folder.</div>
       </div>
 
-      <p class="section-label">TOPICS &mdash; GIT FUNDAMENTALS</p>
+      <div class="callout callout-info">
+        <span class="icon">💡</span>
+        <div><strong>Terminal commands vs VS Code UI.</strong> This week teaches both: terminal commands first (so you understand <em>what</em> Git does) and then the VS Code Source Control panel (which is how you will do it <strong>80% of the time</strong> in real work). If you already use Git daily, skim the terminal section and focus on the VS Code workflow.</div>
+      </div>
+
+      <!-- ── PART 1: CREATE YOUR REPO ── -->
+
+      <p class="section-label">PART 1 &mdash; CREATE YOUR REPO</p>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-theory">Theory</span>
+        <h4>What Git solves</h4>
+        <p>Git tracks changes to your files. Think of it as "save points" &mdash; you can always go back to a previous version. There are two places where your code lives:</p>
+        <ul>
+          <li><strong>Local repo</strong> &mdash; on your machine, inside the <code class="inline-code">.git/</code> folder. Created by <code class="inline-code">git init</code>.</li>
+          <li><strong>Remote repo</strong> &mdash; on GitHub. Created by <code class="inline-code">gh repo create</code>. This is where your team sees your work.</li>
+        </ul>
+        <p>Every file goes through three stages: <strong>working tree</strong> (your edits) &rarr; <strong>staged</strong> (selected for saving with <code class="inline-code">git add</code>) &rarr; <strong>committed</strong> (saved permanently with <code class="inline-code">git commit</code>).</p>
+      </div>
 
       <div class="topic-block">
         <span class="topic-tag tag-git">Git</span>
-        <h4>Git basics &mdash; version control for your project</h4>
-        <p>Git tracks changes to your files. Think of it as "save points" &mdash; you can always go back to a previous version.</p>
+        <h4>Initialize your repo &mdash; the correct order</h4>
+        <p>Follow these steps <strong>in this exact order</strong>. The identity step must come before your first commit &mdash; otherwise the commit uses your global config (which may be a personal email).</p>
         <div class="code-block">
-          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> Initialize your repo <span class="lang">bash</span></div>
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> Full setup sequence <span class="lang">bash</span></div>
           <div class="code-body"><pre># Go to your project folder
 cd my-playwright-learning
 
 # Step 1: Initialize Git
 git init
 
-# Step 2: Check that .gitignore exists.
-# If it's missing, create it (safe append — won't overwrite existing):
-cat &gt;&gt; .gitignore &lt;&lt; 'EOF'
-node_modules/
-test-results/
-playwright-report/
-blob-report/
-playwright/.cache/
-.env
-EOF
+# Step 2: Set identity for THIS repo (no --global flag!)
+# Use the SAME email as your GitHub account
+git config user.name "Your Name"
+git config user.email "you@solvd.com"
 
-# Step 3: Stage all files (prepare them for saving)
+# Step 3: Verify identity BEFORE your first commit
+git config user.name     # should show your name
+git config user.email    # should show your @solvd.com email
+
+# Step 4: Check .gitignore exists (Playwright created it in Week 1)
+cat .gitignore
+
+# Step 5: Stage all files
 git add .
 
-# Step 4: Create your first commit (save point)
+# Step 6: Create your first commit
 git commit -m "Initial project setup with Playwright"
 
-# Step 5: Create a repo on GitHub and push
+# Step 7: Create a repo on GitHub and push
 gh repo create my-playwright-learning --public --source=. --remote=origin --push</pre></div>
+        </div>
+        <div class="callout callout-error">
+          <span class="icon">⚠️</span>
+          <div><strong>Step 7 requires at least one commit.</strong> If <code class="inline-code">gh repo create</code> fails, check:
+            <ul style="margin: 6px 0 0 16px;">
+              <li><code class="inline-code">git log --oneline</code> &mdash; do you have a commit?</li>
+              <li><code class="inline-code">gh auth status</code> &mdash; are you logged in?</li>
+              <li><code class="inline-code">git status</code> &mdash; are there unstaged files?</li>
+            </ul>
+          </div>
         </div>
         <table>
           <tr><th>Command</th><th>What it does</th><th>Analogy</th></tr>
           <tr><td><code class="inline-code">git init</code></td><td>Start tracking this folder</td><td>Create a new save file</td></tr>
+          <tr><td><code class="inline-code">git config user.email</code></td><td>Set your identity for this repo</td><td>Sign your name on the save file</td></tr>
           <tr><td><code class="inline-code">git status</code></td><td>See what changed since last save</td><td>Check unsaved changes</td></tr>
           <tr><td><code class="inline-code">git add .</code></td><td>Mark all changes for saving</td><td>Select what to save</td></tr>
           <tr><td><code class="inline-code">git commit -m "msg"</code></td><td>Save a snapshot with a note</td><td>Press "Save"</td></tr>
           <tr><td><code class="inline-code">git push</code></td><td>Upload saves to GitHub</td><td>Sync to the cloud</td></tr>
           <tr><td><code class="inline-code">git log --oneline</code></td><td>See history of all saves</td><td>View save history</td></tr>
-          <tr><td><code class="inline-code">git diff</code></td><td>See exactly what changed in files</td><td>Compare "before" and "after"</td></tr>
         </table>
       </div>
 
       <div class="topic-block">
         <span class="topic-tag tag-git">Git</span>
+        <h4>Local Git identity &mdash; why and when</h4>
+        <p>Without the <code class="inline-code">--global</code> flag, <code class="inline-code">git config</code> saves settings only for the current project. Your other repos keep using your global identity. This is useful when your global config points to a personal GitHub account.</p>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> How to check what Git is using <span class="lang">bash</span></div>
+          <div class="code-body"><pre># Show ALL config with source (global + local merged)
+git config --list --show-origin
+
+# Show only what THIS repo uses
+git config user.email
+git config user.name</pre></div>
+        </div>
+        <p>If the output shows your Solvd email &mdash; you are good. If it shows your personal email &mdash; run the override commands from Step 2 above before making any commits.</p>
+        <div class="callout callout-warning">
+          <span class="icon">&#9888;&#65039;</span>
+          <div><strong>GitHub CLI and multiple accounts.</strong> If your <code class="inline-code">gh auth login</code> is connected to a <em>different</em> GitHub account than the one you want to push to, you have two options:<br><br><strong>Option A (recommended):</strong> Add your <code class="inline-code">@solvd.com</code> email to your existing GitHub account (Settings &rarr; Emails &rarr; Add email). This way one GitHub account handles both identities &mdash; just override the local Git email per repo as shown above.<br><br><strong>Option B:</strong> Log out and log in with the other account: <code class="inline-code">gh auth logout</code> then <code class="inline-code">gh auth login</code>. Note: this switches the account globally &mdash; you will need to switch back for your other repos.</div>
+        </div>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-git">Git</span>
         <h4><code class="inline-code">.gitignore</code> &mdash; what Git should NOT track</h4>
-        <p><code class="inline-code">.gitignore</code> is a list of files and folders that Git will completely ignore. Playwright creates a good default for you, but it is important to understand <strong>why</strong> certain things are excluded:</p>
+        <p>Playwright created a <code class="inline-code">.gitignore</code> file for you in <a href="#week-1">Week 1</a>. Open it in VS Code and verify it contains these entries:</p>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> .gitignore <span class="lang">text</span></div>
+          <div class="code-body"><pre>node_modules/
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+.env</pre></div>
+        </div>
+        <p>If any line is missing, add it manually in VS Code and save. Here is why each entry matters:</p>
         <table>
           <tr><th>Entry</th><th>Why it is ignored</th></tr>
           <tr><td><code class="inline-code">node_modules/</code></td><td>Downloaded libraries &mdash; 100+ MB, recreated by <code class="inline-code">npm install</code>. Never commit this.</td></tr>
@@ -3715,10 +3773,39 @@ gh repo create my-playwright-learning --public --source=. --remote=origin --push
         <p><strong>Rule:</strong> if a file is generated or downloaded, it does not belong in Git. If it contains secrets, it <em>definitely</em> does not belong in Git.</p>
       </div>
 
+      <!-- ── PART 2: DAILY GIT LOOP ── -->
+
+      <p class="section-label">PART 2 &mdash; THE DAILY GIT LOOP</p>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-git">Git</span>
+        <h4>The 5 commands you will use every day</h4>
+        <p>This is your core loop. Everything else in Git is built on top of this:</p>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">bash</span></div>
+          <div class="code-body"><pre># 1. See what changed
+git status
+
+# 2. See exactly what changed in files
+git diff
+
+# 3. Stage the changes you want to save
+git add tests/login.spec.ts     # specific file
+git add .                        # or everything
+
+# 4. Commit with a clear message
+git commit -m "Add login test for locked user"
+
+# 5. Push to GitHub
+git push</pre></div>
+        </div>
+        <p>That is it. <code class="inline-code">status &rarr; diff &rarr; add &rarr; commit &rarr; push</code>. Repeat this loop for every meaningful change.</p>
+      </div>
+
       <div class="topic-block">
         <span class="topic-tag tag-git">Git</span>
         <h4>Reading <code class="inline-code">git diff</code> output</h4>
-        <p>When you run <code class="inline-code">git diff</code>, Git shows what changed in your files since the last commit:</p>
+        <p>When you run <code class="inline-code">git diff</code>, Git shows what changed since the last commit:</p>
         <div class="code-block">
           <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> Example diff output <span class="lang">diff</span></div>
           <div class="code-body"><pre>- await page.getByPlaceholder("Email").fill("old@test.com");
@@ -3730,13 +3817,13 @@ gh repo create my-playwright-learning --public --source=. --remote=origin --push
           <li><strong><code class="inline-code">+</code> (green)</strong> = line was added</li>
           <li>Lines without <code class="inline-code">+</code> or <code class="inline-code">-</code> = unchanged context</li>
         </ul>
-        <p>This is the same view you will see in VS Code when you click a changed file in the Source Control panel, and in Pull Requests on GitHub. Learn to read it &mdash; you will see it every day.</p>
+        <p>This is the same view you will see in VS Code when you click a changed file, and in Pull Requests on GitHub.</p>
       </div>
 
       <div class="topic-block">
         <span class="topic-tag tag-git">Git</span>
         <h4>Commit messages &mdash; good vs bad</h4>
-        <p>Every commit needs a message. Your future self (and your team) will read these to understand what changed and why.</p>
+        <p>Your future self (and your team) will read these to understand what changed and why.</p>
         <table>
           <tr><th>&#10060; Bad</th><th>&#10003; Good</th><th>Why</th></tr>
           <tr><td><code class="inline-code">"fix"</code></td><td><code class="inline-code">"Fix login test: wrong placeholder text"</code></td><td>Says <em>what</em> was fixed and <em>where</em></td></tr>
@@ -3744,13 +3831,35 @@ gh repo create my-playwright-learning --public --source=. --remote=origin --push
           <tr><td><code class="inline-code">"wip"</code></td><td><code class="inline-code">"WIP: checkout page object (missing assertions)"</code></td><td>If you must use WIP, explain what is in progress</td></tr>
           <tr><td><code class="inline-code">"asdf"</code></td><td><code class="inline-code">"Refactor login tests to use beforeEach"</code></td><td>Future you will thank present you</td></tr>
         </table>
-        <p><strong>Format:</strong> start with a verb (Add, Fix, Refactor, Update, Remove), keep it under ~72 characters, describe <em>what</em> changed. If you need to explain <em>why</em>, add a blank line and write a longer description.</p>
+        <p><strong>Format:</strong> start with a verb (Add, Fix, Refactor, Update, Remove), keep it under ~72 characters.</p>
       </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-git">VS Code</span>
+        <h4>VS Code Source Control &mdash; the same loop, visually</h4>
+        <p>Open the <strong>Source Control panel</strong>: click the <strong>🔀</strong> icon in the Activity Bar, or press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>G</kbd>.</p>
+        <table>
+          <tr><th>Step</th><th>VS Code action</th><th>Terminal equivalent</th></tr>
+          <tr><td>1. See what changed</td><td>Open Source Control panel &mdash; changed files are listed with <strong>M</strong> (modified), <strong>U</strong> (new), <strong>D</strong> (deleted)</td><td><code class="inline-code">git status</code></td></tr>
+          <tr><td>2. Review changes</td><td>Click a file to see the diff (old on the left, new on the right)</td><td><code class="inline-code">git diff</code></td></tr>
+          <tr><td>3. Stage files</td><td>Click the <code class="inline-code">+</code> icon next to each file (or <code class="inline-code">+</code> next to "Changes" to stage all)</td><td><code class="inline-code">git add .</code></td></tr>
+          <tr><td>4. Commit</td><td>Type a message in the box at the top, press <kbd>⌘/Ctrl</kbd>+<kbd>Enter</kbd></td><td><code class="inline-code">git commit -m "..."</code></td></tr>
+          <tr><td>5. Push</td><td>Click the <strong>sync icon</strong> (↑↓) in the status bar, or <code class="inline-code">...</code> menu &rarr; Push</td><td><code class="inline-code">git push</code></td></tr>
+        </table>
+        <div class="callout callout-success">
+          <span class="icon">⚡</span>
+          <div><strong>This is your daily workflow.</strong> In real work, you will use the VS Code Source Control panel for stage/commit/push and the terminal for branch operations and troubleshooting.</div>
+        </div>
+      </div>
+
+      <!-- ── PART 3: BRANCHES AND PULL REQUESTS ── -->
+
+      <p class="section-label">PART 3 &mdash; BRANCHES AND PULL REQUESTS</p>
 
       <div class="topic-block">
         <span class="topic-tag tag-git">Git</span>
         <h4>Branches &mdash; work without breaking things</h4>
-        <p>A <strong>branch</strong> is a copy of your project where you can make changes safely. When you are happy, you merge it back into <code class="inline-code">main</code>.</p>
+        <p>A <strong>branch</strong> is a copy of your project where you can make changes safely. When you are happy, you merge it back into <code class="inline-code">main</code> via a Pull Request.</p>
         <div class="code-block">
           <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">bash</span></div>
           <div class="code-body"><pre># See what branch you are on
@@ -3768,94 +3877,13 @@ git commit -m "Add login tests for valid and invalid credentials"
 # Push your branch to GitHub
 git push -u origin feature/login-tests
 
-# Create a Pull Request (PR) using the gh CLI
+# Create a Pull Request
 gh pr create --title "Add login tests" --body "Covers valid login and wrong password scenarios."</pre></div>
         </div>
         <div class="callout callout-info">
           <span class="icon">💡</span>
           <div><strong>Branch naming:</strong> Use descriptive names like <code class="inline-code">feature/login-tests</code> or <code class="inline-code">fix/broken-locator</code>. If you have Jira tickets: <code class="inline-code">feature/JIRA-123-login-tests</code>.</div>
         </div>
-      </div>
-
-      <div class="topic-block">
-        <span class="topic-tag tag-git">Git</span>
-        <h4>Local Git identity &mdash; override for this project only</h4>
-        <p>If your global Git config points to a different GitHub account (personal, another company, etc.), you do not need to change it. You can set a different identity <strong>for this repo only</strong> using local config. Local settings live inside <code class="inline-code">.git/config</code> in the project folder and do not affect your other repos.</p>
-        <p>After running <code class="inline-code">git init</code> (Step 1 above), run these commands inside your project folder:</p>
-        <div class="code-block">
-          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> Run inside your project folder <span class="lang">bash</span></div>
-          <div class="code-body"><pre># Override identity for THIS repo only (no --global flag!)
-git config user.name "Your Name"
-git config user.email "you@solvd.com"
-
-# Verify &mdash; should show your Solvd email
-git config user.email</pre></div>
-        </div>
-        <p>Without the <code class="inline-code">--global</code> flag, Git saves these settings only for the current project. Your other repos keep using your global identity.</p>
-        <div class="code-block">
-          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> How to check what Git is using <span class="lang">bash</span></div>
-          <div class="code-body"><pre># Show ALL config with source (global + local merged)
-git config --list --show-origin
-
-# Show only what THIS repo uses
-git config user.email
-git config user.name</pre></div>
-        </div>
-        <p>If the output shows your Solvd email &mdash; you are good. If it shows your personal email &mdash; run the local override commands above.</p>
-        <div class="callout callout-warning">
-          <span class="icon">&#9888;&#65039;</span>
-          <div><strong>GitHub CLI and multiple accounts.</strong> If your <code class="inline-code">gh auth login</code> is connected to a <em>different</em> GitHub account than the one you want to push to, you have two options:<br><br><strong>Option A (recommended):</strong> Add your <code class="inline-code">@solvd.com</code> email to your existing GitHub account (Settings &rarr; Emails &rarr; Add email). This way one GitHub account handles both identities &mdash; just override the local Git email per repo as shown above.<br><br><strong>Option B:</strong> Log out and log in with the other account: <code class="inline-code">gh auth logout</code> then <code class="inline-code">gh auth login</code>. Note: this switches the account globally &mdash; you will need to switch back for your other repos.</div>
-        </div>
-      </div>
-
-      <div class="topic-block">
-        <span class="topic-tag tag-git">Git</span>
-        <h4><code class="inline-code">git stash</code> &mdash; "I started working in the wrong branch"</h4>
-        <p>Classic beginner scenario: you made changes but forgot to create a branch first. Or you need to quickly switch to another branch but have uncommitted work.</p>
-        <div class="code-block">
-          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">bash</span></div>
-          <div class="code-body"><pre># You are on "main" but made changes that should be on a feature branch:
-
-# 1. Save your changes temporarily
-git stash
-
-# 2. Create and switch to the correct branch
-git checkout -b feature/login-tests
-
-# 3. Bring your changes back
-git stash pop
-
-# Now your changes are on the right branch — commit as usual</pre></div>
-        </div>
-        <p><code class="inline-code">git stash</code> = temporarily hide your changes. <code class="inline-code">git stash pop</code> = bring them back. That is all you need to know for now.</p>
-      </div>
-
-      <p class="section-label">TOPICS &mdash; GIT IN VS CODE (YOUR DAILY WORKFLOW)</p>
-
-      <div class="callout callout-success">
-        <span class="icon">⚡</span>
-        <div><strong>This is how you will use Git 80% of the time.</strong> The terminal commands above explain <em>what</em> Git does. The VS Code Source Control panel is how you will <em>actually do it</em> every day. It is faster, more visual, and harder to make mistakes in.</div>
-      </div>
-
-      <div class="topic-block">
-        <span class="topic-tag tag-git">VS Code</span>
-        <h4>Source Control panel &mdash; stage, commit, push without the terminal</h4>
-        <p>Open the <strong>Source Control panel</strong>: click the <strong>🔀</strong> icon in the Activity Bar, or press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>G</kbd>.</p>
-        <p><strong>What you see:</strong></p>
-        <ul>
-          <li><strong>Changed files list</strong> with labels: <strong>M</strong> (modified), <strong>U</strong> (untracked/new), <strong>D</strong> (deleted)</li>
-          <li><strong>Click any file</strong> to see the diff &mdash; old version on the left, new version on the right (same <code class="inline-code">+</code>/<code class="inline-code">-</code> format as <code class="inline-code">git diff</code>)</li>
-        </ul>
-        <p><strong>Daily workflow in VS Code:</strong></p>
-        <table>
-          <tr><th>Step</th><th>VS Code action</th><th>Terminal equivalent</th></tr>
-          <tr><td>1. See what changed</td><td>Open Source Control panel &mdash; changed files are listed</td><td><code class="inline-code">git status</code></td></tr>
-          <tr><td>2. Review changes</td><td>Click a file to see the diff</td><td><code class="inline-code">git diff</code></td></tr>
-          <tr><td>3. Stage files</td><td>Click the <code class="inline-code">+</code> icon next to each file (or <code class="inline-code">+</code> next to "Changes" to stage all)</td><td><code class="inline-code">git add .</code></td></tr>
-          <tr><td>4. Write commit message</td><td>Type in the message box at the top of the panel</td><td><code class="inline-code">git commit -m "..."</code></td></tr>
-          <tr><td>5. Commit</td><td>Press <kbd>⌘/Ctrl</kbd>+<kbd>Enter</kbd> or click the ✓ button</td><td>(same)</td></tr>
-          <tr><td>6. Push</td><td>Click the <strong>sync icon</strong> (↑↓) in the status bar, or <code class="inline-code">...</code> menu &rarr; Push</td><td><code class="inline-code">git push</code></td></tr>
-        </table>
       </div>
 
       <div class="topic-block">
@@ -3867,28 +3895,11 @@ git stash pop
           <li><strong>Select a branch</strong> to switch to it (same as <code class="inline-code">git checkout branch-name</code>)</li>
           <li><strong>Create a new branch:</strong> click the branch name &rarr; type a new name &rarr; VS Code creates and switches to it</li>
         </ul>
-        <div class="callout callout-info">
-          <span class="icon">💡</span>
-          <div>You can also use the Command Palette (<kbd>⌘/Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>) &rarr; type "Git: Checkout to..." to switch branches.</div>
-        </div>
       </div>
-
-      <div class="topic-block">
-        <span class="topic-tag tag-git">VS Code</span>
-        <h4>Viewing commit history</h4>
-        <p>VS Code does not have a built-in log viewer as powerful as the terminal, but there are two quick options:</p>
-        <ul>
-          <li><strong>Terminal:</strong> <code class="inline-code">git log --oneline -10</code> &mdash; shows the last 10 commits, one line each</li>
-          <li><strong>Source Control panel</strong> &rarr; click the <strong>clock icon</strong> (or <code class="inline-code">...</code> &rarr; "View History") to see recent commits</li>
-          <li><strong>GitHub:</strong> open your repo on github.com &rarr; click "Commits" &mdash; the most visual way to browse history</li>
-        </ul>
-      </div>
-
-      <p class="section-label">TOPICS &mdash; TEAM WORKFLOW</p>
 
       <div class="topic-block">
         <span class="topic-tag tag-git">Git</span>
-        <h4>The standard workflow: pull, branch, push, PR</h4>
+        <h4>Team workflow &mdash; pull, branch, push, PR</h4>
         <div class="code-block">
           <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">bash</span></div>
           <div class="code-body"><pre># 1. Start from latest main
@@ -3902,6 +3913,7 @@ git checkout -b feature/JIRA-456-search-tests
 
 # 4. Check what changed
 git status
+git diff
 
 # 5. Commit (small, focused commits)
 git add tests/search.spec.ts
@@ -3911,53 +3923,37 @@ git commit -m "Add search tests for product catalog"
 git push -u origin feature/JIRA-456-search-tests
 
 # 7. Open a Pull Request
-gh pr create --title "Add search tests for product catalog" --body "Adds 3 tests covering the search flow."</pre></div>
+gh pr create --title "Add search tests" --body "Adds 3 tests covering the search flow."</pre></div>
         </div>
-        <p style="font-size: 13px; color: var(--text-subtle);">In VS Code: step 1 = click branch name &rarr; select <code class="inline-code">main</code>, then sync. Step 2 = click branch name &rarr; type new name. Steps 4-6 = Source Control panel. Step 7 = terminal (<code class="inline-code">gh pr create</code>) or open github.com.</p>
+        <p style="font-size: 13px; color: var(--text-subtle);">In VS Code: step 1 = click branch name &rarr; select <code class="inline-code">main</code>, then sync. Step 2 = click branch name &rarr; type new name. Steps 4-6 = Source Control panel. Step 7 = terminal or github.com.</p>
       </div>
 
       <div class="topic-block">
-        <span class="topic-tag tag-theory">Theory</span>
-        <h4>Merge vs Rebase &mdash; two ways to combine branches</h4>
-        <p>When your branch is behind <code class="inline-code">main</code> (someone else pushed changes while you were working), you need to combine the changes. There are two strategies:</p>
-        <table>
-          <tr><th></th><th>Merge</th><th>Rebase</th></tr>
-          <tr><td><strong>What it does</strong></td><td>Creates a new "merge commit" that joins both branches</td><td>Replays your commits on top of the latest <code class="inline-code">main</code> as if you started later</td></tr>
-          <tr><td><strong>History looks like</strong></td><td>Branching tree with merge points &mdash; shows exactly when things happened</td><td>Clean straight line &mdash; looks like you wrote everything in order</td></tr>
-          <tr><td><strong>When to use</strong></td><td>Default strategy. Safe, simple, hard to mess up.</td><td>When your team requires linear history (they will tell you)</td></tr>
-          <tr><td><strong>Command</strong></td><td><code class="inline-code">git merge main</code></td><td><code class="inline-code">git rebase main</code></td></tr>
-        </table>
-        <div class="code-block">
-          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> Merge (default, recommended) <span class="lang">bash</span></div>
-          <div class="code-body"><pre># You are on feature/login-tests and main has new commits
-git checkout feature/login-tests
-git merge main
-# Resolve conflicts if any (see next section), then push
-git push</pre></div>
-        </div>
-        <div class="code-block">
-          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> Rebase (only if your team uses it) <span class="lang">bash</span></div>
-          <div class="code-body"><pre># Same situation — your branch is behind main
-git checkout feature/login-tests
-git rebase main
-# Resolve conflicts if any, then force-push (rebase rewrites history)
-git push --force-with-lease</pre></div>
-        </div>
-        <div class="callout callout-error">
-          <span class="icon">⚠️</span>
-          <div><strong>Golden rule of rebase:</strong> never rebase a branch that other people are also working on (like <code class="inline-code">main</code> or <code class="inline-code">develop</code>). Rebase rewrites history &mdash; if someone else has the old history, things break. Only rebase <strong>your own feature branches</strong> that nobody else has checked out.</div>
-        </div>
+        <span class="topic-tag tag-reference">Reference</span>
+        <h4>PR self-review checklist &mdash; check before requesting review</h4>
+        <p>Before asking a colleague to review your Pull Request, go through this list:</p>
+        <ul>
+          <li>&#9744; Did I remove <code class="inline-code">test.only</code>? (Otherwise CI runs only one test)</li>
+          <li>&#9744; Did I check the diff on GitHub? (Look at the "Files changed" tab)</li>
+          <li>&#9744; Did I commit only relevant files? (No accidental <code class="inline-code">package-lock.json</code> changes)</li>
+          <li>&#9744; Does the test pass locally? (<code class="inline-code">npx playwright test --project=chromium</code>)</li>
+          <li>&#9744; Is the commit message clear? (Not "fix" or "wip")</li>
+          <li>&#9744; Does the PR description explain what changed and how I tested it?</li>
+        </ul>
         <div class="callout callout-info">
           <span class="icon">💡</span>
-          <div><strong>Practical advice:</strong> use <strong>merge</strong> until your team explicitly tells you otherwise. Most teams use merge. If your team uses rebase, they will show you the workflow. Do not start rebasing on your own &mdash; it is easy to lose work if done wrong.</div>
+          <div><strong>Self-review is a professional habit.</strong> QA engineers review their own work before asking others. This saves everyone time and makes your PRs easier to approve.</div>
         </div>
       </div>
+
+      <!-- ── PART 4: CONFLICTS ── -->
+
+      <p class="section-label">PART 4 &mdash; MERGE CONFLICTS</p>
 
       <div class="topic-block">
         <span class="topic-tag tag-git">Git</span>
-        <h4>Merge conflicts &mdash; what to do when Git says CONFLICT</h4>
+        <h4>What a merge conflict looks like</h4>
         <p>A <strong>merge conflict</strong> happens when two people changed the <strong>same lines</strong> in the same file. Git does not know which version to keep, so it asks you to decide.</p>
-        <p><strong>What it looks like in a file:</strong></p>
         <div class="code-block">
           <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> File with conflict markers <span class="lang">typescript</span></div>
           <div class="code-body"><pre>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
@@ -3971,27 +3967,87 @@ await page.getByPlaceholder("Email").fill("user@test.com");
           <li><code class="inline-code">=======</code> = divider</li>
           <li><code class="inline-code">&gt;&gt;&gt;&gt;&gt;&gt;&gt; main</code> = their changes (the branch you are merging)</li>
         </ul>
+      </div>
 
-        <p><strong>How to resolve in VS Code (the easy way):</strong></p>
+      <div class="topic-block">
+        <span class="topic-tag tag-git">VS Code</span>
+        <h4>Resolving conflicts in VS Code</h4>
         <ol>
           <li>Open the conflicted file &mdash; VS Code highlights the conflict sections in different colors</li>
           <li>Above each conflict, VS Code shows buttons: <strong>Accept Current Change</strong> | <strong>Accept Incoming Change</strong> | <strong>Accept Both Changes</strong> | <strong>Compare Changes</strong></li>
-          <li>Click the right button for each conflict:
+          <li>Click the right button:
             <ul>
               <li><strong>Accept Current</strong> = keep your version</li>
               <li><strong>Accept Incoming</strong> = keep their version</li>
-              <li><strong>Accept Both</strong> = keep both (you will likely need to edit the result)</li>
+              <li><strong>Accept Both</strong> = keep both (you may need to edit the result)</li>
             </ul>
           </li>
           <li>Save the file</li>
           <li>In the Source Control panel, stage the resolved file (<code class="inline-code">+</code> button)</li>
           <li>Commit &mdash; Git auto-fills a merge commit message for you</li>
         </ol>
-
         <div class="callout callout-warning">
           <span class="icon">💡</span>
-          <div><strong>Conflicts are normal.</strong> They are not errors. They mean two people worked on the same code &mdash; that is expected in a team. Do not panic. Read both versions carefully, pick the right one (or combine them), and commit.</div>
+          <div><strong>Conflicts are normal.</strong> They are not errors. They mean two people worked on the same code &mdash; that is expected in a team. Read both versions carefully, pick the right one, and commit.</div>
         </div>
+      </div>
+
+      <!-- ── OPTIONAL / ADVANCED ── -->
+
+      <p class="section-label">OPTIONAL &mdash; USEFUL WHEN YOU NEED THEM</p>
+
+      <div class="callout callout-info">
+        <span class="icon">📌</span>
+        <div>The topics below are not required to complete your final project. Read them now for awareness, come back when you actually need them.</div>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-git">Git</span>
+        <h4><code class="inline-code">git stash</code> &mdash; "I started working in the wrong branch"</h4>
+        <p>You made changes but forgot to create a branch first. Or you need to quickly switch branches but have uncommitted work.</p>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">bash</span></div>
+          <div class="code-body"><pre># 1. Save your changes temporarily
+git stash
+
+# 2. Create and switch to the correct branch
+git checkout -b feature/login-tests
+
+# 3. Bring your changes back
+git stash pop
+
+# Now your changes are on the right branch — commit as usual</pre></div>
+        </div>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-git">Git</span>
+        <h4><code class="inline-code">git commit --amend</code> &mdash; fix a bad commit message</h4>
+        <p>You just committed with <code class="inline-code">"fix"</code> and immediately regretted it. If you have <strong>not pushed yet</strong>:</p>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">bash</span></div>
+          <div class="code-body"><pre>git commit --amend -m "Fix login test: wrong placeholder text"</pre></div>
+        </div>
+        <p>This replaces the last commit message. <strong>Only use this before <code class="inline-code">git push</code></strong> &mdash; amending a pushed commit causes problems for your team.</p>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-theory">Theory</span>
+        <h4>Merge vs Rebase &mdash; two ways to combine branches</h4>
+        <p>When your branch is behind <code class="inline-code">main</code> (someone pushed changes while you were working), you need to combine the changes:</p>
+        <table>
+          <tr><th></th><th>Merge</th><th>Rebase</th></tr>
+          <tr><td><strong>What it does</strong></td><td>Creates a "merge commit" that joins both branches</td><td>Replays your commits on top of the latest <code class="inline-code">main</code></td></tr>
+          <tr><td><strong>History</strong></td><td>Branching tree with merge points</td><td>Clean straight line</td></tr>
+          <tr><td><strong>Safety</strong></td><td>Safe, simple, hard to mess up</td><td>Rewrites history &mdash; can lose work if done wrong</td></tr>
+          <tr><td><strong>When to use</strong></td><td><strong>Default.</strong> Use this unless told otherwise.</td><td>Only if your team requires linear history (they will tell you)</td></tr>
+          <tr><td><strong>Command</strong></td><td><code class="inline-code">git merge main</code></td><td><code class="inline-code">git rebase main</code></td></tr>
+        </table>
+        <div class="callout callout-error">
+          <span class="icon">⚠️</span>
+          <div><strong>Golden rule of rebase:</strong> never rebase a branch that other people are also working on (like <code class="inline-code">main</code>). Only rebase <strong>your own feature branches</strong>.</div>
+        </div>
+        <p><strong>Practical advice:</strong> use <strong>merge</strong> until your team explicitly tells you otherwise. If your team uses rebase, they will show you the workflow.</p>
       </div>
 
       <div class="topic-block">
@@ -4001,8 +4057,7 @@ await page.getByPlaceholder("Email").fill("user@test.com");
           <tr><th>Scenario</th><th>Command</th></tr>
           <tr><td>Add a new library</td><td><code class="inline-code">npm install &lt;name&gt;</code></td></tr>
           <tr><td>Add as dev dependency</td><td><code class="inline-code">npm install -D &lt;name&gt;</code></td></tr>
-          <tr><td>After <code class="inline-code">git pull</code> &mdash; sync</td><td><code class="inline-code">npm install</code></td></tr>
-          <tr><td>Remove a library</td><td><code class="inline-code">npm uninstall &lt;name&gt;</code></td></tr>
+          <tr><td>After <code class="inline-code">git pull</code> &mdash; sync dependencies</td><td><code class="inline-code">npm install</code></td></tr>
           <tr><td>Update Playwright</td><td><code class="inline-code">npm install -D @playwright/test@latest &amp;&amp; npx playwright install</code></td></tr>
         </table>
       </div>
@@ -4013,33 +4068,57 @@ await page.getByPlaceholder("Email").fill("user@test.com");
         <span class="icon">🎮</span>
         <div><strong>Learn Git Branching</strong> &mdash; an interactive visual tutorial where you execute Git commands and see how branches, commits, and merges work in real time. Highly recommended.
           <p style="margin-top: 8px; font-size: 16px;"><strong>&#128073; <a href="https://learngitbranching.js.org/" target="_blank">learngitbranching.js.org</a></strong></p>
-          <p style="font-size: 13px; color: var(--text-subtle); margin-top: 4px;">Free, browser-based, no install needed. Available in Russian. Start with "Main" &rarr; Introduction Sequence. You can skip levels you already understand.</p>
+          <p style="font-size: 13px; color: var(--text-subtle); margin-top: 4px;">Free, browser-based, no install needed. Available in Russian. Start with "Main" &rarr; Introduction Sequence.</p>
         </div>
       </div>
+
+      <!-- ── EXERCISES ── -->
 
       <p class="section-label">EXERCISES</p>
 
       <div class="topic-block exercises">
-        <span class="topic-tag tag-git">Git &mdash; terminal</span>
-        <h4>Git exercises (terminal)</h4>
+        <span class="topic-tag tag-git">Setup</span>
+        <h4>Create your repo</h4>
         <ol class="checklist">
-          <li><input type="checkbox" id="w5-e1" data-week="5"><label for="w5-e1"><strong>Init your repo.</strong> Run <code class="inline-code">git init</code> in your project folder. Verify <code class="inline-code">.gitignore</code> exists (or create one). Stage and commit all your work from Weeks 1-4: <code class="inline-code">git add . &amp;&amp; git commit -m "Add Weeks 1-4 exercises"</code></label></li>
-          <li><input type="checkbox" id="w5-e2" data-week="5"><label for="w5-e2"><strong>Push to GitHub.</strong> Run <code class="inline-code">gh repo create my-playwright-learning --public --source=. --remote=origin --push</code>. Open the URL it prints to see your code on github.com.</label></li>
-          <li><input type="checkbox" id="w5-e3" data-week="5"><label for="w5-e3"><strong>Read git log.</strong> Run <code class="inline-code">git log --oneline</code>. You should see your commit(s). Note the short hash (e.g. <code class="inline-code">a1b2c3d</code>) &mdash; this is how you refer to specific commits.</label></li>
-          <li><input type="checkbox" id="w5-e4" data-week="5"><label for="w5-e4"><strong>Create a branch and make a change.</strong> Run <code class="inline-code">git checkout -b feature/practice-branch</code>. Open any test file, add a comment, save. Run <code class="inline-code">git diff</code> &mdash; you should see your change highlighted. Commit and push.</label></li>
-          <li><input type="checkbox" id="w5-e5" data-week="5"><label for="w5-e5"><strong>Create a Pull Request.</strong> Run <code class="inline-code">gh pr create --fill</code>. Open the PR link &mdash; look at the diff on GitHub, it shows exactly what changed.</label></li>
+          <li><input type="checkbox" id="w5-e1" data-week="5"><label for="w5-e1"><strong>Initialize and push.</strong> Follow the "Initialize your repo" steps above: <code class="inline-code">git init</code> &rarr; set identity &rarr; verify identity &rarr; check <code class="inline-code">.gitignore</code> &rarr; <code class="inline-code">git add .</code> &rarr; <code class="inline-code">git commit</code> &rarr; <code class="inline-code">gh repo create</code>. Open the URL it prints to see your code on GitHub.</label></li>
+          <li><input type="checkbox" id="w5-e2" data-week="5"><label for="w5-e2"><strong>Check your history.</strong> Run <code class="inline-code">git log --oneline</code>. You should see your commit. Run <code class="inline-code">git config user.email</code> &mdash; confirm it shows your <code class="inline-code">@solvd.com</code> email.</label></li>
         </ol>
       </div>
 
       <div class="topic-block exercises">
-        <span class="topic-tag tag-git">Git &mdash; VS Code</span>
-        <h4>Git exercises (VS Code Source Control)</h4>
+        <span class="topic-tag tag-practice">Scenario 1</span>
+        <h4>QA adds a new test and opens a PR</h4>
+        <p>Imagine you received a task: <em>"Add a negative login test for <code class="inline-code">locked_out_user</code>."</em></p>
         <ol class="checklist">
-          <li><input type="checkbox" id="w5-v1" data-week="5"><label for="w5-v1"><strong>Open Source Control panel</strong> (🔀 icon or <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>G</kbd>). You should see "SOURCE CONTROL" at the top with your changed files (if any). If no changes &mdash; make a small edit to any file.</label></li>
-          <li><input type="checkbox" id="w5-v2" data-week="5"><label for="w5-v2"><strong>View a diff.</strong> Click a changed file in the panel &mdash; the diff opens. Old version on the left, new on the right. Red = removed, green = added.</label></li>
-          <li><input type="checkbox" id="w5-v3" data-week="5"><label for="w5-v3"><strong>Stage, commit, push via UI.</strong> Click <code class="inline-code">+</code> to stage a file. Type a commit message (follow the good examples from the commit messages section). Press <kbd>⌘/Ctrl</kbd>+<kbd>Enter</kbd>. Then click the sync icon (↑↓) in the status bar to push.</label></li>
-          <li><input type="checkbox" id="w5-v4" data-week="5"><label for="w5-v4"><strong>Switch branches via UI.</strong> Click the branch name in the bottom-left of VS Code. Switch to <code class="inline-code">main</code>. Then switch back to your feature branch. Then create a new branch from the same menu.</label></li>
-          <li><input type="checkbox" id="w5-v5" data-week="5"><label for="w5-v5"><strong>Simulate a conflict (optional challenge).</strong> On <code class="inline-code">main</code>, edit line 1 of a test file, commit. Switch to your feature branch, edit the <strong>same line 1</strong> differently, commit. Now run <code class="inline-code">git merge main</code>. VS Code highlights the conflict &mdash; resolve it using the buttons above the conflict.</label></li>
+          <li><input type="checkbox" id="w5-s1a" data-week="5"><label for="w5-s1a"><strong>Create a branch.</strong> <code class="inline-code">git checkout main &amp;&amp; git pull &amp;&amp; git checkout -b feature/locked-user-test</code></label></li>
+          <li><input type="checkbox" id="w5-s1b" data-week="5"><label for="w5-s1b"><strong>Write the test.</strong> In <code class="inline-code">tests/saucedemo.spec.ts</code>, add a test that logs in as <code class="inline-code">locked_out_user</code> / <code class="inline-code">secret_sauce</code> and verifies the error message appears.</label></li>
+          <li><input type="checkbox" id="w5-s1c" data-week="5"><label for="w5-s1c"><strong>Run only your test.</strong> <code class="inline-code">npx playwright test -g "locked" --project=chromium</code></label></li>
+          <li><input type="checkbox" id="w5-s1d" data-week="5"><label for="w5-s1d"><strong>Check the diff.</strong> Run <code class="inline-code">git diff</code> (or click the file in VS Code Source Control). Read through your changes &mdash; do they look right?</label></li>
+          <li><input type="checkbox" id="w5-s1e" data-week="5"><label for="w5-s1e"><strong>Commit with a good message.</strong> <code class="inline-code">git add tests/saucedemo.spec.ts &amp;&amp; git commit -m "Add locked user login validation test"</code></label></li>
+          <li><input type="checkbox" id="w5-s1f" data-week="5"><label for="w5-s1f"><strong>Push and create a PR.</strong> <code class="inline-code">git push -u origin feature/locked-user-test</code>, then:
+            <div class="code-block" style="margin-top: 8px;">
+              <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">bash</span></div>
+              <div class="code-body"><pre>gh pr create --title "Add locked user login validation test" --body "## What changed
+- Added negative login test for locked_out_user
+- Verified error message is displayed
+
+## How tested
+- npx playwright test tests/saucedemo.spec.ts --project=chromium"</pre></div>
+            </div>
+          </label></li>
+          <li><input type="checkbox" id="w5-s1g" data-week="5"><label for="w5-s1g"><strong>Self-review.</strong> Open the PR on GitHub. Go through the self-review checklist above. Does everything look good?</label></li>
+        </ol>
+      </div>
+
+      <div class="topic-block exercises">
+        <span class="topic-tag tag-practice">Scenario 2</span>
+        <h4>VS Code Git workflow</h4>
+        <ol class="checklist">
+          <li><input type="checkbox" id="w5-s2a" data-week="5"><label for="w5-s2a"><strong>Open Source Control panel</strong> (🔀 icon or <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>G</kbd>). Make a small edit to any test file. See it appear in the panel with an <strong>M</strong> label.</label></li>
+          <li><input type="checkbox" id="w5-s2b" data-week="5"><label for="w5-s2b"><strong>View the diff.</strong> Click the changed file in the panel. Read the side-by-side comparison.</label></li>
+          <li><input type="checkbox" id="w5-s2c" data-week="5"><label for="w5-s2c"><strong>Stage, commit, push via UI.</strong> Click <code class="inline-code">+</code> to stage. Type a commit message. Press <kbd>⌘/Ctrl</kbd>+<kbd>Enter</kbd>. Click the sync icon in the status bar.</label></li>
+          <li><input type="checkbox" id="w5-s2d" data-week="5"><label for="w5-s2d"><strong>Switch branches via UI.</strong> Click the branch name in the bottom-left of VS Code. Switch to <code class="inline-code">main</code>, then back to your feature branch.</label></li>
+          <li><input type="checkbox" id="w5-s2e" data-week="5"><label for="w5-s2e"><strong>Simulate a conflict (optional).</strong> On <code class="inline-code">main</code>, edit line 1 of a test file, commit. Switch to your feature branch, edit the <strong>same line</strong> differently, commit. Run <code class="inline-code">git merge main</code>. VS Code highlights the conflict &mdash; resolve it using the buttons.</label></li>
         </ol>
       </div>
 
@@ -4050,26 +4129,25 @@ await page.getByPlaceholder("Email").fill("user@test.com");
           <li><input type="checkbox" id="w5-p1" data-week="5"><label for="w5-p1"><strong>Choose a test target.</strong> Pick a public site (<a href="https://www.saucedemo.com" target="_blank">SauceDemo</a>, <a href="https://demo.playwright.dev/todomvc" target="_blank">TodoMVC</a>) or your company's staging environment.</label></li>
           <li><input type="checkbox" id="w5-p2" data-week="5"><label for="w5-p2"><strong>Pick one user journey.</strong> For example: login, search, add to cart, or registration.</label></li>
           <li><input type="checkbox" id="w5-p3" data-week="5"><label for="w5-p3"><strong>List 3-5 test cases.</strong> At least one happy path and one negative case. Write them as bullet points before writing any code.</label></li>
-          <li><input type="checkbox" id="w5-p4" data-week="5"><label for="w5-p4"><strong>Create a branch.</strong> Run <code class="inline-code">git checkout -b final-project</code> (or create it via the VS Code branch menu). All your <a href="#week-6">Week 6</a> work will go here.</label></li>
+          <li><input type="checkbox" id="w5-p4" data-week="5"><label for="w5-p4"><strong>Create a branch.</strong> <code class="inline-code">git checkout -b final-project</code> (or use the VS Code branch menu). All your <a href="#week-6">Week 6</a> work will go here.</label></li>
         </ol>
       </div>
 
       <div class="deliverable">
         <h4>Deliverable</h4>
-        <p>Your project is in a Git repo on GitHub. You have pushed at least one branch and created a Pull Request. You can stage, commit, and push both via the terminal and via VS Code. You have a plan for your final project: target site, user journey, and list of test cases.</p>
+        <p>Your project is in a Git repo on GitHub. You have completed a realistic workflow: created a branch, wrote a test, checked the diff, committed with a clear message, pushed, and opened a Pull Request with a description. You have a plan for your final project.</p>
       </div>
 
       <div class="ready-box">
         <h4>Ready to Move On When</h4>
         <ul class="checklist">
           <li><input type="checkbox" id="w5-r1" data-week="5"><label for="w5-r1">My project is in a Git repo and pushed to GitHub</label></li>
-          <li><input type="checkbox" id="w5-r2" data-week="5"><label for="w5-r2">I have created a branch, committed, pushed, and opened a Pull Request</label></li>
+          <li><input type="checkbox" id="w5-r2" data-week="5"><label for="w5-r2">I have completed Scenario 1: branch &rarr; test &rarr; diff &rarr; commit &rarr; push &rarr; PR</label></li>
           <li><input type="checkbox" id="w5-r3" data-week="5"><label for="w5-r3">I can stage, commit, and push using the VS Code Source Control panel</label></li>
           <li><input type="checkbox" id="w5-r4" data-week="5"><label for="w5-r4">I can switch branches using the VS Code status bar</label></li>
-          <li><input type="checkbox" id="w5-r5" data-week="5"><label for="w5-r5">I understand the difference between merge and rebase (and know which to use by default)</label></li>
-          <li><input type="checkbox" id="w5-r6" data-week="5"><label for="w5-r6">I know what a merge conflict looks like and how to resolve it in VS Code</label></li>
-          <li><input type="checkbox" id="w5-r7" data-week="5"><label for="w5-r7">I have a written plan for my final project (target site + test case list)</label></li>
-          <li><input type="checkbox" id="w5-r8" data-week="5"><label for="w5-r8">My <code class="inline-code">final-project</code> branch is created and ready for <a href="#week-6">Week 6</a></label></li>
+          <li><input type="checkbox" id="w5-r5" data-week="5"><label for="w5-r5">I know what a merge conflict looks like and how to resolve it in VS Code</label></li>
+          <li><input type="checkbox" id="w5-r6" data-week="5"><label for="w5-r6">I have a written plan for my final project (target site + test case list)</label></li>
+          <li><input type="checkbox" id="w5-r7" data-week="5"><label for="w5-r7">My <code class="inline-code">final-project</code> branch is created and ready for <a href="#week-6">Week 6</a></label></li>
         </ul>
       </div>
 
@@ -4358,16 +4436,26 @@ npx playwright show-report               # open last HTML report
       <div class="changelog">
         <article class="changelog-entry">
           <header class="changelog-head">
+            <span class="changelog-version">v5.24</span>
+            <span class="changelog-date">May 3, 2026</span>
+          </header>
+          <ul>
+            <li><strong>Complete rewrite of <a href="#week-5">Week 5</a> (Git &amp; Final Project Setup).</strong> Reorganized around one real workflow: create repo &rarr; daily loop &rarr; branches &amp; PRs &rarr; conflicts. Local Git identity moved before first commit (was after &mdash; caused wrong email on initial commit). Added VS Code Source Control as the primary daily tool with terminal as foundation. New sections: <code class="inline-code">.gitignore</code> explained, <code class="inline-code">git diff</code> reading, commit message best practices, PR self-review checklist. Merge/rebase, <code class="inline-code">git stash</code>, and <code class="inline-code">git commit --amend</code> moved to Optional.</li>
+            <li><strong>New realistic exercises:</strong> Scenario 1 &mdash; "QA adds a test and opens a PR" (full branch &rarr; test &rarr; diff &rarr; commit &rarr; PR &rarr; self-review cycle); Scenario 2 &mdash; VS Code Git workflow (Source Control panel, diff, stage/commit/push via UI, branch switching, optional conflict simulation).</li>
+            <li><strong>New interactive resource:</strong> added <a href="https://learngitbranching.js.org/" target="_blank">learngitbranching.js.org</a> &mdash; visual Git tutorial for practicing branching, merging, and rebasing in the browser.</li>
+            <li>Updated VS Code Guide cross-reference to reflect the dual terminal + UI approach in Week 5.</li>
+            <li><strong>Issue templates fixed:</strong> week names in dropdown options aligned with current content (Week 3 &rarr; Real UI Testing, Week 4 &rarr; Debugging &amp; Test Structure).</li>
+            <li>Time estimate raised to 6-8 hours (from 5-6).</li>
+          </ul>
+        </article>
+
+        <article class="changelog-entry">
+          <header class="changelog-head">
             <span class="changelog-version">v5.23</span>
             <span class="changelog-date">May 3, 2026</span>
           </header>
           <ul>
-            <li><strong>Complete rewrite of <a href="#week-5">Week 5</a> (Git &amp; Final Project Setup).</strong> Expanded from terminal-only to a dual approach: terminal commands for understanding + VS Code Source Control panel for daily workflow. Added new sections: VS Code Git UI (stage/commit/push/branch switching), merge vs rebase with practical guidance, merge conflict resolution with VS Code buttons, commit message best practices, <code class="inline-code">git stash</code> basics, <code class="inline-code">.gitignore</code> explained, and reading <code class="inline-code">git diff</code> output. Local Git identity section (from v5.22) preserved and integrated.</li>
-            <li><strong>New interactive resource:</strong> added <a href="https://learngitbranching.js.org/" target="_blank">learngitbranching.js.org</a> &mdash; visual Git tutorial for practicing branching, merging, and rebasing in the browser.</li>
-            <li><strong>New VS Code exercises block</strong> with 5 hands-on tasks: Source Control panel walkthrough, diff viewing, stage/commit/push via UI, branch switching via status bar, and optional conflict simulation.</li>
-            <li>Updated VS Code Guide cross-reference to reflect the dual terminal + UI approach in Week 5.</li>
-            <li><strong>Issue templates fixed:</strong> week names in dropdown options aligned with current content (Week 3 &rarr; Real UI Testing, Week 4 &rarr; Debugging &amp; Test Structure).</li>
-            <li>Time estimate raised to 6-8 hours (from 5-6).</li>
+            <li><strong>Week 5 rewrite (first pass).</strong> Expanded from terminal-only to a dual approach: terminal commands + VS Code Source Control panel. Added merge vs rebase, merge conflict resolution, commit messages, <code class="inline-code">git stash</code>, <code class="inline-code">.gitignore</code> explained, <code class="inline-code">git diff</code> reading, and <a href="https://learngitbranching.js.org/" target="_blank">learngitbranching.js.org</a>. New VS Code exercises block. Issue templates fixed. Time estimate raised to 6-8 hours.</li>
           </ul>
         </article>
 
@@ -4381,7 +4469,10 @@ npx playwright show-report               # open last HTML report
           </ul>
         </article>
 
-        <article class="changelog-entry">
+        <details class="changelog-older">
+          <summary>Show older updates (4)</summary>
+
+          <article class="changelog-entry">
           <header class="changelog-head">
             <span class="changelog-version">v5.21</span>
             <span class="changelog-date">Apr 26, 2026</span>
@@ -4393,9 +4484,6 @@ npx playwright show-report               # open last HTML report
             <li><strong>Uniqueness check clarified</strong>: shows Elements search for both CSS and XPath and also keeps Console validation with <code class="inline-code">$$('[data-testid="login-button"]')</code> plus result interpretation (1 / 0 / many).</li>
           </ul>
         </article>
-
-        <details class="changelog-older">
-          <summary>Show older updates (6)</summary>
 
                   <article class="changelog-entry">
                     <header class="changelog-head">
@@ -4439,18 +4527,6 @@ npx playwright show-report               # open last HTML report
           </ul>
         </article>
 
-          <article class="changelog-entry">
-            <header class="changelog-head">
-              <span class="changelog-version">v5.17</span>
-              <span class="changelog-date">Apr 23, 2026</span>
-            </header>
-            <ul>
-              <li>Exercise 7 (Write your first test) now has <strong>two tests: a positive and a negative one</strong>. You write both the "check that X is correct" and the "check that Y is NOT present" shapes from day one &mdash; the two core patterns in any QA suite.</li>
-              <li>Added a <strong>test isolation callout</strong> explaining that Playwright automatically creates a fresh browser context for every test and closes it on finish &mdash; no manual <code class="inline-code">page.close()</code> or <code class="inline-code">afterEach</code> needed.</li>
-              <li>Ready-to-Move-On checklist updated: you now need <strong>both</strong> positive and negative tests passing in your <code class="inline-code">my-first.spec.ts</code>.</li>
-            </ul>
-          </article>
-
         </details>
       </div>
 
@@ -4473,7 +4549,7 @@ npx playwright show-report               # open last HTML report
     </div>
 
     <div class="page-footer">
-      <span>Playwright for Manual QA Engineers &bull; 6-Week Learning Path v5.23 &middot; <a href="#recent-updates" style="color: inherit;">updated May 3, 2026</a></span>
+      <span>Playwright for Manual QA Engineers &bull; 6-Week Learning Path v5.24 &middot; <a href="#recent-updates" style="color: inherit;">updated May 3, 2026</a></span>
       <span>May 2026</span>
     </div>
 
