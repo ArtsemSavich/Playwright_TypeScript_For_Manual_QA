@@ -1040,7 +1040,7 @@
     <svg viewBox="0 0 32 32" fill="none"><path d="M6.5 16c0-.3.2-.7.5-1l8.6-8.6c.6-.6 1.5-.6 2.1 0l.7.7c.6.6.6 1.5 0 2.1L12.1 16l6.3 6.3c.6.6.6 1.5 0 2.1l-.7.7c-.6.6-1.5.6-2.1 0L7 16.5c-.3-.3-.5-.6-.5-1z" fill="rgba(255,255,255,0.5)"/><path d="M15 16c0-.3.2-.7.5-1l8.6-8.6c.6-.6 1.5-.6 2.1 0l.7.7c.6.6.6 1.5 0 2.1L20.6 16l6.3 6.3c.6.6.6 1.5 0 2.1l-.7.7c-.6.6-1.5.6-2.1 0l-8.6-8.6c-.3-.3-.5-.6-.5-1z" fill="white"/></svg>
     QA Engineering &middot; Learning Path
   </div>
-  <span class="version-badge" id="current-version" title="Current document version">v5.25</span>
+  <span class="version-badge" id="current-version" title="Current document version">v5.26</span>
   <button class="mobile-toc-toggle" onclick="document.getElementById('toc').classList.toggle('open')">☰ Navigation</button>
 </nav>
 
@@ -1069,10 +1069,10 @@
         <tr><td><strong>3</strong></td><td>Real UI Testing with Playwright</td><td>Write stable UI tests against SauceDemo: login, cart, validation</td><td>saucedemo.spec.ts with 5+ stable tests</td><td>7-8 hrs</td></tr>
         <tr><td><strong>4</strong></td><td>Debugging &amp; Test Structure</td><td>Debug failures, read traces, refactor tests with describe/beforeEach</td><td>Refactored saucedemo.spec.ts + 3 fixed broken tests</td><td>6-7 hrs</td></tr>
         <tr><td><strong>5</strong></td><td>Git &amp; Project Setup</td><td>Learn Git workflow (terminal + VS Code), set up final project</td><td>Git repo on GitHub + project plan</td><td>6-8 hrs</td></tr>
-        <tr><td><strong>6</strong></td><td>POM &amp; Final Project</td><td>Learn Page Objects, write a test suite, deliver via PR</td><td>3-5 passing tests with POM + Pull Request</td><td>6-7 hrs</td></tr>
+        <tr><td><strong>6</strong></td><td>Final QA Sprint</td><td>Page Objects, test suite, QA tickets, PR with review</td><td>5-7 passing tests with POM + Pull Request</td><td>8-10 hrs</td></tr>
       </table>
 
-      <p style="font-size: 14px; color: var(--text-subtle); margin-top: 4px;">Total estimated time: 38-48 hours over 6 weeks</p>
+      <p style="font-size: 14px; color: var(--text-subtle); margin-top: 4px;">Total estimated time: 40-52 hours over 6 weeks</p>
 
       <div class="callout callout-info">
         <span class="icon">📋</span>
@@ -4248,61 +4248,95 @@ git stash pop
       <div class="week-divider wd6" id="week-6">
         <div class="week-badge"><span>6</span></div>
         <div class="week-info">
-          <h2 style="border:none;">Final Project &mdash; POM &amp; Test Suite</h2>
-          <div class="week-goal">Estimated time: 6-7 hours</div>
+          <h2 style="border:none;">Final QA Automation Sprint</h2>
+          <div class="week-goal">Estimated time: 8-10 hours</div>
         </div>
         <div class="week-progress" data-week="6"><span class="pct-val">0%</span>done</div>
       </div>
 
       <p class="section-label">OBJECTIVE</p>
       <div class="topic-block">
-        <p>Apply everything from Weeks 1-5 to write a small, working test suite for one user journey. You choose the journey. You work independently. You deliver it as a Pull Request.</p>
-        <p>This week also introduces the <strong>Page Object Model</strong> &mdash; a simple pattern that keeps your locators organized. You will use it in your final project.</p>
+        <p>This is your final automation sprint. You will take the project plan from <a href="#week-5">Week 5</a> and implement it as a small but realistic Playwright test suite using the Page Object Model.</p>
+        <p>By the end of this week, you should have: a clean project structure, 2&ndash;4 Page Object classes, 5&ndash;7 meaningful tests, stable locators, no hard waits, a passing test run with HTML report, a README, and a Pull Request ready for review.</p>
+        <p><strong>This is not a lecture week &mdash; it is a project week.</strong> You work independently, apply everything from Weeks 1&ndash;5, and deliver working code.</p>
       </div>
 
       <div class="callout callout-warning">
         <span class="icon">📅</span>
-        <div><strong>Final Pull Request deadline: Friday, June 12.</strong> Week 6 runs June 1-7, and we add a buffer week (June 8-12) for students who need extra time. After June 12, code review from the coach is not guaranteed. Submit your PR by Friday, June 12, end of day (your local time) to ensure feedback.</div>
+        <div><strong>Final Pull Request deadline: Friday, June 12.</strong> Week 6 runs June 1&ndash;7, and we add a buffer week (June 8&ndash;12) for students who need extra time. After June 12, code review from the coach is not guaranteed.</div>
       </div>
+
+      <!-- ── READINESS CHECK ── -->
+
+      <p class="section-label">BEFORE YOU START</p>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-project">Readiness check</span>
+        <h4>Verify your setup from <a href="#week-5">Week 5</a></h4>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">bash</span></div>
+          <div class="code-body"><pre>git branch              # should show * final-project
+git status              # should say "nothing to commit, working tree clean"
+git pull                # sync with remote
+npx playwright test --project=chromium   # existing tests should pass</pre></div>
+        </div>
+        <ul class="checklist">
+          <li><input type="checkbox" id="w6-r0a" data-week="6"><label for="w6-r0a">I am on the <code class="inline-code">final-project</code> branch</label></li>
+          <li><input type="checkbox" id="w6-r0b" data-week="6"><label for="w6-r0b">Working tree is clean, existing tests pass</label></li>
+          <li><input type="checkbox" id="w6-r0c" data-week="6"><label for="w6-r0c">I have chosen a track and listed my test cases (from <a href="#week-5">Week 5</a>)</label></li>
+        </ul>
+      </div>
+
+      <!-- ── PAGE OBJECT MODEL ── -->
 
       <p class="section-label">NEW TOPIC &mdash; PAGE OBJECT MODEL</p>
 
       <div class="topic-block">
         <span class="topic-tag tag-theory">Theory</span>
-        <h4>Page Object Model (POM) &mdash; define locators once, reuse everywhere</h4>
-        <p>If a button locator appears in 5 tests and the button changes, you update 5 files. With a Page Object you define each locator <strong>once</strong> in a separate file.</p>
+        <h4>The problem POM solves</h4>
+        <p>Look at your <a href="#week-3">Week 3</a> tests. You probably have <code class="inline-code">page.getByPlaceholder("Username")</code> repeated in every test that needs to log in. If that placeholder changes, you update 5&ndash;10 places.</p>
+        <p>A <strong>Page Object</strong> moves all locators and actions for one page into a single class. When the UI changes, you update <strong>one file</strong> instead of every test.</p>
+        <p style="font-size: 13px; color: var(--text-subtle);">📖 Official docs: <a href="https://playwright.dev/docs/pom" target="_blank">playwright.dev/docs/pom</a></p>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-practice">Hands-on</span>
+        <h4>LoginPage skeleton &mdash; your starting point</h4>
+        <p>Create a <code class="inline-code">pages/</code> folder next to <code class="inline-code">tests/</code>. Add this file:</p>
         <div class="code-block">
           <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> pages/LoginPage.ts <span class="lang">typescript</span></div>
-          <div class="code-body"><pre>import { Page, Locator } from "@playwright/test";
+          <div class="code-body"><pre>import { type Locator, type Page } from "@playwright/test";
 
 export class LoginPage {
   readonly page: Page;
-  readonly emailInput: Locator;
+  readonly usernameInput: Locator;
   readonly passwordInput: Locator;
   readonly loginButton: Locator;
   readonly errorMessage: Locator;
 
   constructor(page: Page) {
     this.page = page;
-    this.emailInput = page.getByPlaceholder("Email");
+    this.usernameInput = page.getByPlaceholder("Username");
     this.passwordInput = page.getByPlaceholder("Password");
     this.loginButton = page.getByRole("button", { name: "Login" });
-    this.errorMessage = page.locator(".error-message");
+    this.errorMessage = page.getByTestId("error");
   }
 
-  async goto() {
-    await this.page.goto("/login");
+  async open() {
+    await this.page.goto("/");
   }
 
-  async login(email: string, password: string) {
-    await this.emailInput.fill(email);
+  async login(username: string, password: string) {
+    await this.usernameInput.fill(username);
     await this.passwordInput.fill(password);
     await this.loginButton.click();
   }
 }</pre></div>
         </div>
-        <p><strong>Where to save:</strong> Create a <code class="inline-code">pages/</code> folder next to <code class="inline-code">tests/</code>. One file per page of your app.</p>
-        <p style="font-size: 13px; color: var(--text-subtle); margin-top: 8px;">📖 Official docs: <a href="https://playwright.dev/docs/pom" target="_blank">playwright.dev/docs/pom</a> &mdash; full Page Object Models guide including how to use them with fixtures.</p>
+        <div class="callout callout-warning">
+          <span class="icon">💡</span>
+          <div>This is a <strong>starting point, not a complete solution.</strong> You will create 2&ndash;4 more Page Objects for your track (InventoryPage, CartPage, CheckoutPage, etc.). Build them yourself &mdash; that is the exercise.</div>
+        </div>
       </div>
 
       <div class="topic-block">
@@ -4318,129 +4352,364 @@ test.describe("Login", () =&gt; {
 
   test.beforeEach(async ({ page }) =&gt; {
     loginPage = new LoginPage(page);
-    await loginPage.goto();
+    await loginPage.open();
   });
 
-  test("successful login", async ({ page }) =&gt; {
-    await loginPage.login("user@company.com", "password123");
-    await expect(page).toHaveURL(/.*dashboard/);
+  test("standard user can log in", async ({ page }) =&gt; {
+    await loginPage.login("standard_user", "secret_sauce");
+    await expect(page).toHaveURL(/inventory/);
   });
 
-  test("invalid password shows error", async () =&gt; {
-    await loginPage.login("user@company.com", "wrong");
-    await expect(loginPage.errorMessage).toBeVisible();
+  test("locked user sees error message", async () =&gt; {
+    await loginPage.login("locked_out_user", "secret_sauce");
+    await expect(loginPage.errorMessage).toContainText("locked out");
   });
 });</pre></div>
         </div>
         <div class="callout callout-info">
           <span class="icon">💡</span>
-          <div><strong>Notice how clean the tests are now.</strong> If the login button changes, you update ONE file (<code class="inline-code">LoginPage.ts</code>) instead of every test.</div>
+          <div><strong>Notice how clean the tests are.</strong> If the login button changes, you update <code class="inline-code">LoginPage.ts</code> &mdash; not every test. If you need a new login scenario, you reuse the same <code class="inline-code">loginPage.login()</code> method.</div>
         </div>
       </div>
-
-      <p class="section-label">README TEMPLATE</p>
 
       <div class="topic-block">
         <span class="topic-tag tag-reference">Reference</span>
-        <h4>Minimal README.md for your project</h4>
-        <p>A new team member should be able to clone your repo and run your tests. Use this as a starting point:</p>
-        <div class="code-block">
-          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> README.md <span class="lang">markdown</span></div>
-          <div class="code-body"><pre># SauceDemo Playwright Tests
-
-E2E tests for the login and checkout journey on saucedemo.com.
-
-## Prerequisites
-- Node.js v22+
-- npm v10+
-
-## Setup
-```bash
-git clone https://github.com/YOUR-USERNAME/my-playwright-learning.git
-cd my-playwright-learning
-npm install
-npx playwright install
-```
-
-## Run tests
-```bash
-npx playwright test                      # all tests, all browsers
-npx playwright test --project=chromium   # only Chromium (fast)
-npx playwright test --ui                 # interactive UI mode
-npx playwright show-report               # open last HTML report
-```
-
-## Project structure
-- `tests/` — test specs (`*.spec.ts`)
-- `pages/` — Page Object classes
-- `playwright.config.ts` — configuration
-
-## Covered scenarios
-- Successful login with valid credentials
-- Login with wrong password shows error
-- Empty form shows validation message</pre></div>
-        </div>
+        <h4>POM rules &mdash; what makes a good Page Object</h4>
+        <table>
+          <tr><th>&#10003; Good Page Object</th><th>&#10060; Bad Page Object</th></tr>
+          <tr><td>Contains locators for one page</td><td>One huge class for the whole app</td></tr>
+          <tr><td>Has methods for user actions (<code class="inline-code">login()</code>, <code class="inline-code">addToCart()</code>)</td><td>Exposes raw locators without methods</td></tr>
+          <tr><td>Hides page details from the test</td><td>Contains test assertions (assertions belong in tests)</td></tr>
+          <tr><td>Uses clear method names</td><td>Uses <code class="inline-code">waitForTimeout</code> or XPath</td></tr>
+        </table>
+        <p><strong>Simple rule:</strong> actions go in Page Objects, assertions go in tests. One class per page of your app.</p>
       </div>
 
-      <p class="section-label">FINAL PROJECT REQUIREMENTS</p>
+      <div class="topic-block">
+        <span class="topic-tag tag-reference">Reference</span>
+        <h4>Locator quality gate &mdash; check before using any locator</h4>
+        <table>
+          <tr><th>&#10003; Use</th><th>&#10060; Avoid</th></tr>
+          <tr><td><code class="inline-code">getByRole("button", { name: "Login" })</code></td><td>XPath (<code class="inline-code">//div[3]/button</code>)</td></tr>
+          <tr><td><code class="inline-code">getByLabel("Email")</code></td><td>Dynamic CSS classes (<code class="inline-code">.btn-xyz123</code>)</td></tr>
+          <tr><td><code class="inline-code">getByTestId("checkout")</code></td><td>Deep DOM chains (<code class="inline-code">div > div > form > button</code>)</td></tr>
+          <tr><td><code class="inline-code">getByPlaceholder("Username")</code></td><td>Indexes (<code class="inline-code">.nth(5)</code>) unless order is stable</td></tr>
+          <tr><td><code class="inline-code">getByText("Sauce Labs Backpack")</code></td><td></td></tr>
+        </table>
+        <p>For every locator, ask: <em>"Will this still work if a developer changes the CSS or rearranges the layout?"</em> If no &mdash; find a better locator.</p>
+      </div>
 
-      <div class="topic-block" style="border: 2px solid var(--teal); background: #E6FCFF;">
-        <span class="topic-tag tag-project">Final project</span>
-        <h4>Automate a full user journey</h4>
+      <!-- ── OPTIONAL: test.step ── -->
 
-        <p><strong>Your repo structure (minimum — can be simpler):</strong></p>
+      <div class="topic-block">
+        <span class="topic-tag tag-new">Optional</span>
+        <h4><code class="inline-code">test.step</code> &mdash; organize long tests into readable sections</h4>
+        <p>For tests with many actions (like a full checkout flow), <code class="inline-code">test.step</code> groups actions into labeled sections. The HTML report will show each step separately &mdash; like manual test steps but automated.</p>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> Example with test.step <span class="lang">typescript</span></div>
+          <div class="code-body"><pre>test("user can complete checkout", async ({ page }) =&gt; {
+  const loginPage = new LoginPage(page);
+  const inventoryPage = new InventoryPage(page);
+  const checkoutPage = new CheckoutPage(page);
+
+  await test.step("Login as standard user", async () =&gt; {
+    await loginPage.open();
+    await loginPage.login("standard_user", "secret_sauce");
+  });
+
+  await test.step("Add product to cart", async () =&gt; {
+    await inventoryPage.addProductToCart("Sauce Labs Backpack");
+    await expect(inventoryPage.cartBadge).toHaveText("1");
+  });
+
+  await test.step("Complete checkout", async () =&gt; {
+    await checkoutPage.open();
+    await checkoutPage.fillInfo("John", "Smith", "12345");
+    await checkoutPage.finish();
+    await expect(checkoutPage.successMessage).toBeVisible();
+  });
+});</pre></div>
+        </div>
+        <p style="font-size: 13px; color: var(--text-subtle);">Not required for your final project, but makes the HTML report much easier to read. Try it on your longest test.</p>
+      </div>
+
+      <!-- ── PROJECT STRUCTURE ── -->
+
+      <p class="section-label">PROJECT STRUCTURE</p>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-project">Required</span>
+        <h4>Your repo should look like this</h4>
         <div class="file-tree">
           <span class="dir">my-playwright-learning/</span><br>
           ├── <span class="dir">tests/</span><br>
-          │&nbsp;&nbsp;&nbsp;└── <span class="file">login.spec.ts</span> <span class="comment"># add more .spec.ts files as needed</span><br>
+          │&nbsp;&nbsp;&nbsp;├── <span class="file">login.spec.ts</span><br>
+          │&nbsp;&nbsp;&nbsp;├── <span class="file">cart.spec.ts</span><br>
+          │&nbsp;&nbsp;&nbsp;└── <span class="file">checkout.spec.ts</span> <span class="comment"># or fewer files if tests are grouped</span><br>
           ├── <span class="dir">pages/</span><br>
-          │&nbsp;&nbsp;&nbsp;└── <span class="file">LoginPage.ts</span> <span class="comment"># at least 1 Page Object</span><br>
+          │&nbsp;&nbsp;&nbsp;├── <span class="file">LoginPage.ts</span><br>
+          │&nbsp;&nbsp;&nbsp;├── <span class="file">InventoryPage.ts</span><br>
+          │&nbsp;&nbsp;&nbsp;├── <span class="file">CartPage.ts</span><br>
+          │&nbsp;&nbsp;&nbsp;└── <span class="file">CheckoutPage.ts</span> <span class="comment"># 2-4 page objects minimum</span><br>
+          ├── <span class="dir">test-data/</span> <span class="comment"># optional but recommended</span><br>
+          │&nbsp;&nbsp;&nbsp;└── <span class="file">users.ts</span> <span class="comment"># credentials, test inputs</span><br>
           ├── <span class="file">playwright.config.ts</span><br>
           ├── <span class="file">package.json</span><br>
           ├── <span class="file">.gitignore</span><br>
           └── <span class="file">README.md</span>
         </div>
+        <p><strong>Key rules:</strong></p>
+        <ul>
+          <li><strong>2&ndash;4 Page Object classes</strong> in <code class="inline-code">pages/</code> &mdash; one per page of your app. Do not put everything in one file.</li>
+          <li><strong>Test data</strong> (credentials, form inputs) should be in separate files or constants &mdash; not hardcoded in every test.</li>
+          <li><strong>One spec file per feature</strong> &mdash; login tests in one file, cart tests in another. Easier to navigate and debug.</li>
+        </ul>
+      </div>
 
-        <p><strong>Steps:</strong></p>
-        <ol class="checklist">
-          <li><input type="checkbox" id="w6-s1" data-week="6"><label for="w6-s1">Switch to your <code class="inline-code">final-project</code> branch (created in <a href="#week-5">Week 5</a>)</label></li>
-          <li><input type="checkbox" id="w6-s2" data-week="6"><label for="w6-s2">Create at least 1 Page Object class in <code class="inline-code">pages/</code></label></li>
-          <li><input type="checkbox" id="w6-s3" data-week="6"><label for="w6-s3">Write 3-5 test cases: at least one happy path and at least one negative case</label></li>
-          <li><input type="checkbox" id="w6-s4" data-week="6"><label for="w6-s4">Organize tests with <code class="inline-code">test.describe</code> and <code class="inline-code">beforeEach</code></label></li>
-          <li><input type="checkbox" id="w6-s5" data-week="6"><label for="w6-s5">Use <code class="inline-code">getByRole</code> or <code class="inline-code">getByTestId</code> for locators (no XPath)</label></li>
-          <li><input type="checkbox" id="w6-s6" data-week="6"><label for="w6-s6">Add a failure message to each assertion</label></li>
-          <li><input type="checkbox" id="w6-s7" data-week="6"><label for="w6-s7">All tests pass: <code class="inline-code">npx playwright test</code></label></li>
-          <li><input type="checkbox" id="w6-s8" data-week="6"><label for="w6-s8">Write a short <code class="inline-code">README.md</code> (use the template above)</label></li>
-          <li><input type="checkbox" id="w6-s9" data-week="6"><label for="w6-s9">Commit with clear messages, push, create a Pull Request for review</label></li>
+      <!-- ── QA TICKETS ── -->
+
+      <p class="section-label">YOUR WORK &mdash; QA TICKETS</p>
+
+      <div class="callout callout-info">
+        <span class="icon">📋</span>
+        <div>Below are QA tickets for <strong>Track A (SauceDemo)</strong>. If you chose Track B or Track C in <a href="#week-5">Week 5</a>, use the required tests from your track as acceptance criteria and structure them the same way.</div>
+      </div>
+
+      <div class="topic-block" style="border-left: 4px solid var(--green);">
+        <span class="topic-tag tag-project">Ticket 1</span>
+        <h4>Login regression</h4>
+        <p><em>As a user, I want to log in only with valid credentials, so that my account is protected.</em></p>
+        <p><strong>Acceptance criteria:</strong></p>
+        <ul>
+          <li><code class="inline-code">standard_user</code> can log in and sees inventory page</li>
+          <li><code class="inline-code">locked_out_user</code> cannot log in and sees error: <em>"Sorry, this user has been locked out."</em></li>
+          <li>Wrong password shows error message</li>
+          <li>Empty username shows validation error</li>
+        </ul>
+        <p><strong>Automation:</strong> create <code class="inline-code">LoginPage</code>, use semantic locators, no hard waits.</p>
+      </div>
+
+      <div class="topic-block" style="border-left: 4px solid var(--blue);">
+        <span class="topic-tag tag-project">Ticket 2</span>
+        <h4>Cart behavior</h4>
+        <p><em>As a shopper, I want my cart to update correctly when I add or remove products.</em></p>
+        <p><strong>Acceptance criteria:</strong></p>
+        <ul>
+          <li>Cart badge shows correct count after adding a product</li>
+          <li>Cart page shows the name of the selected product</li>
+          <li>Removing a product updates the cart (badge disappears or decrements)</li>
+          <li>Adding multiple products shows correct badge count</li>
+        </ul>
+        <p><strong>Automation:</strong> create <code class="inline-code">InventoryPage</code> and <code class="inline-code">CartPage</code>.</p>
+      </div>
+
+      <div class="topic-block" style="border-left: 4px solid var(--purple);">
+        <span class="topic-tag tag-project">Ticket 3</span>
+        <h4>Checkout flow</h4>
+        <p><em>As a shopper, I want to complete a purchase successfully.</em></p>
+        <p><strong>Acceptance criteria:</strong></p>
+        <ul>
+          <li>User can enter first name, last name, and postal code</li>
+          <li>Overview page shows the selected product</li>
+          <li>Finish button completes the order</li>
+          <li>Success message ("Thank you for your order!") is visible</li>
+        </ul>
+        <p><strong>Automation:</strong> create <code class="inline-code">CheckoutPage</code>. This is the longest test &mdash; good candidate for <code class="inline-code">test.step</code>.</p>
+      </div>
+
+      <div class="topic-block" style="border-left: 4px solid var(--orange);">
+        <span class="topic-tag tag-project">Ticket 4 (bonus)</span>
+        <h4>Product sorting</h4>
+        <p><em>As a shopper, I want to sort products by price so I can find the cheapest one.</em></p>
+        <p><strong>Acceptance criteria:</strong></p>
+        <ul>
+          <li>User can select "Price (low to high)"</li>
+          <li>Product prices are displayed in ascending order</li>
+        </ul>
+        <p><strong>Why this is harder:</strong> you need to collect all prices from the page, parse them as numbers, and verify the array is sorted. Good final challenge.</p>
+      </div>
+
+      <!-- ── TEST QUALITY ── -->
+
+      <p class="section-label">TEST QUALITY CHECKLIST</p>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-reference">Reference</span>
+        <h4>Every test must</h4>
+        <ul>
+          <li>Have a clear name that describes <em>behavior</em>, not steps (<code class="inline-code">"locked user sees error"</code>, not <code class="inline-code">"test login"</code>)</li>
+          <li>Be independent from other tests &mdash; no shared state, no execution order dependency</li>
+          <li>Include at least one meaningful assertion (using web-first assertions: <code class="inline-code">toBeVisible</code>, <code class="inline-code">toHaveText</code>, <code class="inline-code">toHaveURL</code>, <code class="inline-code">toHaveCount</code>)</li>
+          <li>Avoid <code class="inline-code">waitForTimeout</code> &mdash; always</li>
+          <li>Test user-visible behavior, not implementation details</li>
+          <li>Fail clearly when the feature is broken (read the error message &mdash; does it tell you what went wrong?)</li>
+        </ul>
+        <p style="font-size: 13px; color: var(--text-subtle);">📖 <a href="https://playwright.dev/docs/best-practices" target="_blank">playwright.dev/docs/best-practices</a> &mdash; Playwright's own recommendations.</p>
+      </div>
+
+      <!-- ── README ── -->
+
+      <p class="section-label">README TEMPLATE</p>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-reference">Reference</span>
+        <h4>README.md &mdash; a new team member should be able to run your tests</h4>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> README.md <span class="lang">markdown</span></div>
+          <div class="code-body"><pre># Final Project &mdash; Playwright Test Suite
+
+## Test target
+SauceDemo (https://www.saucedemo.com)
+
+## Covered user journey
+Login &rarr; product selection &rarr; cart &rarr; checkout
+
+## Test cases
+- Valid user can log in
+- Locked user cannot log in
+- User can add product to cart
+- User can remove product from cart
+- User can sort products by price
+- User can complete checkout and see success message
+
+## Project structure
+- `pages/` &mdash; Page Object classes (LoginPage, InventoryPage, CartPage, CheckoutPage)
+- `tests/` &mdash; test specs (*.spec.ts)
+- `test-data/` &mdash; credentials and test inputs
+- `playwright.config.ts` &mdash; configuration
+
+## How to run
+```bash
+npm install
+npx playwright install
+npx playwright test
+npx playwright show-report
+```
+
+## Notes
+- No hard waits (`waitForTimeout`) are used
+- Tests use semantic locators (`getByRole`, `getByTestId`, `getByPlaceholder`)
+- Test data is stored separately from test logic
+
+## Known limitations
+- This suite covers only the selected user journey
+- It does not cover all possible edge cases</pre></div>
+        </div>
+      </div>
+
+      <!-- ── PR REQUIREMENTS ── -->
+
+      <p class="section-label">PULL REQUEST REQUIREMENTS</p>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-git">Git</span>
+        <h4>PR template &mdash; use this when creating your final PR</h4>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> PR description <span class="lang">markdown</span></div>
+          <div class="code-body"><pre>## What changed
+- Added Page Object classes for Login, Inventory, Cart, Checkout
+- Added 6 Playwright tests for login, cart, sorting, and checkout
+- Added test data files
+- Added README with setup and run instructions
+
+## How tested
+- `npx playwright test` &mdash; all tests pass
+- `npx playwright show-report` &mdash; HTML report reviewed
+
+## Checklist
+- [ ] No `test.only` left in code
+- [ ] No `waitForTimeout` used
+- [ ] No generated reports committed (`playwright-report/`, `test-results/`)
+- [ ] Tests pass locally with `--project=chromium`
+- [ ] README.md is complete
+- [ ] Locators are stable (semantic, no XPath)
+- [ ] Commit messages are clear</pre></div>
+        </div>
+        <p><strong>Before submitting:</strong> open your PR on GitHub, go to the <strong>"Files changed"</strong> tab, and review your own code. Check every item in the checklist above. This is the same self-review habit from <a href="#week-5">Week 5</a>.</p>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-reference">Reference</span>
+        <h4>Debugging evidence &mdash; show that your tests work</h4>
+        <p>Before submitting your PR:</p>
+        <ol>
+          <li>Run all tests: <code class="inline-code">npx playwright test</code></li>
+          <li>Open the HTML report: <code class="inline-code">npx playwright show-report</code></li>
+          <li>If any test failed, use the trace viewer or <code class="inline-code">--debug</code> flag to find the root cause. Fix it. Do not add <code class="inline-code">waitForTimeout</code>.</li>
+          <li>In your PR description, include the command you used and the result (e.g. <em>"7 passed, 0 failed"</em>).</li>
         </ol>
       </div>
 
-      <div class="topic-block" style="border: 2px solid #ABF5D1; background: var(--success-bg);">
-        <h4>Assessment Criteria</h4>
+      <!-- ── SUGGESTED SCHEDULE ── -->
+
+      <p class="section-label">SUGGESTED SCHEDULE</p>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-reference">Reference</span>
+        <h4>How to spread the work across the week</h4>
         <table>
-          <tr><th>Area</th><th>What We Look For</th></tr>
-          <tr><td><strong>Tests run</strong></td><td><code class="inline-code">npx playwright test</code> passes with no errors</td></tr>
-          <tr><td><strong>Coverage</strong></td><td>Happy path + at least one negative case covered</td></tr>
-          <tr><td><strong>Locators</strong></td><td>Semantic locators used (<code class="inline-code">getByRole</code>, <code class="inline-code">getByLabel</code>, <code class="inline-code">getByText</code>) — no XPath</td></tr>
-          <tr><td><strong>No hard waits</strong></td><td>No <code class="inline-code">page.waitForTimeout()</code>. Rely on auto-waiting assertions.</td></tr>
-          <tr><td><strong>Assertions</strong></td><td>Each test has at least one meaningful assertion with a failure message</td></tr>
-          <tr><td><strong>Readability</strong></td><td>Test names clearly describe what is being tested</td></tr>
-          <tr><td><strong>Page Objects</strong></td><td>At least 1 Page Object file in <code class="inline-code">pages/</code> (more is fine)</td></tr>
-          <tr><td><strong>Git</strong></td><td>Clean commit history, descriptive messages, Pull Request created</td></tr>
-          <tr><td><strong>README</strong></td><td>A new team member could run the tests by following the README</td></tr>
+          <tr><th>Day</th><th>Focus</th><th>~Time</th></tr>
+          <tr><td><strong>Day 1</strong></td><td>Readiness check, create Page Object files, write skeleton methods</td><td>1.5&ndash;2h</td></tr>
+          <tr><td><strong>Day 2</strong></td><td>Implement Tickets 1&ndash;2: login tests + cart tests. First passing tests.</td><td>2&ndash;3h</td></tr>
+          <tr><td><strong>Day 3</strong></td><td>Implement Ticket 3: checkout flow. Add negative and state-change tests.</td><td>2&ndash;3h</td></tr>
+          <tr><td><strong>Day 4</strong></td><td>Refactor: remove duplication, improve locators, run tests 3 times. Ticket 4 if time permits.</td><td>1.5&ndash;2h</td></tr>
+          <tr><td><strong>Day 5</strong></td><td>Write README, run full suite, open HTML report, create PR, complete self-review.</td><td>1&ndash;1.5h</td></tr>
+        </table>
+        <p style="font-size: 13px; color: var(--text-subtle);">This is a suggestion, not a strict schedule. Adjust based on your pace. The important thing: do not leave the PR for the last day.</p>
+      </div>
+
+      <!-- ── IMPLEMENTATION STEPS ── -->
+
+      <p class="section-label">IMPLEMENTATION STEPS</p>
+
+      <div class="topic-block" style="border: 2px solid var(--teal); background: #E6FCFF;">
+        <span class="topic-tag tag-project">Final project</span>
+        <h4>Step-by-step checklist</h4>
+        <ol class="checklist">
+          <li><input type="checkbox" id="w6-s1" data-week="6"><label for="w6-s1"><strong>Confirm your setup.</strong> Complete the readiness check above. You are on <code class="inline-code">final-project</code> branch, tests pass, target site and test cases are selected.</label></li>
+          <li><input type="checkbox" id="w6-s2" data-week="6"><label for="w6-s2"><strong>Create Page Object skeleton files.</strong> Add 2&ndash;4 empty classes in <code class="inline-code">pages/</code>. Fill in locators and basic methods (e.g. <code class="inline-code">open()</code>, <code class="inline-code">login()</code>). Start with <code class="inline-code">LoginPage.ts</code> using the skeleton above.</label></li>
+          <li><input type="checkbox" id="w6-s3" data-week="6"><label for="w6-s3"><strong>Implement Ticket 1 &mdash; Login regression.</strong> Write 2&ndash;4 login tests using <code class="inline-code">LoginPage</code>. Run them. Green? Commit.</label></li>
+          <li><input type="checkbox" id="w6-s4" data-week="6"><label for="w6-s4"><strong>Implement Ticket 2 &mdash; Cart behavior.</strong> Create <code class="inline-code">InventoryPage</code> and <code class="inline-code">CartPage</code>. Write cart tests. Run. Commit.</label></li>
+          <li><input type="checkbox" id="w6-s5" data-week="6"><label for="w6-s5"><strong>Implement Ticket 3 &mdash; Checkout flow.</strong> Create <code class="inline-code">CheckoutPage</code>. Write the checkout test. This is the longest one. Run. Commit.</label></li>
+          <li><input type="checkbox" id="w6-s6" data-week="6"><label for="w6-s6"><strong>Stabilize and refactor.</strong> Run all tests 3 times: <code class="inline-code">npx playwright test --repeat-each=3</code>. Fix any flaky tests. Remove duplication. Improve locators if needed.</label></li>
+          <li><input type="checkbox" id="w6-s7" data-week="6"><label for="w6-s7"><strong>Ticket 4 (bonus) &mdash; Sorting.</strong> If time permits, add the sorting test. This is the hardest one.</label></li>
+          <li><input type="checkbox" id="w6-s8" data-week="6"><label for="w6-s8"><strong>Write README.md.</strong> Use the template above. A new team member should be able to run your tests.</label></li>
+          <li><input type="checkbox" id="w6-s9" data-week="6"><label for="w6-s9"><strong>Run the full suite and check the HTML report.</strong> <code class="inline-code">npx playwright test &amp;&amp; npx playwright show-report</code></label></li>
+          <li><input type="checkbox" id="w6-s10" data-week="6"><label for="w6-s10"><strong>Create your Pull Request.</strong> Push, open PR on GitHub, fill in the PR template, go through the self-review checklist.</label></li>
+        </ol>
+      </div>
+
+      <!-- ── ASSESSMENT ── -->
+
+      <p class="section-label">ASSESSMENT</p>
+
+      <div class="topic-block" style="border: 2px solid #ABF5D1; background: var(--success-bg);">
+        <h4>Assessment Rubric</h4>
+        <table>
+          <tr><th>Area</th><th>Required</th><th>Good</th><th>Excellent</th></tr>
+          <tr><td><strong>Tests</strong></td><td>5 passing tests</td><td>6&ndash;7 meaningful tests</td><td>Covers happy path, negative, state change, data validation</td></tr>
+          <tr><td><strong>POM</strong></td><td>2 Page Object classes</td><td>3&ndash;4 focused classes</td><td>Clean methods, no duplicated locators, clear separation</td></tr>
+          <tr><td><strong>Locators</strong></td><td>No XPath</td><td>Semantic locators mostly</td><td>Locators are stable, readable, and verified unique</td></tr>
+          <tr><td><strong>Assertions</strong></td><td>Basic assertions present</td><td>Web-first assertions (<code class="inline-code">toBeVisible</code>, <code class="inline-code">toHaveText</code>)</td><td>Assertions verify real business behavior with failure messages</td></tr>
+          <tr><td><strong>No hard waits</strong></td><td>No <code class="inline-code">waitForTimeout</code></td><td>Uses auto-waiting assertions</td><td>Understands why and can explain the alternative</td></tr>
+          <tr><td><strong>Git / PR</strong></td><td>PR submitted</td><td>Clean commits + PR description</td><td>Self-review checklist completed, PR ready for team review</td></tr>
+          <tr><td><strong>README</strong></td><td>Basic run instructions</td><td>Includes project structure</td><td>Includes test scope, covered scenarios, and known limitations</td></tr>
+          <tr><td><strong>Debugging</strong></td><td>Can run tests</td><td>Can open HTML report</td><td>Can explain a failure using trace viewer or error message</td></tr>
         </table>
       </div>
 
       <div class="ready-box">
         <h4>Graduation Criteria</h4>
         <ul class="checklist">
-          <li><input type="checkbox" id="w6-g1" data-week="6"><label for="w6-g1">My final project passes all assessment criteria above</label></li>
-          <li><input type="checkbox" id="w6-g2" data-week="6"><label for="w6-g2">I can read an unfamiliar Playwright test and explain what it does</label></li>
-          <li><input type="checkbox" id="w6-g3" data-week="6"><label for="w6-g3">I can debug a broken test without asking for help</label></li>
-          <li><input type="checkbox" id="w6-g4" data-week="6"><label for="w6-g4">I have submitted my project as a Pull Request</label></li>
-          <li><input type="checkbox" id="w6-g5" data-week="6"><label for="w6-g5">I can explain my test code to a colleague</label></li>
+          <li><input type="checkbox" id="w6-g1" data-week="6"><label for="w6-g1">My final project passes all "Required" criteria in the rubric above</label></li>
+          <li><input type="checkbox" id="w6-g2" data-week="6"><label for="w6-g2">I have 5+ passing tests with 2+ Page Objects, submitted as a Pull Request</label></li>
+          <li><input type="checkbox" id="w6-g3" data-week="6"><label for="w6-g3">I can read an unfamiliar Playwright test and explain what it does</label></li>
+          <li><input type="checkbox" id="w6-g4" data-week="6"><label for="w6-g4">I can debug a broken test using the error message, HTML report, or trace viewer</label></li>
+          <li><input type="checkbox" id="w6-g5" data-week="6"><label for="w6-g5">I can explain my test code and Page Object structure to a colleague</label></li>
+          <li><input type="checkbox" id="w6-g6" data-week="6"><label for="w6-g6">My README allows a new team member to clone the repo and run the tests</label></li>
         </ul>
       </div>
+
 
       <hr>
 
@@ -4528,6 +4797,20 @@ npx playwright show-report               # open last HTML report
       <div class="changelog">
         <article class="changelog-entry">
           <header class="changelog-head">
+            <span class="changelog-version">v5.26</span>
+            <span class="changelog-date">May 3, 2026</span>
+          </header>
+          <ul>
+            <li><strong>Complete rewrite of <a href="#week-6">Week 6</a> (Final QA Automation Sprint).</strong> Restructured as a project sprint, not a lecture. Added: readiness check (link to Week 5), POM rules (good vs bad table), locator quality gate, <code class="inline-code">test.step</code> (optional), required project structure with 2&ndash;4 Page Objects, and test quality checklist.</li>
+            <li><strong>QA tickets with acceptance criteria.</strong> 4 SauceDemo tickets (login regression, cart behavior, checkout flow, product sorting as bonus) &mdash; structured like real Jira tasks. Track B/C students use their Week 5 required tests.</li>
+            <li><strong>Assessment rubric</strong> with three levels: Required / Good / Excellent across 8 areas (tests, POM, locators, assertions, hard waits, Git/PR, README, debugging).</li>
+            <li>Added PR template with self-review checklist, debugging evidence requirement, improved README template, and suggested 5-day schedule.</li>
+            <li>Raised requirements: 5&ndash;7 tests (was 3&ndash;5), 2&ndash;4 Page Objects (was 1). Time estimate raised to 8&ndash;10 hours.</li>
+          </ul>
+        </article>
+
+        <article class="changelog-entry">
+          <header class="changelog-head">
             <span class="changelog-version">v5.25</span>
             <span class="changelog-date">May 3, 2026</span>
           </header>
@@ -4554,6 +4837,9 @@ npx playwright show-report               # open last HTML report
           </ul>
         </article>
 
+        <details class="changelog-older">
+          <summary>Show older updates (4)</summary>
+
         <article class="changelog-entry">
           <header class="changelog-head">
             <span class="changelog-version">v5.23</span>
@@ -4563,9 +4849,6 @@ npx playwright show-report               # open last HTML report
             <li><strong>Week 5 rewrite (first pass).</strong> Expanded from terminal-only to a dual approach: terminal commands + VS Code Source Control panel. Added merge vs rebase, merge conflict resolution, commit messages, <code class="inline-code">git stash</code>, <code class="inline-code">.gitignore</code> explained, <code class="inline-code">git diff</code> reading, and <a href="https://learngitbranching.js.org/" target="_blank">learngitbranching.js.org</a>. New VS Code exercises block. Issue templates fixed. Time estimate raised to 6-8 hours.</li>
           </ul>
         </article>
-
-        <details class="changelog-older">
-          <summary>Show older updates (4)</summary>
 
           <article class="changelog-entry">
           <header class="changelog-head">
@@ -4605,18 +4888,6 @@ npx playwright show-report               # open last HTML report
                     </ul>
                   </article>
 
-          <article class="changelog-entry">
-          <header class="changelog-head">
-            <span class="changelog-version">v5.19</span>
-            <span class="changelog-date">Apr 26, 2026</span>
-          </header>
-          <ul>
-            <li><strong>Complete rewrite of <a href="#week-3">Week 3</a> (Real UI Testing with Playwright).</strong> Replaced locator-only exercises with 7 practical tasks on <a href="https://www.saucedemo.com" target="_blank">SauceDemo</a>: login happy/negative, cart add/remove, empty form validation, stability challenge, and QA bug-hunt. Added theory on dynamic UI, element states, auto-waiting boundaries, and flaky tests. Included actions &amp; assertions cheat sheets with SauceDemo-specific examples. Time estimate raised to 7-8 hours.</li>
-            <li><strong><a href="#week-4">Week 4</a> refocused on Debugging &amp; Test Structure.</strong> Removed duplicate content (cheat sheets, baseURL setup) now covered in Week 3. Added test organization exercise (<code class="inline-code">describe</code>/<code class="inline-code">beforeEach</code> refactoring) and trace analysis task. Exercises now build on Week 3&rsquo;s SauceDemo test suite.</li>
-            <li>Bonus section added to Week 3: multiple products, sorting validation, and state-after-refresh challenges.</li>
-            <li>Updated all cross-references so Weeks 1&ndash;2 correctly point to Week 3 as the first real test-writing week.</li>
-          </ul>
-        </article>
 
         </details>
       </div>
@@ -4640,7 +4911,7 @@ npx playwright show-report               # open last HTML report
     </div>
 
     <div class="page-footer">
-      <span>Playwright for Manual QA Engineers &bull; 6-Week Learning Path v5.25 &middot; <a href="#recent-updates" style="color: inherit;">updated May 3, 2026</a></span>
+      <span>Playwright for Manual QA Engineers &bull; 6-Week Learning Path v5.26 &middot; <a href="#recent-updates" style="color: inherit;">updated May 3, 2026</a></span>
       <span>May 2026</span>
     </div>
 
