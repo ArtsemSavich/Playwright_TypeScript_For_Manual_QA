@@ -1040,7 +1040,7 @@
     <svg viewBox="0 0 32 32" fill="none"><path d="M6.5 16c0-.3.2-.7.5-1l8.6-8.6c.6-.6 1.5-.6 2.1 0l.7.7c.6.6.6 1.5 0 2.1L12.1 16l6.3 6.3c.6.6.6 1.5 0 2.1l-.7.7c-.6.6-1.5.6-2.1 0L7 16.5c-.3-.3-.5-.6-.5-1z" fill="rgba(255,255,255,0.5)"/><path d="M15 16c0-.3.2-.7.5-1l8.6-8.6c.6-.6 1.5-.6 2.1 0l.7.7c.6.6.6 1.5 0 2.1L20.6 16l6.3 6.3c.6.6.6 1.5 0 2.1l-.7.7c-.6.6-1.5.6-2.1 0l-8.6-8.6c-.3-.3-.5-.6-.5-1z" fill="white"/></svg>
     QA Engineering &middot; Learning Path
   </div>
-  <span class="version-badge" id="current-version" title="Current document version">v5.27</span>
+  <span class="version-badge" id="current-version" title="Current document version">v5.28</span>
   <button class="mobile-toc-toggle" onclick="document.getElementById('toc').classList.toggle('open')">☰ Navigation</button>
 </nav>
 
@@ -4274,24 +4274,34 @@ git stash pop
         <span class="topic-tag tag-project">Readiness check</span>
         <h4>Before writing code</h4>
         <p>First, make sure your <a href="#week-5">Week 5</a> practice PR is either merged or closed &mdash; it should not be left open. Your final project starts from the latest <code class="inline-code">main</code>.</p>
+
+        <p><strong>If <code class="inline-code">final-project</code> branch does not exist yet:</strong></p>
         <div class="code-block">
           <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">bash</span></div>
-          <div class="code-body"><pre># Start from latest main
-git checkout main
+          <div class="code-body"><pre>git checkout main
 git pull origin main
-
-# Create your final project branch (skip if already created in Week 5)
 git checkout -b final-project
-git push -u origin final-project
-
-# Verify
-git branch              # should show * final-project
-git status              # should say "nothing to commit, working tree clean"
-npx playwright test --project=chromium   # existing tests should pass</pre></div>
+git push -u origin final-project</pre></div>
         </div>
+
+        <p><strong>If <code class="inline-code">final-project</code> branch already exists (created in <a href="#week-5">Week 5</a>):</strong></p>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">bash</span></div>
+          <div class="code-body"><pre>git checkout final-project
+git pull</pre></div>
+        </div>
+
         <div class="callout callout-warning">
           <span class="icon">💡</span>
-          <div>If <code class="inline-code">git pull</code> fails because your branch has no upstream, run: <code class="inline-code">git push -u origin final-project</code></div>
+          <div>If <code class="inline-code">git pull</code> on <code class="inline-code">final-project</code> fails because the branch has no upstream, run: <code class="inline-code">git push -u origin final-project</code></div>
+        </div>
+
+        <p><strong>Then verify:</strong></p>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">bash</span></div>
+          <div class="code-body"><pre>git branch              # should show * final-project
+git status              # should say "nothing to commit, working tree clean"
+npx playwright test --project=chromium   # existing tests should pass</pre></div>
         </div>
         <ul class="checklist">
           <li><input type="checkbox" id="w6-r0a" data-week="6"><label for="w6-r0a">My Week 5 practice PR is merged or closed</label></li>
@@ -4310,6 +4320,26 @@ npx playwright test --project=chromium   # existing tests should pass</pre></div
         <p>Look at your <a href="#week-3">Week 3</a> tests. You probably have <code class="inline-code">page.getByPlaceholder("Username")</code> repeated in every test that needs to log in. If that placeholder changes, you update 5&ndash;10 places.</p>
         <p>A <strong>Page Object</strong> moves all locators and actions for one page into a single class. When the UI changes, you update <strong>one file</strong> instead of every test.</p>
         <p style="font-size: 13px; color: var(--text-subtle);">📖 Official docs: <a href="https://playwright.dev/docs/pom" target="_blank">playwright.dev/docs/pom</a></p>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-theory">Theory</span>
+        <h4>How Page Object Model works</h4>
+        <p>Think of a Page Object as a small API for one page of your application. The responsibility is split:</p>
+        <table>
+          <tr><th>File</th><th>Responsibility</th></tr>
+          <tr><td><code class="inline-code">tests/login.spec.ts</code></td><td>Test scenario: what the user does and what we expect to happen</td></tr>
+          <tr><td><code class="inline-code">pages/LoginPage.ts</code></td><td>Locators and user actions for the Login page (where inputs are, how to click Login)</td></tr>
+          <tr><td><code class="inline-code">test-data/users.ts</code></td><td>Test users, passwords, input data (optional but recommended)</td></tr>
+        </table>
+        <p>A <strong>test</strong> describes user behavior: <em>"open login page, log in as standard user, check that inventory page opens."</em></p>
+        <p>A <strong>Page Object</strong> knows the technical details: <em>"username input has placeholder 'Username', the submit button has role 'button' with name 'Login'."</em></p>
+        <p>In the test, you write:</p>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="lang">typescript</span></div>
+          <div class="code-body"><pre>const loginPage = new LoginPage(page);</pre></div>
+        </div>
+        <p>This means: <em>"Create an object that knows how to work with the Login page, using the current Playwright browser page."</em> From this point, the test calls <code class="inline-code">loginPage.login(...)</code> without knowing which locators are used internally.</p>
       </div>
 
       <div class="topic-block">
@@ -4350,6 +4380,21 @@ export class LoginPage {
           <span class="icon">💡</span>
           <div>This is a <strong>starting point, not a complete solution.</strong> You will create 2&ndash;4 more Page Objects for your track (InventoryPage, CartPage, CheckoutPage, etc.). Build them yourself &mdash; that is the exercise.</div>
         </div>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-theory">Theory</span>
+        <h4>What each part of LoginPage means</h4>
+        <p>If this is your first time seeing a TypeScript class, here is what each section does:</p>
+        <table>
+          <tr><th>Code</th><th>What it means</th></tr>
+          <tr><td><code class="inline-code">readonly page: Page</code></td><td>Stores the Playwright browser page inside the class. Every method uses it.</td></tr>
+          <tr><td><code class="inline-code">readonly usernameInput: Locator</code></td><td>Stores the locator for the username input. Defined once, reused everywhere.</td></tr>
+          <tr><td><code class="inline-code">constructor(page: Page) { ... }</code></td><td>Runs when you write <code class="inline-code">new LoginPage(page)</code>. Receives the browser page from the test and sets up all locators.</td></tr>
+          <tr><td><code class="inline-code">async open() { ... }</code></td><td>A method that navigates to the login page. The test calls <code class="inline-code">loginPage.open()</code>.</td></tr>
+          <tr><td><code class="inline-code">async login(username, password)</code></td><td>A method that fills both fields and clicks Login. The test does not need to know which locators are used inside.</td></tr>
+        </table>
+        <p><strong>Key idea:</strong> <code class="inline-code">constructor</code> is the entry point of the class. It runs once when the object is created. Everything after that is methods you call from the test.</p>
       </div>
 
       <div class="topic-block">
@@ -4404,6 +4449,25 @@ test.describe("Login", () =&gt; {
           <span class="icon">⚠️</span>
           <div><strong>Do not over-engineer.</strong> Do not create <code class="inline-code">BasePage</code>, custom wrappers, or complex abstractions. For this project, simple and readable Page Objects are better than a "framework". You are writing tests, not building an architecture.</div>
         </div>
+      </div>
+
+      <div class="topic-block">
+        <span class="topic-tag tag-reference">Reference</span>
+        <h4>Assertions belong in tests, not in Page Objects</h4>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> &#10060; Bad &mdash; assertion inside Page Object <span class="lang">typescript</span></div>
+          <div class="code-body"><pre>// Inside LoginPage.ts — DON'T do this
+async verifyLoginError() {
+  await expect(this.errorMessage).toContainText("locked out");
+}</pre></div>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span> &#10003; Good &mdash; assertion in the test <span class="lang">typescript</span></div>
+          <div class="code-body"><pre>// Inside login.spec.ts — DO this
+await loginPage.login("locked_out_user", "secret_sauce");
+await expect(loginPage.errorMessage).toContainText("locked out");</pre></div>
+        </div>
+        <p><strong>Why:</strong> Page Objects perform actions. Tests verify expected behavior. When assertions live in the test, you can see the full picture: <em>what the user did</em> and <em>what we expect</em> in the same place.</p>
       </div>
 
       <div class="topic-block">
@@ -4845,6 +4909,18 @@ npx playwright show-report
       <div class="changelog">
         <article class="changelog-entry">
           <header class="changelog-head">
+            <span class="changelog-version">v5.28</span>
+            <span class="changelog-date">May 3, 2026</span>
+          </header>
+          <ul>
+            <li><strong>POM theory expanded.</strong> Added "How Page Object Model works" block with responsibility table (test vs page object vs test-data). Added "What each part of LoginPage means" &mdash; line-by-line explanation of <code class="inline-code">readonly</code>, <code class="inline-code">constructor</code>, and methods for beginners new to classes.</li>
+            <li><strong>Assertions example added:</strong> explicit bad/good code comparison &mdash; assertions belong in tests, not in Page Objects.</li>
+            <li><strong>Git readiness split</strong> into two clear paths: "branch does not exist" vs "branch already exists" (prevents <code class="inline-code">git checkout -b</code> error for students who created the branch in Week 5).</li>
+          </ul>
+        </article>
+
+        <article class="changelog-entry">
+          <header class="changelog-head">
             <span class="changelog-version">v5.27</span>
             <span class="changelog-date">May 3, 2026</span>
           </header>
@@ -4871,6 +4947,9 @@ npx playwright show-report
           </ul>
         </article>
 
+        <details class="changelog-older">
+          <summary>Show older updates (4)</summary>
+
         <article class="changelog-entry">
           <header class="changelog-head">
             <span class="changelog-version">v5.25</span>
@@ -4883,9 +4962,6 @@ npx playwright show-report
             <li><strong>Practice Sites expanded:</strong> added <a href="https://automationexercise.com" target="_blank">Automation Exercise</a>, <a href="https://the-internet.herokuapp.com" target="_blank">The Internet</a>, and <a href="https://practice.expandtesting.com" target="_blank">ExpandTesting</a> to Resources.</li>
           </ul>
         </article>
-
-        <details class="changelog-older">
-          <summary>Show older updates (4)</summary>
 
         <article class="changelog-entry">
           <header class="changelog-head">
@@ -4922,19 +4998,6 @@ npx playwright show-report
           </ul>
         </article>
 
-          <article class="changelog-entry">
-          <header class="changelog-head">
-            <span class="changelog-version">v5.21</span>
-            <span class="changelog-date">Apr 26, 2026</span>
-          </header>
-          <ul>
-            <li><strong>Refined Week 3 locator validation guide</strong> for "How to validate a locator like a QA" (A/B/C sections) with clearer B1-B2 wording.</li>
-            <li><strong>Step C updated</strong>: added full DevTools shortcuts for Windows/Linux and Mac, explicit Elements-tab flow, and expanded inspect checklist (attributes, role, visible text, accessible name).</li>
-            <li><strong>Stability guidance improved</strong>: added auto-generated ids to the "avoid" list and clarified that <code class="inline-code">id</code> is valid only if stable and unique.</li>
-            <li><strong>Uniqueness check clarified</strong>: shows Elements search for both CSS and XPath and also keeps Console validation with <code class="inline-code">$$('[data-testid="login-button"]')</code> plus result interpretation (1 / 0 / many).</li>
-          </ul>
-        </article>
-
         </details>
       </div>
 
@@ -4957,7 +5020,7 @@ npx playwright show-report
     </div>
 
     <div class="page-footer">
-      <span>Playwright for Manual QA Engineers &bull; 6-Week Learning Path v5.27 &middot; <a href="#recent-updates" style="color: inherit;">updated May 3, 2026</a></span>
+      <span>Playwright for Manual QA Engineers &bull; 6-Week Learning Path v5.28 &middot; <a href="#recent-updates" style="color: inherit;">updated May 3, 2026</a></span>
       <span>May 2026</span>
     </div>
 
